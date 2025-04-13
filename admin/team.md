@@ -25,7 +25,7 @@ Here is our team for this quarter:
 
 - Nathan Reed: 
 - Hanbin Tan:
-- Sruti Mani: Hi my name is Sruti Mani, and I am a third year Mathematics: Computer Science major. I am interested in software development and project management. Here is a link to my personal github page: Sruti's GitHub](https://github.com/srutimani)
+- Sruti Mani: Hi my name is Sruti Mani, and I am a third year Mathematics: Computer Science major. I am interested in software development and project management. Here is a link to my personal github page: [Sruti's GitHub](https://github.com/srutimani)
 - Anthony Velikov:
 - Chaitya Jodhavat:
 - Jason Huang:
