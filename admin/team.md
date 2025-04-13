@@ -10,7 +10,7 @@
 Hello! Welcome to Team 26's Page! Our team name is Go Gitters. We are super excited to develop a great project this quarter.
 
 ![Team Image](./teambonding.jpg)
-![Team Logo](./teambranding.jpg)
+![Team Logo](./branding.jpg)
 
 ## Team Values
 Some of our team values include: 
