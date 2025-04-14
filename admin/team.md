@@ -36,4 +36,4 @@ Here is our team for this quarter:
 - Long Hodac:
 - Mahdi Najjar: 
 - Min Paing: Hi My name is Min Aung Paing. I am a junior majoring in Computer Science. I am interested in backend development and have some background in Full-stack web development. I am excited to work on this project with these amazing teammates. Here is link to my github: [MgMap](https://github.com/MgMap)
-- Yifei Xue: 
+- Yifei Xue: Hi I'am Yifei and I am a second year math-cs student. I have full-stack experience and is looking forward to further practice my back-end skills. Here is the link to my github: [Yifei's Github](https://github.com/YifeiXue111)
