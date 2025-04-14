@@ -31,7 +31,7 @@ Here is our team for this quarter:
 - Sruti Mani: Hi my name is Sruti Mani, and I am a third year Mathematics: Computer Science major. I am interested in software development and project management. Here is a link to my personal github page: [Sruti's GitHub](https://github.com/srutimani)
 - Anthony Velikov: Im Tony and im a 3rd year Computer Science major. Im going to be focused on bringing the team together but im also excited to get technical and code. [Tony's GitHub](https://github.com/AnthonyVelikov)
 - Chaitya Jodhavat:
-- Jason Huang:
+- Jason Huang: Hi, I'm Jason and I am a second year Computer Science major. I hope to work along with my teammates to code and build a good project that could go on our resumes. Here's my github: [Jason's Github](https://github.com/jasonhuan9)
 - Kevin Lee:
 - Long Hodac:
 - Mahdi Najjar: 
