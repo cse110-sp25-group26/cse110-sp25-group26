@@ -26,7 +26,7 @@ Some of our team values include:
 ## Team Roster
 Here is our team for this quarter:
 
-- Nathan Reed: 
+- Nathan Reed: Hi, I'm Nathan Reed, a 2nd year CS student! I develop a wide variety of software, with a specialization more in backend bare-metal development. I'll be mainly working to organize our group and tie everyone's skills together to build a great project, but I'll also be helping program when I can! My person GitHub Page is available here: [Nathan's GitHub](https://github.com/Minater247)
 - Hanbin Tan: Hello, I'm Hanbin Tan. I'm a third year CAS major with an interest in cloud engineering. I aim to bring creativity and diligence to our projects.  Here is a link to my personal  page: [Hanbin's GitHub](https://hanbintan.com)
 - Sruti Mani: Hi my name is Sruti Mani, and I am a third year Mathematics: Computer Science major. I am interested in software development and project management. Here is a link to my personal github page: [Sruti's GitHub](https://github.com/srutimani)
 - Anthony Velikov: Im Tony and im a 3rd year Computer Science major. Im going to be focused on bringing the team together but im also excited to get technical and code. [Tony's GitHub](https://github.com/AnthonyVelikov)
