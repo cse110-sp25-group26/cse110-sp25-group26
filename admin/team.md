@@ -9,7 +9,10 @@
 ## Welcome
 Hello! Welcome to Team 26's Page! Our team name is Go Gitters. We are super excited to develop a great project this quarter.
 
+### Our First Team Photo!
 ![Team Image](./teambonding.jpg)
+
+### Our Team Logo
 ![Team Logo](./branding.png)
 
 ## Team Values
@@ -32,5 +35,5 @@ Here is our team for this quarter:
 - Kevin Lee:
 - Long Hodac:
 - Mahdi Najjar: 
-- Min Paing:
+- Min Paing: Hi My name is Min Aung Paing. I am a junior majoring in Computer Science. I am interested in backend development and have some background in Full-stack web development. I am excited to work on this project with these amazing teammates. Here is link to my github: [MgMap](https://github.com/MgMap)
 - Yifei Xue: 
