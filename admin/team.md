@@ -32,7 +32,7 @@ Here is our team for this quarter:
 - Anthony Velikov: Im Tony and im a 3rd year Computer Science major. Im going to be focused on bringing the team together but im also excited to get technical and code. [Tony's GitHub](https://github.com/AnthonyVelikov)
 - Chaitya Jodhavat: Hi, I'm Chaitya and I'm a second year Computer Science major. I am interested in full-stack software engineering and machine learning. I hope to develop this project to the fullest of my abilities! Here's my GitHub page: [Chaitya's Github](https://github.com/ChaityaJ21)
 - Jason Huang: Hi, I'm Jason and I am a second year Computer Science major. I hope to work along with my teammates to code and build a good project that could go on our resumes. Here's my github: [Jason's Github](https://github.com/jasonhuan9)
-- Kevin Lee:
+- Kevin Lee: Hi my name is Kevin Lee, and I am a third year CS major. I am interested in full-stack development. Here is a link to my personal github page: [Kevin's Github](https://github.com/kevinlee1989)
 - Long Hodac:
 - Mahdi Najjar: 
 - Min Paing: Hi My name is Min Aung Paing. I am a junior majoring in Computer Science. I am interested in backend development and have some background in Full-stack web development. I am excited to work on this project with these amazing teammates. Here is link to my github: [MgMap](https://github.com/MgMap)
