@@ -38,3 +38,7 @@ This session brought the team together to define and refine the core concept of 
 1. Finalize the pitch document for the in-person pitch
 2. Refine KPI definitions and form a roadmap to completion
 3. Schedule follow-up based on feedback to either plan development or revise pitch.
+
+# 6. Reference Images
+![sticky note board](/specs/brainstorm/stickies.png)
+![game design mockups](/specs/brainstorm/mockups.png)
