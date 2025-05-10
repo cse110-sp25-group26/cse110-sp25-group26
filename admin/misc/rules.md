@@ -29,9 +29,11 @@
 |-----|-----|-----|
 | Team Leads | Organize team, manage overall project structure, mediate inter-group communication and discussion, etc. | Nathan Reed, Hanbin Tan |
 | Merge Coordinator | Determine branch structure, branch communication, manage merges | <> |
-| Frontend / Design | <> | <> |
-| Backend | <> | <> |
+| Frontend / Design | Manage the User Interface portion of the game, including designing the elements and creating HTML/CSS | <> |
+| Backend |  | <> |
 | Documentation Lead | <> | <> |
+
+**Accountability**: Update GitHub Issues in a timely manner, ensure all PRs meet requirements and are properly reviewed.
 
 # 4. Communication Protocals and Meeting Cadence
 - **Channels**:
