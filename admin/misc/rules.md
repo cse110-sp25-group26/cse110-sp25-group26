@@ -8,12 +8,15 @@
 - Implement deck generation, interactable cards, and Hands
 - Add core game loop (Send/Discard, basic scoring)
 - Build basic UI layout for player/dealer hands and controls
+
 **Week 2** (May 24, 2025):
 - Enhance UI/UX with animations, responsiveness, and keyboard controls for accessibility.
 - Integrate audio effects and score tracking display bar
+
 **Week 3** (May 31, 2025):
 - Begin basic user testing and collect feedback.
 - Write automated unit tests for game logic and log bugs.
+
 **Week 4** (June 5, 2025):
 - Final polish: Fix critical bugs, optimize performance, update documentation (README, JSDoc, code comments)
 - Deploy final build to GitHub Pages and verify cross-browser compatibility.
