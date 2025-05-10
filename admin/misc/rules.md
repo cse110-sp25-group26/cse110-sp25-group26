@@ -25,8 +25,13 @@
 - **Adaptability**: Welcome feedback, iterate based on playtesting
 
 # 3. Roles, Responsibilities and Accountability
-
-> TBD in meeting
+| Role | Responsibilities | Assigned To |
+|-----|-----|-----|
+| Team Leads | Organize team, manage overall project structure, mediate inter-group communication and discussion, etc. | Nathan Reed, Hanbin Tan |
+| Merge Coordinator | Determine branch structure, branch communication, manage merges | <> |
+| Frontend / Design | <> | <> |
+| Backend | <> | <> |
+| Documentation Lead | <> | <> |
 
 # 4. Communication Protocals and Meeting Cadence
 - **Channels**:
@@ -34,9 +39,9 @@
   - **GitHub Issues and PRs**: Task assignments and code discussions
   - **Discord/Zoom Call**: Sprint planning, showcase, and retrospectives.
 - **Meetings**:
-  - **Stand-Up**: TBD
-  - **Sprint Planning**: Weekly, day/time TBD
-  - **Sprint Retrospective**: Weekly, day/time TBD
+  - **Stand-Up**: Tuesday/Thursday After Class
+  - **Sprint Planning**: Weekly, Tuesdays After Class
+  - **Sprint Retrospective**: Weekly, Mondays at 11:00 AM
 
 # 5. Conflict Resolution and Rule Enforcement
 1. **Direct Talk**: Address concerns in a private message first.
