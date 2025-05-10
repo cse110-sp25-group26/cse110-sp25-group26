@@ -2,7 +2,7 @@
 
 ## Javascript
 - Always use semicolons at the end of lines.
-- Use CamelCase for variables/functions, PascalCase for game objects (Card, Hand, Deck, etc.)
+- Use camelCase for variables/functions, PascalCase for game objects (Card, Hand, Deck, etc.)
 - Document functions with [JSDoc](https://jsdoc.app/about-getting-started)
 
 ## HTML / CSS
