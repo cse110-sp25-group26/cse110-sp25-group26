@@ -31,10 +31,10 @@
 | Role | Responsibilities | Assigned To |
 |-----|-----|-----|
 | Team Leads | Organize team, manage overall project structure, mediate inter-group communication and discussion, etc. | Nathan Reed, Hanbin Tan |
-| Merge Coordinator | Determine branch structure, branch communication, manage merges | <> |
-| Frontend / Design | Manage the User Interface portion of the game, including designing the elements and creating HTML/CSS | <> |
-| Backend |  | <> |
-| Documentation Lead | <> | <> |
+| Merge Coordinator | Determine branch structure, branch communication, manage merges | Min Paing |
+| Frontend / Design | Manage the User Interface portion of the game, including designing the elements and creating HTML/CSS | Variable based on demand |
+| Backend | Manage the game logic and implementation of Javascript code in the backend. | Variable based on demand |
+| Documentation Lead | Manage the documentation for the project, including [README](/README.md) management, code comments, and structural documentation. | Sruti Mani and Anthony Velikov |
 
 **Accountability**: Update GitHub Issues in a timely manner, ensure all PRs meet requirements and are properly reviewed.
 
@@ -67,3 +67,8 @@
 
 
 **Review Cycle**: Update this charter in retrospectives to reflect lessons learned.
+
+
+# Signature
+
+________________________________________________________________________________________________________________________________________________________________________________________
