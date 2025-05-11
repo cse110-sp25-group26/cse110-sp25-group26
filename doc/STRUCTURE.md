@@ -7,6 +7,13 @@ This directory contains JavaScript scripts and objects for the project. These sh
 - `optionsManager.js`, which manages the state of options throughout the game. Includes methods to temporarily and permanently modify game options such as SFX/Music volume and game speed.
 - `utils.js`, which contains helper functions commonly used between other files.
 
+## scripts/tests/
+This directory contains tests for the JavaScript scripts and objects in the `scripts/` directory. The respective test file for a code file may be found as follows:
+1. Change the extension from `.js` to `.test.js`
+2. Follow the directory tree from `tests/` as if from `scripts/`.
+
+For example, if a file is under `scripts/subdirectory/file.js`, the test fill will be at `scripts/tests/subdirectory/file.test.js`.
+
 ## res/
 This directory contains external resources for the project. This includes sound, images, and any other non-text files used in the project. This limitation is open to discussion and modification if necessary.
 
