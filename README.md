@@ -1,4 +1,4 @@
-# cse110-sp25-group26
+# cse110-sp25-group26 Go Gitters
 Project Repository for CSE110, Group 26.
 
 ## Resources
