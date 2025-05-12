@@ -4,6 +4,7 @@
 - Always use semicolons at the end of lines.
 - Use camelCase for variables/functions, PascalCase for game objects (Card, Hand, Deck, etc.)
 - Document functions with [JSDoc](https://jsdoc.app/about-getting-started)
+  - There should be no whitespace between a JSDoc comment and its function/class.
 
 ## HTML / CSS
 - Use semantic tags, avoid "divitis"
@@ -16,6 +17,9 @@
 ## General (all):
 - Format all code with built-in VSCode formatting before creating pull requests
 - Use tabs, not spaces
+- Keep related keywords, expressions, and function parameters on the same line.
+- Use a reasonable amount of whitespace, typically 1-2 lines.
+- Group items by their relevance to one another.
 
 
 ## Commit Messages
