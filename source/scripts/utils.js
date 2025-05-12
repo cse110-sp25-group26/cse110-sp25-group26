@@ -2,6 +2,16 @@
  * @function calculateBlackjackScore
  * @description Calculates the Blackjack score from an array of cards.
  * @param {Card[]} cards - An array of Card objects.
+ * 
+ * @example
+ * const cards = [
+ *   new Card('hearts', 'A'),
+ *   new Card('spades', 'K'),
+ *   new Card('diamonds', '5')
+ *  ];
+ * const score = calculateBlackjackScore(cards);
+ * console.log(score); // Outputs 16
+ * 
  * @returns {number} The calculated score.
  */
 export function calculateBlackjackScore(cards) {
