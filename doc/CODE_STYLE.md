@@ -20,7 +20,23 @@
 
 ## Commit Messages
 Commit messages should follow the form:
-`<type>(<scope>): <short summary>`
-The body and footers in the main message are optional. If you want to be detailed, check the [Conventional Commits documentation](https://www.conventionalcommits.org/en/v1.0.0/), but the full format is not required.
+`<type>: <short summary>`
+The body and footers in the main message are optional.
 
-The types we will be using include, but are not limited to: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, and `test`.
+The types we will be using include, but are not limited to:
+- `build`: Changes that affect the build system or external dependencies
+- `ci`: Changes to our CI configuration files and scripts
+- `docs`: Documentation-only changes
+- `feat`: A new feature
+- `perf`: A code change related to performance
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `style`: Changes that do not affect the meaning of the code (whitespac,e formatting, missing semicolons, etc.)
+- `test`: Modifying tests, such as adding missing tests or correcting existing ones
+
+
+
+
+
+
+# Citations
+- Commit message style strongly based off of [Angular's commit structure](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)

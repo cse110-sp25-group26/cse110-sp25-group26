@@ -1,0 +1,22 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": ["source/scripts"],
+        "includePattern": ".+\\.js$",
+        "excludePattern": "(node_modules/|docs/|test/|tests/|\\.git/)"
+    },
+    "opts": {
+        "destination": "doc/scripts",
+        "recurse": true,
+        "template": "templates/default",
+        "readme": "README.md",
+        "encoding": "utf8"
+    },
+    "templates": {
+        "default": {
+            "includeDate": false
+        }
+    }
+}
