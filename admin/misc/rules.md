@@ -52,6 +52,7 @@
 1. **Direct Talk**: Address concerns in a private message first.
 2. **Team Mediation**: If unresolved, discuss at next stand-up or DM a Team Lead.
 3. **Concensus**: Majority decision, documented in meeting notes.
+
 **Enforcement Steps**:
 - **Reminder**: Friendly cue in Slack.
 - **Check-In**: One-on-one meeting with Team Lead.
