@@ -1,41 +1,111 @@
 # Build Pipeline - Phase 1
 
-Our phase 1 pipeline automates testing and documentation, while providing guidelines and a verification process to ensure code style guidelines are met.
+Our **Phase 1 pipeline** is designed to automate key processes such as testing and documentation, while also providing clear guidelines and a robust verification process. This is done to ensure that code style guidelines are consistently met across the entire codebase, promoting maintainability and quality.
+
+---
 
 ## 1. Linting and Code Style Enforcement
-Currently, our pipeline utilizes mostly manual code style enforcement and default editor linting. Code style guidelines are documented in [CODE_STYLE.md](/doc/CODE_STYLE.md), and include:
-- Code case (camelCase/PascalCase)
-- HTML formatting and guidelines
-- CSS organizational and rule type guidelines
-- General code organizational and stylistic guidelines
-- Commit message formatting
 
-Until a proper linter is implemented (likely `eslint`, but it has caused issues beyond the time available for this phase), the current linting guidelines are to use VSCode's built-in linter, and to format all JavaScript code using the integrated formatter.
+Currently, our pipeline primarily relies on **manual code style enforcement** and the default editor linting capabilities available. Code style guidelines are comprehensively documented in [CODE_STYLE.md](/doc/CODE_STYLE.md). These guidelines encompass a variety of aspects, including but not limited to:
+
+- **Code Case Conventions**: 
+  - Consistent use of `camelCase` or `PascalCase` for variable and function names.
+- **HTML Formatting and Guidelines**: 
+  - Clear, readable, and consistent HTML structure.
+- **CSS Organizational and Rule Type Guidelines**: 
+  - Ensuring that CSS rules are well-structured and logically grouped.
+- **General Code Organizational and Stylistic Guidelines**:
+  - Clear separation of concerns, modular code design, and adherence to naming conventions.
+- **Commit Message Formatting**:
+  - Structured, meaningful commit messages to ensure clear version history.
+
+Until a more robust linting solution is implemented (likely using `eslint`), our current linting practices are as follows:
+
+- **VSCode's Built-in Linter**:
+  - Utilizing the integrated linting capabilities of VSCode.
+- **JavaScript Code Formatting**:
+  - Formatting all JavaScript code using the integrated VSCode formatter.
+
+---
 
 ## 2. Code Quality via Tool
-This is not yet implemented. Both CodeClimate and Codacy require paid plans for team use, and although alternatives are available, we are yet to fully compare the efficacy of them.
+
+This aspect of the pipeline is **currently not implemented**. Both **CodeClimate** and **Codacy** require paid plans for team usage, which is not feasible at this stage. Although there are alternative tools available, we have not yet fully compared their efficacy or suitability for our project.
+
+---
 
 ## 3. Code Quality via Human Review
-Pull requests to `main` and `develop` require pull requests to merge to, while `main` additionally requires both passing CI and one approving review. This is not implemented through GitHub's automatic branch protection, as our organization does not have the paid plan, but the details are specified at the top of [BRANCHING.md](/doc/BRANCHING.md).
 
-The review process is described in [REVIEWING.md](/doc/REVIEWING.md) and defines a 5-step review process, with a reviewer checklist, to ensure the review process goes smoothly. Pull requests to `develop` require at least one peer reviewer, while pull requests to `main` require two reviews, one from a team lead.
+- **Branch Protection Requirements**:
+  - Pull requests (PRs) to the `main` and `develop` branches are required for merging.
+  - For the `main` branch, PRs must pass continuous integration (CI) checks and receive one approving review.
+  - These requirements are not enforced through GitHub's automatic branch protection settings, due to the organization's lack of a paid plan. Instead, they are defined and enforced through team guidelines.
 
-## Unit Tests via Automation
-Unit tests are present in the code, and are both manually runnable (`npm run test`) and automatically run on PR/push to `main`/`develop`. They automatically run all tests present in `source/scripts/tests/`.
+- **Review Process Details**:
+  - The review process is comprehensively defined in [REVIEWING.md](/doc/REVIEWING.md).
+  - It is a **5-step review process**, complete with a reviewer checklist to ensure consistency and quality.
+  - PRs to `develop` require at least one peer reviewer.
+  - PRs to `main` require two reviews, including one from a team lead.
 
-Unit tests have a defined location relative to their main file - take the file tree from `source/scripts/`, add `tests/` before that, and re-root the tree back to `source/scripts`. See [TESTING.md](/doc/TESTING.md) for more information about this.
+- **Manual Review Verification**:
+  - Even without automatic branch protection, the team adheres to these guidelines through documented processes.
 
-Also present in `TESTING.md` is the type of tests present. We will be using Jest to write and run unit tests.
+---
 
-# Documentation Generation via Automation
-All JavaScript files are documented via JSDoc. This is required by the [style guidelines](/doc/CODE_STYLE.md), and in the future will be automatically assessed by the linter. Documentation should include function descriptions, class descriptions, and usage examples where necessary.
+## 4. Unit Tests via Automation
 
-An HTML version of the documentation is present at [/doc/scripts/index.html](/doc/scripts/index.html), containing compiled JSDoc information. This may be recompiled at any time via `npm run docs`. This provides a clean, well-structured way to view nicely-formatted documentation for the codebase as a whole.
+Unit testing is an integral part of this pipeline:
 
-# Other Testing
-We also intend to implement HTML and CSS validation via W3C, either through the review process or through automated testing. The planned automated environments have recently incurred unfixed vulnerabilities (the costs of dependencies...), so they have been left out until required.
+- **Automated Testing Triggers**:
+  - Tests are automatically executed on PRs and direct pushes to both the `main` and `develop` branches.
+  - These tests can also be manually run using the command: 
+    ```bash
+    npm run test
+    ```
 
+- **Test Directory Structure**:
+  - Unit tests are located in `source/scripts/tests/`.
+  - The structure for tests is defined by re-rooting the `source/scripts/` tree into `source/scripts/tests/`.
 
+- **Testing Framework**:
+  - We utilize **Jest** for both writing and executing unit tests, ensuring a consistent testing environment.
 
-# Documentation Passes - Image
+- **Further Information**:
+  - Additional details about the testing process are available in [TESTING.md](/doc/TESTING.md), including specific guidelines on test organization and expected test types.
+
+---
+
+## 5. Documentation Generation via Automation
+
+Documentation is a critical aspect of maintaining code quality and usability:
+
+- **Documentation Style**:
+  - All JavaScript files are documented using **JSDoc**.
+  - This is a mandatory requirement as specified in the [style guidelines](/doc/CODE_STYLE.md).
+
+- **Required Documentation Components**:
+  - Each function and class should have:
+    - A clear, descriptive comment explaining its purpose.
+    - Properly annotated parameters and return types.
+    - Usage examples, where appropriate.
+
+- **HTML Documentation Generation**:
+  - A complete, HTML version of the documentation is available at [/doc/scripts/index.html](/doc/scripts/index.html).
+  - This documentation can be recompiled at any time using:
+    ```bash
+    npm run docs
+    ```
+
+- **Future Improvements**:
+  - We aim to enhance this process by integrating automatic documentation checks through the linter in future pipeline phases.
+
+---
+
+## 6. Other Testing - HTML and CSS Validation
+
+We have plans to implement **HTML and CSS validation** using the **W3C validation tools**. However, the automated validation environments have recently experienced unresolved vulnerabilities due to dependency issues, leading to their temporary exclusion. If these dependency issues are not resolved, we will have to add manual verification to the merge requirements.
+
+---
+
+## Documentation Passes
 ![alt test](/admin/cipipeline/phase1.png)
