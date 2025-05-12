@@ -14,5 +14,13 @@
  * addNumbers('2', 3); // returns 5
  */
 export function addNumbers(num1, num2) {
+    // Convert arguments to numbers if they are strings
+    if (typeof num1 === 'string') {
+        num1 = parseFloat(num1);
+    }
+    if (typeof num2 === 'string') {
+        num2 = parseFloat(num2);
+    }
+
     return num1 + num2;
 }
