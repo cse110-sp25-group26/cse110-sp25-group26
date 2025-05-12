@@ -34,3 +34,8 @@ An HTML version of the documentation is present at [/doc/scripts/index.html](/do
 
 # Other Testing
 We also intend to implement HTML and CSS validation via W3C, either through the review process or through automated testing. The planned automated environments have recently incurred unfixed vulnerabilities (the costs of dependencies...), so they have been left out until required.
+
+
+
+# Documentation Passes - Image
+![alt test](/admin/cipipeline/phase1.png)
