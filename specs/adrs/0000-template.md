@@ -1,6 +1,6 @@
 ---
-# Configuration for the Jekyll “Just the Docs” theme (optional)
-parent: Decisions # shows a “Decisions” section in a Jekyll site
+# Configuration for the Jekyll "Just the Docs" theme (optional)
+parent: Decisions # shows a "Decisions" section in a Jekyll site
 nav_order: 100
 title: ADR Template
 # status: "{proposed | accepted | rejected | superseded by MMDDYY‑other‑adr }"
@@ -17,7 +17,7 @@ title: ADR Template
 ## Context and Problem Statement
 
 {Explain the situation and the problem in 2‑3 sentences.  
-If helpful, phrase it as a question: “How should we … ?”}
+If helpful, phrase it as a question: "How should we … ?"}
 
 ## Decision Drivers
 
@@ -34,7 +34,7 @@ If helpful, phrase it as a question: “How should we … ?”}
 
 ## Decision Outcome
 
-Chosen option: **“{option 1}”**, because {concise justification}.
+Chosen option: **"{option 1}"**, because {concise justification}.
 
 ### Consequences
 
