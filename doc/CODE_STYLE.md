@@ -34,7 +34,7 @@ The types we will be using include, but are not limited to:
 - `feat`: A new feature
 - `perf`: A code change related to performance
 - `refactor`: A code change that neither fixes a bug nor adds a feature
-- `style`: Changes that do not affect the meaning of the code (whitespac,e formatting, missing semicolons, etc.)
+- `style`: Changes that do not affect the meaning of the code (whitespace, formatting, missing semicolons, etc.)
 - `test`: Modifying tests, such as adding missing tests or correcting existing ones
 
 

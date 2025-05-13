@@ -25,7 +25,7 @@ cd cse110-sp25-group26
 npm install
 
 # 3. sanity check
-npm run tes
+npm run test
 ```
 
 Need more detail? Read the [Getting Started Guide](/doc/GETTINGSTARTED.md).
