@@ -2,8 +2,10 @@
 
 A chronological list of all ADRs in this repository.
 
-| No.  | Date | Title / Topic            | Status |
-| ---- | ---- | ------------------------ | ------ |
-| 0000 | —    | ADR Template (this file) | —      |
-
-> **Tip:** add new rows as you create ADRs; keep the table sorted by date.
+| No.  | Date       | Title / Topic      | Status   |
+| ---- | ---------- | ------------------ | ------   |
+| 0000 | —          | ADR Template       | —        |
+| 0001 | 05/11/2025 | Mouse Dragging     | accepted |
+| 0002 | 05/11/2025 | Keyboard Controls  | accepted |
+| 0003 | 05/11/2025 | Card Animation     | accepted |
+| 0004 | 05/11/2025 | Hand Position      | accepted |
