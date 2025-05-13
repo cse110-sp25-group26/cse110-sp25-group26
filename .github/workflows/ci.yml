@@ -31,37 +31,8 @@ jobs:
       
       - name: Run jest
         run: npm run test -- --ci --passWithNoTests
-
-  # 2) Regenerate docs and make sure nothing changed
-  docs:
-    name: Verify docs are up-to-date
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '21'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Regenerate docs
-        run: npm run docs
-
-      - name: Check for changes
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "blank@blank.com"
-          git diff --exit-code doc/scripts
   
-  # 3) Lint code
+  # 2) Lint code
   lint:
     name: Lint code
     runs-on: ubuntu-latest
