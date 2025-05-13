@@ -6,22 +6,22 @@
  * @property {string} type - The rank of the card (e.g., 'A', '2', '3', ..., 'K'). Contains the joker or consumable type if the card is a joker or consumable.
  */
 export class Card {
-    /**
-     * @constructor
-     * @param {string} suit - The suit of the card.
-     * @param {string} type - The rank of the card.
-     */
-    constructor(suit, type) {
-        this.isFlipped = false;
-        this.suit = suit;
-        this.type = type;
-    }
+	/**
+	 * @class Card
+	 * @param {string} suit - The suit of the card.
+	 * @param {string} type - The rank of the card.
+	 */
+	constructor(suit, type) {
+		this.isFlipped = false;
+		this.suit = suit;
+		this.type = type;
+	}
 
-    /**
-     * @method flip
-     * @description Flips the card.
-     */
-    flip() {
-        this.isFlipped = !this.isFlipped;
-    }
+	/**
+	 * @function flip
+	 * @description Flips the card.
+	 */
+	flip() {
+		this.isFlipped = !this.isFlipped;
+	}
 }
