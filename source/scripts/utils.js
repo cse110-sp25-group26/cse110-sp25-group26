@@ -1,4 +1,4 @@
-import { Card } from '../classes/Card.js';
+import { Card } from './Card.js';
 
 /**
  * @function calculateBlackjackScore
