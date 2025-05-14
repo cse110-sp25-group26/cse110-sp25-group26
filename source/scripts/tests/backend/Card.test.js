@@ -2,7 +2,7 @@
  * @description Unit tests for the Card class.
  */
 
-import { Card } from '../Card.js';
+import { Card } from '../../backend/Card.js';
 
 describe('Card', () => {
     test('Card constructor initializes properties correctly', () => {
