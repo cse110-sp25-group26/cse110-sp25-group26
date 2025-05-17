@@ -53,4 +53,29 @@ export class Card {
 		this.properties.push(property);
 		return true;
 	}
+
+	/**
+	 * @function removeProperty
+	 * @description Removes a property from the card.
+	 * @param {string} property - The property to remove.
+	 * @returns {boolean} - True if the property was removed, false if it didn't exist.
+	 */
+	removeProperty(property) {
+		const index = this.properties.indexOf(property);
+		if (index === -1) {
+			return false;
+		}
+		this.properties.splice(index, 1);
+		return true;
+	}
+
+	/**
+	 * @function hasProperty
+	 * @description Checks if the card has a specific property.
+	 * @param {string} property - The property to check.
+	 * @returns {boolean} - True if the card has the property, false otherwise.
+	 */
+	hasProperty(property) {
+		return this.properties.includes(property);
+	}
 }
