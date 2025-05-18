@@ -1,0 +1,70 @@
+<!DOCTYPE html>>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gameplay</title>
+    <link rel="stylesheet" href="gameplay.css">
+</head>
+
+<body>
+    <div id="stage">
+        <!-- ───────── SCOREKEEPER ───────── -->
+        <aside id="scoreboard">
+            <button class="pill" id="buy-in">Buy In</button>
+            <section class="score-goal">
+                <p>Score at least</p>
+                <h1 id="goal-score">place-holder</h1>
+            </section>
+            <section class="current round-score">
+                <p>Current Round Score</p>
+                <h1 id="round score">place-holder</h1>
+            </section>
+
+            <section class="chip-multiplier">
+                <div class="row">
+                    <div class="blue square"><span id="chip-val">1</span></div>
+                    <span class="x">×</span>
+                    <div class="red square"><span id="mult-val">1</span></div>
+                </div>
+                <small>Chips&nbsp;/&nbsp;Mult</small>
+            </section>
+
+            <section class="info-options">
+                <button class="pill" id="info">Info</button>
+                <button class="pill" id="options">Options</button>
+            </section>
+
+            <p class="bank"><span id="bank-amount">place-holder</span></p>
+
+            <div class ="meta">
+                <div>discards <strong id="discards"> 4</strong></div>
+            </div>
+            </aside>
+      <!-- ─────────  MAIN GAME ───────── -->
+            <main id ="board">
+                <div id="play-area">        </div>
+                <footer id="hand">
+                    <span id="card-count">5/5</span>
+                    <div id="hand-cards">  </div>
+                        
+
+                    <div class="row">
+                        <button class="pill" id="discard">Discard</button>
+                        <button class="pill" id="draw">Draw</button>
+                    </div>
+
+                    <div id="deck"> </div>
+                       
+                    </footer>
+            </main>
+    </div>
+    <script type="module">
+    import Scorekeeper from './scripts/frontend/UI_scorekeeper.js';
+    const hud = new Scorekeeper();
+
+
+  </script>
+</body>
+</html>
