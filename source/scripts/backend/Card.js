@@ -78,4 +78,50 @@ export class Card {
 	hasProperty(property) {
 		return this.properties.includes(property);
 	}
+
+	/**
+	 * @function moveTo
+	 * @description - Moves the card's UI element to a target DOM container with a smooth animation.
+	 *              Can be awaited to ensure the move completes before continuing.
+	 * @param {HTMLElement} targetEl - The DOM element to move the card into.
+	 * @returns {Promise<void>} - Resolves when the move is finished.
+	 */
+	async moveTo(targetEl){
+      	return new Promise((resolve) => {
+
+			// If Card has no UI element
+			if(!this.UIel || !(this.UIel instanceof HTMLElement)){
+				console.warn("Card has no UI element");
+				resolve();
+				return;
+			}
+
+			// Get current and target positions for moving card.
+			const currentRect = this.UIel.getBoundingClientRect();
+			const targetRect = targetEl.getBoundingClientRect();
+
+			const deltaX = targetRect.left - currentRect.left;
+			const deltaY = targetRect.top - currentRect.top;
+
+			// For animation
+			this.UIel.style.position = 'absoulte';
+			this.UIel.style.transition = 'transform 0.5 ease';
+			this.UIel.style.zIndex = '1000';
+			this.UIel.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+			const onTransitionEnd = () => {
+				// Update to the initial state after animation
+				this.UIel.style.position = '';
+				this.UIel.style.transition = '';
+				this.UIel.style.zIndex = '';
+				this.UIel.style.transform = '';
+				targetEl.appendChild(this.UIel);
+				this.UIel.removeEventListener('transitionend', onTransitionEnd);
+				resolve();
+			};
+
+			this.UIel.addEventListener('transitionend', onTransitionEnd);
+      	});
+	}
+
 }
