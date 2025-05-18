@@ -3,8 +3,8 @@
  */
 
 import { mock } from 'node:test';
-import { Card } from '../../backend/Card.js';
-import { calculateBlackjackScore, staggered } from '../../backend/utils.js';
+import { Card } from '../Card.js';
+import { calculateBlackjackScore, staggered } from '../utils.js';
 import { jest } from '@jest/globals';
 
 describe('calculateBlackjackScore', () => {

@@ -30,11 +30,8 @@
  * @classdesc Represents a playing card in the game.
  *
  * @property {boolean} isFlipped - Indicates if the card is flipped.
- * @property {boolean} isSelected - Indicates if the card is selected.
  * @property {string} suit - The suit of the card (e.g., 'hearts', 'diamonds'). Contains 'joker' or 'consumable' if the card is a joker or consumable.
  * @property {string} type - The rank of the card (e.g., 'A', '2', '3', ..., 'K'). Contains the joker or consumable type if the card is a joker or consumable.
- * @property {string[]} properties - The properties of the card (e.g., 'seal_gold', 'holo', 'alwaysFlipped')
- * @property {any} UIel - The UI element associated with the card. Type depends on the UI implementation.
  */
 export class Card {
 	/**
@@ -44,10 +41,8 @@ export class Card {
 	 */
 	constructor(suit, type) {
 		this.isFlipped = false;
-		this.isSelected = false;
 		this.suit = suit;
 		this.type = type;
-		this.properties = [];
 	}
 
 	/**
@@ -56,55 +51,6 @@ export class Card {
 	 */
 	flip() {
 		this.isFlipped = !this.isFlipped;
-	}
-
-	/**
-	 * @function toggleSelect
-	 * @description Toggles the selection state of the card.
-	 * @returns {boolean} - The new selection state of the card.
-	 */
-	toggleSelect() {
-		this.isSelected = !this.isSelected;
-		return this.isSelected;
-	}
-
-	/**
-	 * @function addProperty
-	 * @description Adds a property to the card.
-	 * @param {string} property - The property to add.
-	 * @returns {boolean} - True if the property was added, false if it already exists.
-	 */
-	addProperty(property) {
-		if (this.properties.includes(property)) {
-			return false;
-		}
-		this.properties.push(property);
-		return true;
-	}
-
-	/**
-	 * @function removeProperty
-	 * @description Removes a property from the card.
-	 * @param {string} property - The property to remove.
-	 * @returns {boolean} - True if the property was removed, false if it didn't exist.
-	 */
-	removeProperty(property) {
-		const index = this.properties.indexOf(property);
-		if (index === -1) {
-			return false;
-		}
-		this.properties.splice(index, 1);
-		return true;
-	}
-
-	/**
-	 * @function hasProperty
-	 * @description Checks if the card has a specific property.
-	 * @param {string} property - The property to check.
-	 * @returns {boolean} - True if the card has the property, false otherwise.
-	 */
-	hasProperty(property) {
-		return this.properties.includes(property);
 	}
 }</code></pre>
         </article>
@@ -116,8 +62,7 @@ export class Card {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Hand.html">Hand</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li></ul>
-
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#staggered">staggered</a></li></ul>
 </nav>
 
 <br class="clear">
