@@ -5,7 +5,10 @@ import jsdoc from "eslint-plugin-jsdoc";
 
 export default defineConfig([
   {
-    files: ["source/scripts/*.{js,mjs,cjs}"],
+    files: [
+      "source/scripts/backend/*.{js,mjs,cjs}",
+      "source/scripts/frontend/*.{js,mjs,cjs}",
+    ],
     plugins: { 
       js,
       jsdoc 
