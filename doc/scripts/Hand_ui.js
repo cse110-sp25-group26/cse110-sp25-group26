@@ -33,40 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
         new Map();
 
     function createCardElement(card) {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.dataset.suit = card.suit;
+        cardElement.dataset.type = card.type;
+        cardElement.textContent = `${card.type} of ${card.suit}`;
 
-        const cardElement =
-            document.createElement(
-                'div'
-            );
-
-        cardElement.className =
-            'card';
-
-        cardElement.dataset.suit =
-            card.suit;
-
-        cardElement.dataset.type =
-            card.type;
-
-        cardElement.textContent =
-            `${card.type} of ${card.suit}`;
-
-        cardElement.addEventListener(
-            'click',
-            () => {
-
-                const index =
-                    hand.cards.indexOf(
-                        card
-                    );
-
-                hand.selectCard(
-                    index
-                );
-
-                updateCardDisplay();
+        cardElement.addEventListener('click', () => {
+            const index = hand.cards.indexOf(card);
+            if (card.isSelected) {
+                // Unselect if already selected
+                card.isSelected = false;
+            } else {
+                hand.selectCard(index);
             }
-        );
+            updateCardDisplay();
+        });
 
         return cardElement;
     }
@@ -278,6 +260,25 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
     addCardToHand(
         'hearts',
         'A'
