@@ -183,4 +183,43 @@ describe('Hand', () => {
         expect(hand.cards[0].type).toBe('2');
         expect(hand.cards[1].type).toBe('A');
     });
+
+    test('selectCard selects a card and deselects others', () => {
+        const hand = new Hand();
+        const card1 = new Card('hearts', 'A');
+        const card2 = new Card('clubs', 'K');
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.selectCard(0);
+        expect(card1.selected).toBe(true);
+        expect(card2.selected).toBe(false);
+        hand.selectCard(1);
+        expect(card1.selected).toBe(false);
+        expect(card2.selected).toBe(true);
+    });
+
+    test('selectCard with invalid index returns false', () => {
+        const hand = new Hand();
+        hand.addCard(new Card('hearts', 'A'));
+        expect(hand.selectCard(-1)).toBe(false);
+        expect(hand.selectCard(1)).toBe(false);
+    });
+
+    test('getSelectedCard returns the selected card', () => {
+        const hand = new Hand();
+        const card1 = new Card('hearts', 'A');
+        const card2 = new Card('clubs', 'K');
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.selectCard(1);
+        expect(hand.getSelectedCard()).toBe(card2);
+        hand.selectCard(0);
+        expect(hand.getSelectedCard()).toBe(card1);
+    });
+
+    test('getSelectedCard returns null if no card is selected', () => {
+        const hand = new Hand();
+        hand.addCard(new Card('hearts', 'A'));
+        expect(hand.getSelectedCard()).toBeNull();
+    });
 });

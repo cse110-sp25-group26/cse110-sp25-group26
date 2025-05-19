@@ -193,4 +193,29 @@ export class Hand {
 		}
 		return this.cards.splice(index, 1)[0];
 	}
+
+	/**
+	 * @function selectCard
+	 * @description Selects a card in the hand, deselecting all others.
+	 * @param {number} index - The index of the card to select.
+	 * @returns {boolean} - Returns true if the selection was successful, false otherwise.
+	 */
+	selectCard(index) {
+		if (index < 0 || index >= this.cards.length) {
+			console.error("Hand::selectCard - Invalid index.");
+			return false;
+		}
+		this.cards.forEach(card => card.selected = false); // Deselect all cards
+		this.cards[index].selected = true; // Select the specified card
+		return true;
+	}
+
+	/**
+	 * @function getSelectedCard
+	 * @description Gets the currently selected card.
+	 * @returns {Card|null} - The selected card, or null if no card is selected.
+	 */
+	getSelectedCard() {
+		return this.cards.find(card => card.selected) || null;
+	}
 }
