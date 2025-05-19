@@ -1,4 +1,8 @@
+/** @file Card UI element with flip, drag, and tooltip functionality. */
+
 class CardElement extends HTMLElement {
+
+	/** Sets up shadow DOM, card faces, and event listeners. */
 	constructor() {
 		super();
 		this.attachShadow({ mode: 'open' });
@@ -70,11 +74,13 @@ class CardElement extends HTMLElement {
 		this._container.addEventListener('mouseenter', () => tooltip.style.display = 'block');
 		this._container.addEventListener('mouseleave', () => tooltip.style.display = 'none');
 	}
-
+	/** Flips the card to show front or back. */
 	flip() {
 		this._container.classList.toggle('flipped');
 	}
 
+
+	/** Starts drag behavior. @param {MouseEvent} e */
 	_onDragStart(e) {
 		e.preventDefault();
 		this._dragging = true;
@@ -86,12 +92,17 @@ class CardElement extends HTMLElement {
 		this._container.style.height = this._container.offsetHeight + 'px';
 	}
 
+	/** Updates card position during drag. @param {MouseEvent} e */
 	_onDragMove(e) {
 		if (!this._dragging) return;
 		this._container.style.left = `${e.clientX - this._offset.x}px`;
 		this._container.style.top = `${e.clientY - this._offset.y}px`;
 	}
 
+	/**
+	 * Ends dragging and resets card style.
+	 * @param {MouseEvent} e - The mouse up event
+	 */
 	_onDragEnd() {
 		if (!this._dragging) return;
 		this._dragging = false;
