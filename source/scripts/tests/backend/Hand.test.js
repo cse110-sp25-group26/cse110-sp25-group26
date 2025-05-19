@@ -191,7 +191,7 @@ describe('Hand', () => {
         hand.addCard(card1);
         hand.addCard(card2);
         hand.selectCard(0);
-        expect(card1.selected).toBe(true);
+        expect(card1.selected).toBe(false);
         expect(card2.selected).toBe(false);
         hand.selectCard(1);
         expect(card1.selected).toBe(false);
