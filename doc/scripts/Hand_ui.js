@@ -335,4 +335,61 @@ document.addEventListener('DOMContentLoaded', () => {
         'diamonds',
         '10'
     );
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
 });
