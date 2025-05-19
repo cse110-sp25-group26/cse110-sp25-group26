@@ -191,7 +191,12 @@ export class Hand {
 		if (index < 0 || index >= this.cards.length) {
 			return null; // Invalid index
 		}
-		return this.cards.splice(index, 1)[0];
+		const removed = this.cards.splice(index, 1)[0];
+		// If the removed card was selected, clear selection on all cards
+		if (removed && removed.isSelected) {
+			this.cards.forEach(card => card.isSelected = false);
+		}
+		return removed;
 	}
 
 	/**
@@ -205,8 +210,8 @@ export class Hand {
 			console.error("Hand::selectCard - Invalid index.");
 			return false;
 		}
-		this.cards.forEach(card => card.selected = false); // Deselect all cards
-		this.cards[index].selected = true; // Select the specified card
+		this.cards.forEach(card => card.isSelected = false); // Deselect all cards
+		this.cards[index].isSelected = true; // Select the specified card
 		return true;
 	}
 
@@ -216,6 +221,6 @@ export class Hand {
 	 * @returns {Card|null} - The selected card, or null if no card is selected.
 	 */
 	getSelectedCard() {
-		return this.cards.find(card => card.selected) || null;
+		return this.cards.find(card => card.isSelected) || null;
 	}
 }

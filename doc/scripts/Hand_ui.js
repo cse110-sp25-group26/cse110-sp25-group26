@@ -1,12 +1,13 @@
 import {
     Hand
-} from '../source/scripts/backend/Hand.js';
+} from '../../source/scripts/backend/Hand.js';
 
 import {
     Card
-} from '../source/scripts/backend/Card.js';
+} from '../../source/scripts/backend/Card.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Hand_ui.js loaded and DOMContentLoaded fired");
 
     const handContainer =
         document.getElementById('hand-container');
@@ -262,10 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
         removeCardButton.addEventListener(
             'click',
             () => {
-
-                removeCardFromHand(
-                    0
-                );
+                // Find the selected card
+                const selectedIndex = hand.cards.findIndex(card => card.isSelected);
+                if (selectedIndex !== -1) {
+                    removeCardFromHand(selectedIndex);
+                }
             }
         );
 
@@ -276,6 +278,44 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
     addCardToHand(
         'hearts',
         'A'
