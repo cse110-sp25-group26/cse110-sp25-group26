@@ -191,11 +191,11 @@ describe('Hand', () => {
         hand.addCard(card1);
         hand.addCard(card2);
         hand.selectCard(0);
-        expect(card1.selected).toBe(true);
-        expect(card2.selected).toBe(false);
+        expect(card1.isSelected).toBe(true);   // was card1.selected
+        expect(card2.isSelected).toBe(false);  // was card2.selected
         hand.selectCard(1);
-        expect(card1.selected).toBe(false);
-        expect(card2.selected).toBe(true);
+        expect(card1.isSelected).toBe(false);  // was card1.selected
+        expect(card2.isSelected).toBe(true);   // was card2.selected
     });
 
     test('selectCard with invalid index returns false', () => {
