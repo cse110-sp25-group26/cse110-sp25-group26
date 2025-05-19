@@ -92,7 +92,7 @@ class CardElement extends HTMLElement {
 		this._container.style.top = `${e.clientY - this._offset.y}px`;
 	}
 
-	_onDragEnd(e) {
+	_onDragEnd() {
 		if (!this._dragging) return;
 		this._dragging = false;
 		this._container.style.position = '';
