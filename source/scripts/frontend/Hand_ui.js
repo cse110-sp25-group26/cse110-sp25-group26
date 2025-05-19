@@ -8,6 +8,7 @@ import {
 
 // Wait for the DOM to be fully loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
+
 	// Log to console for debugging
 	console.log("Hand_ui.js loaded and DOMContentLoaded fired");
 
@@ -17,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	// If the hand container is not found, log an error and stop execution
 	if (!handContainer) {
 		console.error('Hand container not found');
-		return; // Exit if container is missing
+		return; 
+		// Exit if container is missing
 	}
 
 	// Store the width of the hand container for layout calculations
@@ -29,34 +31,42 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Map to keep track of card objects and their corresponding DOM elements
 	const cardElements = new Map();
 
-	// Function to create a DOM element for a card
 	/**
-	 *
-	 * @param card
+	 * Creates a DOM element for a card and sets up its event listeners.
+	 * @param {Card} card - The card object to create a UI element for.
+	 * @returns {HTMLElement} The created card element.
 	 */
 	function createCardElement(card) {
 		// Create a div element to represent the card visually
 		const cardElement = document.createElement('div');
+
 		// Assign the 'card' CSS class for styling
 		cardElement.className = 'card';
 		// Store card data as dataset attributes for reference
+
 		cardElement.dataset.suit = card.suit;
 		cardElement.dataset.type = card.type;
 		// Set the text content to show card type and suit
+
 		cardElement.textContent = `${card.type} of ${card.suit}`;
 
 		// Add a click event listener to handle selection and unselection
 		cardElement.addEventListener('click', () => {
+
 			// Find the index of the card in the hand
-			const index = hand.cards.indexOf(card);
+			// (index is not used, but left for clarity)
+			// const index = hand.cards.indexOf(card);
 			// If the card is already selected, unselect it
 			if (card.isSelected) {
+
 				// Unselect if already selected
 				card.isSelected = false;
 			} else {
+
 				// Otherwise, select this card
-				hand.selectCard(index);
+				hand.selectCard(hand.cards.indexOf(card));
 			}
+
 			// Update the UI to reflect the selection state
 			updateCardDisplay();
 		});
@@ -65,9 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		return cardElement;
 	}
 
-	// Function to update the visual display of the hand and position all cards
 	/**
-	 *
+	 * Updates the visual display of the hand and positions all cards.
 	 */
 	function updateCardDisplay() {
 
@@ -78,8 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		);
 
 		// Clear the hand container before re-rendering
-		handContainer.innerHTML =
-            '';
+		handContainer.innerHTML = '';
 
 		// Clear the cardElements map to rebuild it
 		cardElements.clear();
@@ -89,10 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			card => {
 
 				// Create the card element
-				const cardElement =
-                    createCardElement(
-                    	card
-                    );
+				const cardElement = createCardElement(card);
 
 				// Map the card object to its DOM element
 				cardElements.set(
@@ -127,42 +132,29 @@ document.addEventListener('DOMContentLoaded', () => {
 			totalCardsWidth <= HAND_WIDTH
 		) {
 
-			let offset =
-                0;
+			let offset = 0;
 
 			// Position each card absolutely within the container
 			hand.cards.forEach(
-				(card, index) => {
+				(card) => {
 
 					// Get the DOM element for this card
-					const cardElement =
-                        cardElements.get(
-                        	card
-                        );
+					const cardElement = cardElements.get(card);
 
 					// Set absolute positioning for the card
-					cardElement.style.position =
-                        'absolute';
+					cardElement.style.position = 'absolute';
 
 					// Set the left offset for the card
-					cardElement.style.left =
-                        `${offset}px`;
+					cardElement.style.left = `${offset}px`;
 
 					// Raise the selected card visually
-					cardElement.style.zIndex =
-                        card.isSelected
-                        	? '2'
-                        	: '1';
+					cardElement.style.zIndex = card.isSelected ? '2' : '1';
 
 					// Move the selected card up slightly
-					cardElement.style.transform =
-                        card.isSelected
-                        	? 'translateY(-10px)'
-                        	: 'translateY(0)';
+					cardElement.style.transform = card.isSelected ? 'translateY(-10px)' : 'translateY(0)';
 
 					// Increment the offset for the next card
-					offset +=
-                        cardWidth;
+					offset += cardWidth;
 				}
 			);
 
@@ -183,14 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				(card, index) => {
 
 					// Get the DOM element for this card
-					const cardElement =
-                        cardElements.get(
-                        	card
-                        );
+					const cardElement = cardElements.get(card);
 
 					// Set absolute positioning for the card
-					cardElement.style.position =
-                        'absolute';
+					cardElement.style.position = 'absolute';
 
 					// Set the left offset with overlap
 					cardElement.style.left =
@@ -202,26 +190,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         }px`;
 
 					// Raise the selected card visually
-					cardElement.style.zIndex =
-                        card.isSelected
-                        	? '2'
-                        	: '1';
+					cardElement.style.zIndex = card.isSelected ? '2' : '1';
 
 					// Move the selected card up slightly
-					cardElement.style.transform =
-                        card.isSelected
-                        	? 'translateY(-10px)'
-                        	: 'translateY(0)';
+					cardElement.style.transform = card.isSelected ? 'translateY(-10px)' : 'translateY(0)';
 				}
 			);
 		}
 	}
 
-	// Function to add a new card to the hand and update the display
 	/**
-	 *
-	 * @param suit
-	 * @param type
+	 * Adds a new card to the hand and updates the display.
+	 * @param {string} suit - The suit of the card (e.g., 'hearts').
+	 * @param {string} type - The type/rank of the card (e.g., 'A', 'K', '2').
 	 */
 	function addCardToHand(
 		suit,
@@ -229,54 +210,36 @@ document.addEventListener('DOMContentLoaded', () => {
 	) {
 
 		// Create a new Card object
-		const card =
-            new Card(
-            	suit,
-            	type
-            );
+		const card = new Card(suit, type);
 
 		// Add the card to the hand
-		hand.addCard(
-			card
-		);
+		hand.addCard(card);
 
 		// Update the UI to show the new card
 		updateCardDisplay();
 	}
 
-	// Function to remove a card from the hand at the given index and update the display
 	/**
-	 *
-	 * @param index
+	 * Removes a card from the hand at the given index and updates the display.
+	 * @param {number} index - The index of the card to remove.
 	 */
 	function removeCardFromHand(
 		index
 	) {
 
 		// Remove the card from the hand
-		hand.removeCard(
-			index
-		);
+		hand.removeCard(index);
 
 		// Update the UI to reflect the removal
 		updateCardDisplay();
 	}
 
 	// Get the add and remove card buttons from the DOM
-	const addCardButton =
-        document.getElementById(
-        	'add-card-button'
-        );
-
-	const removeCardButton =
-        document.getElementById(
-        	'remove-card-button'
-        );
+	const addCardButton = document.getElementById('add-card-button');
+	const removeCardButton = document.getElementById('remove-card-button');
 
 	// If the add card button exists, set up its click event
-	if (
-		addCardButton
-	) {
+	if (addCardButton) {
 
 		addCardButton.addEventListener(
 			'click',
@@ -299,15 +262,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// If the remove card button exists, set up its click event
-	if (
-		removeCardButton
-	) {
+	if (removeCardButton) {
 
 		removeCardButton.addEventListener(
 			'click',
+            
 			() => {
 				// Find the selected card
 				const selectedIndex = hand.cards.findIndex(card => card.isSelected);
+
 				// If a card is selected, remove it
 				if (selectedIndex !== -1) {
 					removeCardFromHand(selectedIndex);
@@ -496,3 +459,4 @@ document.addEventListener('DOMContentLoaded', () => {
 		'10'
 	);
 });
+
