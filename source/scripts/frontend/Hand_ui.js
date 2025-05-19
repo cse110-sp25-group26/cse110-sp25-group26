@@ -12,32 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Hand_ui.js loaded and DOMContentLoaded fired");
 
     // Get the hand container element from the DOM
-    const handContainer =
-        document.getElementById('hand-container');
+    const handContainer = document.getElementById('hand-container');
 
     // If the hand container is not found, log an error and stop execution
-    if (
-        !handContainer
-    ) {
-
-        console.error(
-            'Hand container not found'
-        );
-
+    if (!handContainer) {
+        console.error('Hand container not found');
         return; // Exit if container is missing
     }
 
     // Store the width of the hand container for layout calculations
-    let HAND_WIDTH =
-        handContainer.offsetWidth;
+    let HAND_WIDTH = handContainer.offsetWidth;
 
     // Create a new Hand instance to manage the cards in the hand
-    const hand =
-        new Hand();
+    const hand = new Hand();
 
     // Map to keep track of card objects and their corresponding DOM elements
-    const cardElements =
-        new Map();
+    const cardElements = new Map();
 
     // Function to create a DOM element for a card
     function createCardElement(card) {
@@ -174,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // If cards don't fit, overlap them so they fit within the hand width
             const overlap =
                 (
-                    totalCardsWidth -
+                    totalCardsWidth - 
                     HAND_WIDTH
                 ) /
                 (
@@ -318,6 +308,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Add several cards to the hand for initial testing/demo
+    addCardToHand(
+        'hearts',
+        'A'
+    );
+
+    addCardToHand(
+        'clubs',
+        'K'
+    );
+
+    addCardToHand(
+        'spades',
+        '2'
+    );
+
+    addCardToHand(
+        'diamonds',
+        '10'
+    );
     addCardToHand(
         'hearts',
         'A'
