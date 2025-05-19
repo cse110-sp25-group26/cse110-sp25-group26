@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Hand UI</title>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -11,10 +12,199 @@
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-<body>
-    <div id="hand-container" style="width: 600px; height: 150px; border: 1px solid black; position: relative; overflow: hidden;">
-        <!-- Cards will be dynamically added here -->
-    </div>
-    <script src="Hand_js."></script>
+
+<!--for testing-->
+<body><!-- Add this inside <body> before </body> -->
+
+
+<div style="margin: 2em 0;">
+  <h2>Hand UI Test Area</h2>
+  <div id="hand-container" style="position:relative; width:600px; height:140px; border:1px solid #aaa; background:#f8f8f8; margin-bottom:1em;"></div>
+  <button id="add-card-button">Add Card</button>
+  <button id="remove-card-button">Remove Card</button>
+</div>
+
+<style>
+/*
+.card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  transition: transform 0.2s, z-index 0.2s;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1em;
+  font-family: sans-serif;
+}
+*/
+</style>
+
+
+
+<!-- At the end of <body>, after all other scripts: -->
+<script type="module" src="Hand_ui.js"></script>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>BalatJack - By the Go Gitters (Team 26)</h1>
+<p>BalatJack is a lightweight, browser-based twist on Blackjack that we're building as the final project for CSE110 at UC San Diego. The focus: well-made code, a fun game, and a well-structured development process that keeps quality high despite a tight schedule.</p>
+<br>
+<h2>🛣️ Sprint Roadmap</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Milestone</strong></th>
+<th><strong>What we're building</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>May 17</td>
+<td>Core game loop, basic UI layout</td>
+</tr>
+<tr>
+<td>May 24</td>
+<td>Enhanced UI/UX, audio effects, more Jokers/Consumables</td>
+</tr>
+<tr>
+<td>May 31</td>
+<td>User testing and feedback collection, add/extend unit tests</td>
+</tr>
+<tr>
+<td>June 5</td>
+<td>Bugfixes and performance passes, documentation refresh, final deployment</td>
+</tr>
+</tbody>
+</table>
+<p>(Pulled from our <a href="/admin/misc/rules.md">Team Charter</a>)</p>
+<h2>🚀 Quick Start</h2>
+<p>Clone -&gt; Install -&gt; Test - in three commands:</p>
+<pre class="prettyprint source lang-bash"><code># 1. clone
+git clone git@github.com:cse110-sp25-group26/cse110-sp25-group26.git
+cd cse110-sp25-group26
+
+# 2. install deps
+npm install
+
+# 3. sanity check
+npm run test
+</code></pre>
+<p>Need more detail? Read the <a href="/doc/GETTINGSTARTED.md">Getting Started Guide</a>.</p>
+<h2>📁 Repository Layout</h2>
+<pre class="prettyprint source"><code>.
+├── admin/               # Class-related documentation
+├── source/              # Game code & assets
+│   ├── scripts/         # JavaScript classes & helpers
+│   ├── css/             # Component‑scoped CSS
+│   └── res/             # Images, audio, etc.
+├── doc/                 # Project docs actively used for writing code
+├── specs/               # Architectural and design records
+└── index.html           # Entry point – game start for browser
+</code></pre>
+<p>Full spec: <a href="/doc/STRUCTURE.md">doc/STRUCTURE.md</a></p>
+<h2>🛠️ Tech Stack</h2>
+<ul>
+<li><strong>HTML + CSS</strong> - semantic, responsive visual pages</li>
+<li><strong>Vanilla JS</strong> - No frameworks!</li>
+<li><strong>JSDoc</strong> - API docs, compiles to <code>doc/scripts/</code> on <code>npm run docs</code></li>
+<li><strong>Jest</strong> - Unit tests (<code>npm run test</code>)</li>
+<li><strong>ESLint</strong> - Code linting (<code>npx eslint .</code>)</li>
+</ul>
+<h2>🧑‍💻 Contributing</h2>
+<ol>
+<li>Branch naming &amp; rules -&gt; <a href="/doc/BRANCHING.md">doc/BRANCHING.md</a></li>
+<li>Style -&gt; <a href="/doc/CODE_STYLE.md">doc/CODE_STYLE.md</a></li>
+<li>Tests libe in <code>source/scripts/tests/</code></li>
+<li>Open a PR against <code>develop</code>; follow the <a href="/doc/REVIEWING.md">Review Checklist</a></li>
+</ol>
+<h2>🏗️ Current CI Pipeline</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Command</th>
+<th>Automated Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tests</td>
+<td><code>npm run test</code></td>
+<td>PRs -&gt; <code>develop</code>/<code>main</code></td>
+</tr>
+<tr>
+<td>Docs</td>
+<td><code>npm run docs</code></td>
+<td>PRs -&gt; <code>develop</code>/<code>main</code></td>
+</tr>
+<tr>
+<td>Lint</td>
+<td><code>npx eslint .</code></td>
+<td>PRs -&gt;<code> develop</code>/<code>main</code></td>
+</tr>
+</tbody>
+</table>
+<p>All checks must pass before a protected branch can merge.</p>
+<h2>👥 Team &amp; Credits</h2>
+<p>Faces &amp; roles: <a href="/admin/team.md">Team Page</a> - Charter: <a href="/admin/misc/rules.md">admin/misc/rules.md</a></p>
+<h2>📝 License</h2>
+<p>TBD - must determine before making repository public</p></article>
+    </section>zz
+
+
+
+
+
+
+</div>
+
+<nav>
+
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Hand.html">Hand</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li></ul>
+
+
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>
