@@ -1,10 +1,10 @@
 import {
     Hand
-} from '../../source/scripts/backend/Hand.js'; // Import Hand class from backend
+} from '../backend/Hand.js'; // Import Hand class from backend
 
 import {
     Card
-} from '../../source/scripts/backend/Card.js'; // Import Card class from backend
+} from '../backend/Card.js'; // Import Card class from backend
 
 // Wait for the DOM to be fully loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
