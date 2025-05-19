@@ -1,8 +1,13 @@
-/** @file Card UI element with flip, drag, and tooltip functionality. */
-
+/**
+ * @class CardElement
+ * @classdesc Custom web component representing a draggable, flippable card with tooltip.
+ */
 class CardElement extends HTMLElement {
 
-	/** Sets up shadow DOM, card faces, and event listeners. */
+	/**
+	 * @constructor
+	 * @description Sets up shadow DOM, structure, and event listeners.
+	 */
 	constructor() {
 		super();
 		this.attachShadow({ mode: 'open' });
@@ -74,13 +79,21 @@ class CardElement extends HTMLElement {
 		this._container.addEventListener('mouseenter', () => tooltip.style.display = 'block');
 		this._container.addEventListener('mouseleave', () => tooltip.style.display = 'none');
 	}
-	/** Flips the card to show front or back. */
+	/**
+	 * @function flip
+	 * @description Toggles the flipped state of the card.
+	 * @param {boolean} [force] - If true, forces the card to flip regardless of its current state.
+	 */
 	flip() {
 		this._container.classList.toggle('flipped');
 	}
 
 
-	/** Starts drag behavior. @param {MouseEvent} e */
+	/**
+	 * @function _onDragStart
+	 * @description drag tracking on mouse down.
+	 * @param {MouseEvent} e - The mouse down event.
+	 */
 	_onDragStart(e) {
 		e.preventDefault();
 		this._dragging = true;
@@ -92,7 +105,11 @@ class CardElement extends HTMLElement {
 		this._container.style.height = this._container.offsetHeight + 'px';
 	}
 
-	/** Updates card position during drag. @param {MouseEvent} e */
+	/**
+	 * @function _onDragMove
+	 * @description Moves the card during drag.
+	 * @param {MouseEvent} e - The mouse move event.
+	 */
 	_onDragMove(e) {
 		if (!this._dragging) return;
 		this._container.style.left = `${e.clientX - this._offset.x}px`;
@@ -100,9 +117,9 @@ class CardElement extends HTMLElement {
 	}
 
 	/**
-	 * Ends dragging and resets card style.
-	 * @param {MouseEvent} e - The mouse up event
-	 */
+	* @function _onDragEnd
+	* @description Ends the drag operation and resets styles.
+	*/
 	_onDragEnd() {
 		if (!this._dragging) return;
 		this._dragging = false;
