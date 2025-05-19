@@ -5,7 +5,7 @@
 class CardElement extends HTMLElement {
 
 	/**
-	 * @constructor
+	 * @class
 	 * @description Sets up shadow DOM, structure, and event listeners.
 	 */
 	constructor() {
@@ -81,8 +81,7 @@ class CardElement extends HTMLElement {
 	}
 	/**
 	 * @function flip
-	 * @description Toggles the flipped state of the card.
-	 * @param {boolean} [force] - If true, forces the card to flip regardless of its current state.
+	 * @description Toggles the flipped state of the card. - If true, forces the card to flip regardless of its current state.
 	 */
 	flip() {
 		this._container.classList.toggle('flipped');
@@ -117,9 +116,9 @@ class CardElement extends HTMLElement {
 	}
 
 	/**
-	* @function _onDragEnd
-	* @description Ends the drag operation and resets styles.
-	*/
+	 * @function _onDragEnd
+	 * @description Ends the drag operation and resets styles.
+	 */
 	_onDragEnd() {
 		if (!this._dragging) return;
 		this._dragging = false;
