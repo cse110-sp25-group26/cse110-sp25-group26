@@ -7,30 +7,30 @@ import { Card } from '../backend/Card.js';
  * @returns {HTMLElement} The created card element.
  */
 export function createUICardForDeck(card) {
-    // Find the deck container in the DOM
-    const deckContainer = document.getElementById('deck-container');
-    if (!deckContainer) {
-        console.error('Deck container not found');
-        return null;
-    }
+	// Find the deck container in the DOM
+	const deckContainer = document.getElementById('deck-container');
+	if (!deckContainer) {
+		console.error('Deck container not found');
+		return null;
+	}
 
-    // Create the card element
-    const cardElement = document.createElement('div');
-    cardElement.className = 'card';
-    cardElement.textContent = `${card.type} of ${card.suit}`;
-    cardElement.style.position = 'absolute';
-    cardElement.style.left = '0px';
-    cardElement.style.top = '0px';
+	// Create the card element
+	const cardElement = document.createElement('div');
+	cardElement.className = 'card';
+	cardElement.textContent = `${card.type} of ${card.suit}`;
+	cardElement.style.position = 'absolute';
+	cardElement.style.left = '0px';
+	cardElement.style.top = '0px';
 
-    // Set z-index so the new card is on top of previous cards
-    const numCards = deckContainer.children.length;
-    cardElement.style.zIndex = (10 + numCards).toString();
+	// Set z-index so the new card is on top of previous cards
+	const numCards = deckContainer.children.length;
+	cardElement.style.zIndex = (10 + numCards).toString();
 
-    // Optionally, store the UI element on the card object for later reference
-    card.UIel = cardElement;
+	// Optionally, store the UI element on the card object for later reference
+	card.UIel = cardElement;
 
-    // Add the card element to the deck container (on top)
-    deckContainer.appendChild(cardElement);
+	// Add the card element to the deck container (on top)
+	deckContainer.appendChild(cardElement);
 
-    return cardElement;
+	return cardElement;
 }
