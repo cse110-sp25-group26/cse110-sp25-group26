@@ -1,7 +1,7 @@
-# Sprint 1 Retrospective (May 19, 2025)
+# Sprint 1 Retrospective/Review (May 19, 2025)
 
 ## Main Topics
-This retrospective did not have much to cover, as for the majority of the team did not begin until yesterday afternoon. However, this did provide some insight on process and communication shortcomings which need to be addressed. In this meeting, we discussed:
+This retrospective/review did not have much to cover, as for the majority of the team did not begin until yesterday afternoon. However, this did provide some insight on process and communication shortcomings which need to be addressed. In this meeting, we discussed:
 1. **Starting Earlier**: We agreed that the main issue at hand during this sprint was that work did not begin early enough to meet the proposed deadline.
 2. **Updating Deadline Task Assignments**: Upon starting, we have discovered that the originally proposed deadlines may not be achievable. This has been noted for discussion and potential updating during the next retrospective.
 
