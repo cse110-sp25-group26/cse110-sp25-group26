@@ -28,6 +28,8 @@ export class Card {
 	 */
 	flip() {
 		this.isFlipped = !this.isFlipped;
+
+		// TODO_UI: Update the UI element to reflect the new flipped state
 	}
 
 	/**
@@ -37,6 +39,9 @@ export class Card {
 	 */
 	toggleSelect() {
 		this.isSelected = !this.isSelected;
+
+		// TODO_UI: Update the UI element to reflect the new selection state
+
 		return this.isSelected;
 	}
 
@@ -51,6 +56,9 @@ export class Card {
 			return false;
 		}
 		this.properties.push(property);
+
+		// TODO_UI: Call back to the UI to update the card's properties
+
 		return true;
 	}
 
@@ -66,6 +74,9 @@ export class Card {
 			return false;
 		}
 		this.properties.splice(index, 1);
+
+		// TODO_UI: Call back to the UI to update the card's properties
+
 		return true;
 	}
 
