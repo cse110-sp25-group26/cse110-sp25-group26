@@ -42,52 +42,7 @@ export class gameHandler {
 	 * @class gameHandler
 	 */
 	constructor() {
-		this.state = {
-			deck: new Deck(),
-			hands: {
-				main: new Hand(),
-				played: new Hand(),
-				joker: new Hand(),
-				consumable: new Hand()
-			},
-
-			// Core progression
-			currAnte: 1,
-			currBlind: 1,
-			handsRemaining: 4,
-
-			// Hand sizes
-			handSize: 5,
-			handSizeJoker: 4,
-			handSizeConsumable: 2,
-
-			// Config
-			handsPerBlind: 4, // Variable
-			blindsPerAnte: 3, // Fixed
-			totalAntes: 8, // Fixed
-
-			// Resources
-			money: 24,
-			discardCount: 4,
-
-			// Blind requirements
-			blindRequirements: [40, 60, 80],
-
-			// Tracking
-			roundScore: 0,
-			roundMult: 1,
-			handsPlayed: 0,
-			discardsUsed: 0,
-		};
-
-		this.suits = ["hearts", "diamonds", "clubs", "spades"];
-		this.types = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-		this.defaultCards = [];
-		for (let suit of this.suits) {
-			for (let type of this.types) {
-				this.defaultCards.push(new Card(suit, type));
-			}
-		}
+		this.resetGame();
 	}
 
 	/**
@@ -96,7 +51,6 @@ export class gameHandler {
 	 */
 	resetGame() {
 		this.state = {
-			deck: new Deck(),
 			hands: {
 				main: new Hand(),
 				played: new Hand(),
@@ -132,6 +86,16 @@ export class gameHandler {
 			handsPlayed: 0,
 			discardsUsed: 0,
 		};
+
+		this.suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+		this.types = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+		this.defaultCards = [];
+		for (let suit of this.suits) {
+			for (let type of this.types) {
+				this.defaultCards.push(new Card(suit, type));
+			}
+		}
+		this.state.deck = new Deck(this.defaultCards);
 	}
 
 	/**
@@ -143,7 +107,6 @@ export class gameHandler {
 			const card = this.state.deck.drawCard();
 			if (card) {
 				this.state.hands.main.addCard(card);
-				console.log(`Dealt card: ${card.type} of ${card.suit}`);
 			} else {
 				console.log("No more cards to deal.");
 				break;
@@ -198,7 +161,7 @@ export class gameHandler {
 
 		// TODO_UI: Call move_multiple to move said cards from main to discard pile, remove UI element for each card
 
-		this.state.discardsUsed += selectedCards.length;
+		this.state.discardsUsed++;
 	}
 
 	/**
