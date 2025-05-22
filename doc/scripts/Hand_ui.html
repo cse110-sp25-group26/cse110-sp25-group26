@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Deck</title>
+    <title>JSDoc: Class: Hand</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Deck</h1>
+    <h1 class="page-title">Class: Hand</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Deck<span class="signature">(cards)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Hand<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,72 +41,19 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">(cards)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Hand"><span class="type-signature"></span>new Hand<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
 
-<div class="description">
-    Creates a new deck of cards.
-</div>
 
 
 
 
 
 
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The cards to be included in the deck.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -142,7 +89,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Deck.js.html">Deck.js</a>, <a href="Deck.js.html#line11">line 11</a>
+        <a href="Hand_ui.js.html">Hand.js</a>, <a href="Hand_ui.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -183,7 +130,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
+            <dt><a href="Hand_ui.html">Hand</a></dt>
             <dd></dd>
         </dl>
     
@@ -216,9 +163,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="Deck.html">Deck</a></span>Deck<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="Hand_ui.html">Hand</a></span>Hand<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents a deck of cards in the game.</div>
+            <div class="class-description">Represents a hand of cards in the game.</div>
         
     
 </header>
@@ -233,7 +180,7 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Hand"><span class="type-signature"></span>new Hand<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -278,7 +225,7 @@
 
         <tr>
             
-                <td class="name"><code>availableCards</code></td>
+                <td class="name"><code>cards</code></td>
             
 
             <td class="type">
@@ -294,20 +241,20 @@
 
             
 
-            <td class="description last">The cards available in the deck.</td>
+            <td class="description last">The cards in the hand.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>usedCards</code></td>
+                <td class="name"><code>sortMethod</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">string</span>
 
 
             
@@ -317,30 +264,7 @@
 
             
 
-            <td class="description last">The cards that have been used from the deck.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>allCards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">All cards in the deck, including available and used cards.</td>
+            <td class="description last">The sorting method used for the hand.</td>
         </tr>
 
     
@@ -379,7 +303,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Deck.js.html">Deck.js</a>, <a href="Deck.js.html#line10">line 10</a>
+        <a href="Hand_ui.js.html">Hand.js</a>, <a href="Hand.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -420,7 +344,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
+            <dt><a href="Hand_ui.html">Hand</a></dt>
             <dd></dd>
         </dl>
     
@@ -446,6 +370,38 @@
 
 
 </div>
+
+<!-- Hand UI Test Area -->
+<div style="margin: 2em 0;">
+  <h2>Hand UI Test Area</h2>
+  <div id="hand-container" style="position:relative; width:600px; height:140px; border:1px solid #aaa; background:#f8f8f8; margin-bottom:1em;"></div>
+  <button id="add-card-button">Add Card</button>
+  <button id="remove-card-button">Remove Card</button>
+</div>
+
+<style>
+.card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 1.1em;
+  font-family: sans-serif;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s;
+}
+</style>
+
+<script type="module">
+import '../../source/scripts/frontend/Hand_ui.js';
+</script>
 
 <nav>
     <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
