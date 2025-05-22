@@ -1,6 +1,7 @@
 import { Deck } from "./Deck.js";
 import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
+import { calculateBlackjackScore } from "./utils.js";
 
 /**
  * @typedef {object} HandHolder
@@ -16,7 +17,7 @@ import { Card } from "./Card.js";
  * @property {HandHolder}     hands            – the player's hands
  * @property {number}         currAnte         – current ante value
  * @property {number}         currBlind        – current blind value
- * @property {number}         handsRemaining   – how many hands are left this round
+ * @property {number}         totalHands   	   – how many hands may be played this ante
  * @property {number}         handsPerBlind    – (config) hands per blind
  * @property {number}         blindsPerAnte    – (fixed) blinds per ante
  * @property {number}         totalAntes       – (fixed) total antes in the game
@@ -24,9 +25,11 @@ import { Card } from "./Card.js";
  * @property {number}         discardCount     – how many cards can be discarded
  * @property {number[]}       blindRequirements – thresholds for each blind
  * @property {number}         roundScore       – score for the current round
- * @property {number}         roundMult        – score multiplier for the round
  * @property {number}         handsPlayed      – total hands played so far
  * @property {number}         discardsUsed     – how many discards have been used
+ * @property {number}         handScore	  	   – score for the current hand
+ * @property {number}         handMult 	  	   – multiplier for the current hand
+ * @property {boolean}        endlessMode      – whether the game is in endless mode
  */
 
 /**
@@ -61,7 +64,7 @@ export class gameHandler {
 			// Core progression
 			currAnte: 1,
 			currBlind: 1,
-			handsRemaining: 4,
+			totalHands: 4,
 
 			// Hand sizes
 			handSize: 5,
@@ -82,7 +85,6 @@ export class gameHandler {
 
 			// Tracking
 			roundScore: 0,
-			roundMult: 1,
 			handsPlayed: 0,
 			discardsUsed: 0,
 		};
@@ -186,6 +188,134 @@ export class gameHandler {
 
 		// TODO_UI: Call move_multiple to move said cards from main to played
 
-		// TODO: Implement scoring logic
+		this.scoreHand();
+
+		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
+			this.state.hands.main.cards = [];
+
+			// TODO_UI: Call back to UI to move_multiple the main hand cards back to the deck
+			
+			if (this.state.roundScore < this.state.blindRequirements[this.state.currBlind - 1]) {
+				console.log("Not enough score to advance to the next blind.");
+				// TODO_UI: Call back to UI to display loss message and exit game
+				return;
+			}
+
+			// TODO_UI: Call back to the UI to display the shop
+			//          Requires Shop class to be implemented (not done yet)
+			console.log("Should run the shop now.");
+
+			// TODO: Should this go in the shop class?
+			if (this.nextBlind()) {
+				console.log("Next blind reached.");
+				// TODO: Finish this
+			} else {
+				// TODO_UI: Call back to UI to exit the game
+				console.log("Game over.");
+			}
+		}
+	}
+
+	/**
+	 * @function scoreHand
+	 * @description Scores the played hand, updates the round score, and sets up for the next round.
+	 */
+	scoreHand() {
+		// If the hand is empty, log and return
+		if (this.state.hands.played.cards.length === 0) {
+			console.log("No cards played. No score.");
+			return;
+		}
+
+		this.state.handScore = 0;
+		this.state.handMult = 1;
+
+		for (let i = 0; i < this.state.hands.played.cards.length;) {
+			const card = this.state.hands.played.cards[i];
+			
+			let cardValue = card.getValue();
+
+			// TODO_UI: Call back to UI to play scoring animation
+
+			// TODO: Check for attributes on the card
+
+			// TODO: Check for applicable jokers to this card
+			// ->UI: Call back to UI to play joker animation (likely also score animation)
+
+			this.state.handScore += cardValue;
+			console.log(`Card ${card.type} of ${card.suit} scored: ${cardValue}`);
+
+			// TODO_UI: Call back to UI to update the scorekeeper
+		}
+		
+
+		// Verify that the played hand has a valid blackjack score
+		const score = calculateBlackjackScore(this.state.hands.played.cards);
+		if (score > 21) {
+			console.log("Score exceeds 21. Hand is bust.");
+
+			this.handScore = 0;
+			this.handMult = 1;
+			
+			// TODO_UI: Call back to UI to display bust, update scorekeeper
+		} else {
+			console.log(`Hand scored: ${this.state.roundScore}`);
+
+			this.state.roundScore += this.handScore * this.handMult;
+			this.state.handScore = 0;
+			this.state.handMult = 1;
+
+			this.state.handsPlayed++;
+			this.state.hands.played.cards = [];
+
+			// TODO_UI: Call back to UI to display won money, update scorekeeper,
+			//          move_multiple the played cards offscreen and remove their UI elements
+		}
+	}
+
+	/**
+	 * @function nextBlind
+	 * @description Advances to the next blind level and resets the game state.
+	 * @returns {boolean} - True if the next blind was reached, false if the game is over.
+	 */
+	nextBlind() {
+		// TODO_UI: Call back to UI to display blind selection screen
+
+		let nextBlind = this.state.currBlind + 1;
+		if (nextBlind > this.state.blindsPerAnte) {
+			this.state.currBlind = 1;
+			this.state.currAnte++;
+			this.state.handsPlayed = 0;
+			this.state.discardsUsed = 0;
+
+			if (this.state.currAnte > this.state.totalAntes && !this.state.endlessMode) {
+				// TODO_UI: Game win! Call back to UI to display win screen and
+				//          ask if user wants endless mode
+				let enterEndlessMode = false; // STUB
+
+				console.log("Game won!");
+
+				if (enterEndlessMode) {
+					this.state.endlessMode = true;
+				} else {
+					// TODO_UI: Call back to UI to exit the game (not game over)
+					console.log("Game finished.");
+					return false;
+				}
+			}
+		} else {
+			this.state.currBlind = nextBlind;
+		}
+
+		this.state.roundScore = 0;
+		this.state.handsPlayed = 0;
+		this.state.discardsUsed = 0;
+
+		this.state.deck.resetDeck();
+
+		// TODO: There's probably a lot more stuff to reset but I don't know what yet
+		//       I need to implement the tests first and just run this a bit
+
+		return true;
 	}
 }

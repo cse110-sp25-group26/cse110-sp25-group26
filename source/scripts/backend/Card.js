@@ -89,4 +89,23 @@ export class Card {
 	hasProperty(property) {
 		return this.properties.includes(property);
 	}
+
+	/**
+	 * @function getValue
+	 * @description Gets the base scoring value of the card.
+	 * @returns {number} - The base value of the card.
+	 */
+	getValue() {
+		if (this.suit === 'joker' || this.suit === 'consumable') {
+			return 0; // Jokers and consumables have no base value
+		}
+
+		if (this.type === 'A') {
+			return 11; // Ace is worth 11
+		} else if (['K', 'Q', 'J'].includes(this.type)) {
+			return 10; // Face cards are worth 10
+		} else {
+			return parseInt(this.type, 10); // Number cards are worth their value
+		}
+	}
 }
