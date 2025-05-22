@@ -1,26 +1,26 @@
 import {
-    Hand
+	Hand
 } from '../backend/Hand.js';
 
 import {
-    Card
+	Card
 } from '../backend/Card.js';
 
 const handContainer =
     document.getElementById('hand-container');
 
 if (
-    !handContainer
+	!handContainer
 ) {
-    console.error(
-        'Hand container not found'
-    );
+	console.error(
+		'Hand container not found'
+	);
 }
 
 let HAND_WIDTH =
     handContainer
-        ? handContainer.offsetWidth
-        : 600;
+    	? handContainer.offsetWidth
+    	: 600;
 
 const hand =
     new Hand();
@@ -34,174 +34,175 @@ const cardElements =
  * @returns {HTMLElement} The created card element.
  */
 function createCardElement(
-    card
+	card
 ) {
-    const cardElement =
+	const cardElement =
         document.createElement('div');
 
-    cardElement.className =
+	cardElement.className =
         'card';
 
-    cardElement.dataset.suit =
+	cardElement.dataset.suit =
         card.suit;
 
-    cardElement.dataset.type =
+	cardElement.dataset.type =
         card.type;
 
-    cardElement.textContent =
+	cardElement.textContent =
         `${card.type} of ${card.suit}`;
 
-    cardElement.addEventListener(
-        'click',
-        () => {
-            card.isSelected =
+	cardElement.addEventListener(
+		'click',
+		() => {
+			card.isSelected =
                 !card.isSelected;
 
-            updateCardDisplay(
-                card
-            );
-        }
-    );
+			updateCardDisplay(
+				card
+			);
+		}
+	);
 
-    return cardElement;
+	return cardElement;
 }
 
 /**
  * Updates the visual display of the hand and positions all cards.
+ * @param {Card|null} bounceCard - The card to animate (bounce) if toggled, or null for no animation.
  */
 function updateCardDisplay(
-    bounceCard = null
+	bounceCard = null
 ) {
-    if (
-        !handContainer
-    ) {
-        return;
-    }
+	if (
+		!handContainer
+	) {
+		return;
+	}
 
-    handContainer.innerHTML =
+	handContainer.innerHTML =
         '';
 
-    cardElements.clear();
+	cardElements.clear();
 
-    hand.cards.forEach(
-        (card) => {
-            const cardElement =
+	hand.cards.forEach(
+		(card) => {
+			const cardElement =
                 createCardElement(
-                    card
+                	card
                 );
 
-            cardElements.set(
-                card,
-                cardElement
-            );
+			cardElements.set(
+				card,
+				cardElement
+			);
 
-            handContainer.appendChild(
-                cardElement
-            );
-        }
-    );
+			handContainer.appendChild(
+				cardElement
+			);
+		}
+	);
 
-    const cardWidth =
+	const cardWidth =
         cardElements.size > 0
-            ? cardElements
-                  .values()
-                  .next()
-                  .value.offsetWidth
-            : 0;
+        	? cardElements
+        		.values()
+        		.next()
+        		.value.offsetWidth
+        	: 0;
 
-    const totalCardsWidth =
+	const totalCardsWidth =
         cardWidth *
         hand.cards.length;
 
-    if (
-        totalCardsWidth <=
+	if (
+		totalCardsWidth <=
         HAND_WIDTH
-    ) {
-        let offset = 0;
+	) {
+		let offset = 0;
 
-        hand.cards.forEach(
-            (card) => {
-                const cardElement =
+		hand.cards.forEach(
+			(card) => {
+				const cardElement =
                     cardElements.get(
-                        card
+                    	card
                     );
 
-                cardElement.style.position =
+				cardElement.style.position =
                     'absolute';
 
-                cardElement.style.left =
+				cardElement.style.left =
                     `${offset}px`;
 
-                cardElement.style.zIndex =
+				cardElement.style.zIndex =
                     card.isSelected
-                        ? '2'
-                        : '1';
+                    	? '2'
+                    	: '1';
 
-                if (
-                    card ===
+				if (
+					card ===
                     bounceCard
-                ) {
-                    cardElement.style.transition =
+				) {
+					cardElement.style.transition =
                         'transform 0.2s cubic-bezier(.68,-0.55,.27,1.55)';
-                } else {
-                    cardElement.style.transition =
+				} else {
+					cardElement.style.transition =
                         'none';
-                }
+				}
 
-                cardElement.style.transform =
+				cardElement.style.transform =
                     card.isSelected
-                        ? 'translateY(-10px)'
-                        : 'translateY(0)';
+                    	? 'translateY(-10px)'
+                    	: 'translateY(0)';
 
-                offset += cardWidth;
-            }
-        );
-    } else {
-        const overlap =
+				offset += cardWidth;
+			}
+		);
+	} else {
+		const overlap =
             (totalCardsWidth -
                 HAND_WIDTH) /
             (hand.cards.length - 1);
 
-        hand.cards.forEach(
-            (card, index) => {
-                const cardElement =
+		hand.cards.forEach(
+			(card, index) => {
+				const cardElement =
                     cardElements.get(
-                        card
+                    	card
                     );
 
-                cardElement.style.position =
+				cardElement.style.position =
                     'absolute';
 
-                cardElement.style.left =
+				cardElement.style.left =
                     `${
-                        index *
+                    	index *
                         (cardWidth -
                             overlap)
                     }px`;
 
-                cardElement.style.zIndex =
+				cardElement.style.zIndex =
                     card.isSelected
-                        ? '2'
-                        : '1';
+                    	? '2'
+                    	: '1';
 
-                if (
-                    card ===
+				if (
+					card ===
                     bounceCard
-                ) {
-                    cardElement.style.transition =
+				) {
+					cardElement.style.transition =
                         'transform 0.2s cubic-bezier(.68,-0.55,.27,1.55)';
-                } else {
-                    cardElement.style.transition =
+				} else {
+					cardElement.style.transition =
                         'none';
-                }
+				}
 
-                cardElement.style.transform =
+				cardElement.style.transform =
                     card.isSelected
-                        ? 'translateY(-10px)'
-                        : 'translateY(0)';
-            }
-        );
-    }
+                    	? 'translateY(-10px)'
+                    	: 'translateY(0)';
+			}
+		);
+	}
 }
 
 /**
@@ -210,20 +211,20 @@ function updateCardDisplay(
  * @param {string} type - The type/rank of the card (e.g., 'A', 'K', '2').
  */
 function addCardToHand(
-    suit,
-    type
+	suit,
+	type
 ) {
-    const card =
+	const card =
         new Card(
-            suit,
-            type
+        	suit,
+        	type
         );
 
-    hand.addCard(
-        card
-    );
+	hand.addCard(
+		card
+	);
 
-    updateCardDisplay();
+	updateCardDisplay();
 }
 
 /**
@@ -231,115 +232,114 @@ function addCardToHand(
  * @param {number} index - The index of the card to remove.
  */
 function removeCardFromHand(
-    index
+	index
 ) {
-    hand.removeCard(
-        index
-    );
+	hand.removeCard(
+		index
+	);
 
-    updateCardDisplay();
+	updateCardDisplay();
 }
 
 export {
-    hand,
-    addCardToHand,
-    removeCardFromHand,
-    updateCardDisplay
+	hand,
+	addCardToHand,
+	removeCardFromHand,
+	updateCardDisplay
 };
 
 // --- Demo/testing code only: ---
 document.addEventListener(
-    'DOMContentLoaded',
-    () => {
-        const addCardButton =
+	'DOMContentLoaded',
+	() => {
+		const addCardButton =
             document.getElementById(
-                'add-card-button'
+            	'add-card-button'
             );
 
-        const removeCardButton =
+		const removeCardButton =
             document.getElementById(
-                'remove-card-button'
+            	'remove-card-button'
             );
 
-        if (
-            addCardButton
-        ) {
-            addCardButton.addEventListener(
-                'click',
-                () => {
-                    addCardToHand(
-                        'hearts',
-                        'A'
-                    );
-                }
-            );
-        } else {
-            console.error(
-                'Add card button not found'
-            );
-        }
+		if (
+			addCardButton
+		) {
+			addCardButton.addEventListener(
+				'click',
+				() => {
+					addCardToHand(
+						'hearts',
+						'A'
+					);
+				}
+			);
+		} else {
+			console.error(
+				'Add card button not found'
+			);
+		}
 
-        if (
-            removeCardButton
-        ) {
-            removeCardButton.addEventListener(
-                'click',
-                () => {
-                    const selectedIndices =
+		if (
+			removeCardButton
+		) {
+			removeCardButton.addEventListener(
+				'click',
+				() => {
+					const selectedIndices =
                         hand.cards
-                            .map(
-                                (
-                                    card,
-                                    idx
-                                ) =>
-                                    card.isSelected
-                                        ? idx
-                                        : -1
-                            )
-                            .filter(
-                                (
-                                    idx
-                                ) =>
-                                    idx !==
+                        	.map(
+                        		(
+                        			card,
+                        			idx
+                        		) =>
+                        			card.isSelected
+                        				? idx
+                        				: -1
+                        	)
+                        	.filter(
+                        		(
+                        			idx
+                        		) =>
+                        			idx !==
                                     -1
-                            )
-                            .reverse();
+                        	)
+                        	.reverse();
 
-                    selectedIndices.forEach(
-                        (idx) => {
-                            removeCardFromHand(
-                                idx
-                            );
-                        }
-                    );
-                }
-            );
-        } else {
-            console.error(
-                'Remove card button not found'
-            );
-        }
+					selectedIndices.forEach(
+						(idx) => {
+							removeCardFromHand(
+								idx
+							);
+						}
+					);
+				}
+			);
+		} else {
+			console.error(
+				'Remove card button not found'
+			);
+		}
 
-        addCardToHand(
-            'hearts',
-            'A'
-        );
+		addCardToHand(
+			'hearts',
+			'A'
+		);
 
-        addCardToHand(
-            'clubs',
-            'K'
-        );
+		addCardToHand(
+			'clubs',
+			'K'
+		);
 
-        addCardToHand(
-            'spades',
-            '2'
-        );
+		addCardToHand(
+			'spades',
+			'2'
+		);
 
-        addCardToHand(
-            'diamonds',
-            '10'
-        );
-    }
+		addCardToHand(
+			'diamonds',
+			'10'
+		);
+	}
 );
-
 
