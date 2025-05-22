@@ -419,7 +419,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line141">line 141</a>
+        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -556,7 +556,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line43">line 43</a>
+        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -768,7 +768,13 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const cards = [  new Card('hearts', 'A'),  new Card('spades', 'K'),  new Card('diamonds', '5') ];const score = calculateBlackjackScore(cards);console.log(score); // Outputs 16</code></pre>
+    <pre class="prettyprint"><code>const cards = [
+  new Card('hearts', 'A'),
+  new Card('spades', 'K'),
+  new Card('diamonds', '5')
+ ];
+const score = calculateBlackjackScore(cards);
+console.log(score); // Outputs 16</code></pre>
 
 
 
@@ -1142,6 +1148,182 @@
     
 
     
+    <h4 class="name" id="dealCards"><span class="type-signature"></span>dealCards<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deals cards to the main hand until the hand is full or no cards are left in the deck.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="discardCards"><span class="type-signature"></span>discardCards<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Discards selected cards from the main hand.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="drawCard"><span class="type-signature"></span>drawCard<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Card.html">Card</a>|null}</span></h4>
     
 
@@ -1444,7 +1626,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line92">line 92</a>
+        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -1603,7 +1785,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line72">line 72</a>
+        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -1785,7 +1967,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line162">line 162</a>
+        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -1815,6 +1997,165 @@
         
 <div class="param-desc">
     - Returns true if the move was successful, false otherwise (ex. if the indices are out of bounds).
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="playCards"><span class="type-signature"></span>playCards<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Plays selected cards from the main hand and scores them.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Card.html">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The card to be removed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Returns true if the card was removed successfully, false if the card does not exist in the deck.
 </div>
 
 
@@ -1887,13 +2228,13 @@
 
         <tr>
             
-                <td class="name"><code>card</code></td>
+                <td class="name"><code>index</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type">number</span>
 
 
             
@@ -2052,7 +2393,7 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -2103,7 +2444,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line184">line 184</a>
+        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -2262,7 +2603,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line57">line 57</a>
+        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -2319,6 +2660,79 @@
 
     
 
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Returns true if the move was successful, false otherwise (ex. if the indices are out of bounds).
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Deck.js.html">Deck.js</a>, <a href="Deck.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
     
     <h4 class="name" id="resetDeck"><span class="type-signature"></span>resetDeck<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -2373,6 +2787,94 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="Deck.js.html">Deck.js</a>, <a href="Deck.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resetGame"><span class="type-signature"></span>resetGame<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Resets the game state to its initial values.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -2543,6 +3045,188 @@
             
 
     
+
+    
+    <h4 class="name" id="selectCard"><span class="type-signature"></span>selectCard<span class="signature">(hand, index)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Toggles the selection state of a card in a hand.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Hand.html">Hand</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The hand containing the card.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The index of the card in the hand.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - The new selection state of the card.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+
+
+
+
+
+
+
+
+
+
 
     
     <h4 class="name" id="shuffle"><span class="type-signature"></span>shuffle<span class="signature">()</span><span class="type-signature"></span></h4>
@@ -2773,7 +3457,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line76">line 76</a>
+        <a href="Hand.js.html">Hand.js</a>, <a href="Hand.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -3110,7 +3794,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line33">line 33</a>
+        <a href="Card.js.html">Card.js</a>, <a href="Card.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -3166,6 +3850,641 @@
     
 
     
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="GameState">GameState</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>deck</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Deck.html">Deck</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– the deck of cards</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hands</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#HandHolder">HandHolder</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– the player's hands</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currAnte</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– current ante value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currBlind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– current blind value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handsRemaining</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– how many hands are left this round</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handsPerBlind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– (config) hands per blind</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>blindsPerAnte</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– (fixed) blinds per ante</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAntes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– (fixed) total antes in the game</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>money</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– player's available money</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discardCount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– how many cards can be discarded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>blindRequirements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– thresholds for each blind</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roundScore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– score for the current round</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roundMult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– score multiplier for the round</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handsPlayed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– total hands played so far</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discardsUsed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">– how many discards have been used</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="HandHolder">HandHolder</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>main</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Hand.html">Hand</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The main hand of the player.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>played</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Hand.html">Hand</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The played hand of the player.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>joker</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Hand.html">Hand</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The joker hand of the player.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>consumable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Hand.html">Hand</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The consumable hand of the player.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="gameHandler.js.html">gameHandler.js</a>, <a href="gameHandler.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
 
     
 </article>
@@ -3178,7 +4497,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">

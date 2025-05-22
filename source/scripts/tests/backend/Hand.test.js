@@ -1,5 +1,6 @@
 import { Hand } from '../../backend/Hand.js';
 import { Card } from '../../backend/Card.js';
+import { jest } from '@jest/globals';
 
 describe('Hand', () => {
     test('Constructor initializes properties correctly', () => {
@@ -107,10 +108,18 @@ describe('Hand', () => {
     test('moveCard with invalid indices returns false', () => {
         const hand = new Hand();
         hand.addCard(new Card('hearts', 'Q'));
+
+        // Temporarily disable console.error to avoid cluttering test output
+        const originalError = console.error;
+        console.error = jest.fn();
+
         expect(hand.moveCard(-1, 0)).toBe(false);
         expect(hand.moveCard(0, -1)).toBe(false);
         expect(hand.moveCard(1, 0)).toBe(false);
         expect(hand.moveCard(0, 1)).toBe(false);
+
+        // Restore console.error
+        console.error = originalError;
     });
 
     test('sortBySuit handles secondary sort by value correctly', () => {
