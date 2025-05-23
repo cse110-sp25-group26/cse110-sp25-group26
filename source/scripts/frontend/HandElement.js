@@ -24,11 +24,17 @@ class HandElement extends HTMLElement {
 
         // Internal state
         this.cards = [];
+        this._draggedCard = null;
+        this._originalIndex = -1;
 
         // Listen for card-dropped events
         this.addEventListener('card-dropped', () => {
             this._updateLayout();
         });
+
+        // Listen for drag events
+        this.addEventListener('card-dragstart', (e) => this._onDragStart(e));
+        this.addEventListener('card-dragend', (e) => this._onDragEnd(e));
     }
 
     /**
@@ -100,7 +106,7 @@ class HandElement extends HTMLElement {
             card.style.position = 'absolute';
             card.style.left = `${index * spacing}px`;
             card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
-            card.style.zIndex = ''; // Clear residual z-index
+            card.style.zIndex = index; // Ensure cards on the right have a higher zIndex
             card.style.width = `${cardWidth}px`; // Ensure consistent width
         });
     }
@@ -119,6 +125,85 @@ class HandElement extends HTMLElement {
             composed: true
         }));
         this._updateLayout();
+    }
+
+    /**
+     * @function _onDragStart
+     * @description Handles the start of a drag event.
+     * @param {Event} e - The drag start event.
+     */
+    _onDragStart(e) {
+        this._draggedCard = e.detail.card;
+        this._originalIndex = this.cards.indexOf(this._draggedCard);
+    }
+
+    /**
+     * @function _onDragEnd
+     * @description Handles the end of a drag event.
+     * @param {Event} e - The drag end event.
+     */
+    _onDragEnd(e) {
+        const { card, x, y } = e.detail;
+
+        // Determine the drop index based on mouse position
+        let dropIndex = this._getDropIndex(x, y);
+
+        if (dropIndex === -1 || dropIndex === this._originalIndex) {
+            // Invalid drop or no change in position, return card to original position
+            this._updateLayout();
+        } else {
+            // Adjust drop index if moving from left to right
+            if (this._originalIndex < dropIndex) {
+                dropIndex -= 1; // Floor division adjustment
+            }
+
+            // Reorder cards
+            this.cards.splice(this._originalIndex, 1); // Remove from original index
+            this.cards.splice(dropIndex, 0, card); // Insert at new index
+
+            // Notify game logic of reorder
+            this.dispatchEvent(new CustomEvent('hand-reordered', {
+                detail: { cards: this.cards, draggedCard: card, from: this._originalIndex, to: dropIndex },
+                bubbles: true,
+                composed: true
+            }));
+
+            this._updateLayout();
+        }
+
+        // Reset drag state
+        this._draggedCard = null;
+        this._originalIndex = -1;
+    }
+
+    /**
+     * @function _getDropIndex
+     * @description Calculates the drop index for a dragged card based on mouse position.
+     * @param {number} x - The x-coordinate of the mouse pointer.
+     * @param {number} y - The y-coordinate of the mouse pointer.
+     * @returns {number} - The index where the card can be dropped, or -1 if the drop is invalid.
+     */
+    _getDropIndex(x, y) {
+        const rect = this._container.getBoundingClientRect();
+        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+            return -1; // Invalid drop location
+        }
+
+        const relativeX = x - rect.left;
+        const cardWidth = 80; // Default card width
+
+        // Find the index based on the mouse position relative to the edges of each card
+        for (let i = 0; i < this.cards.length; i++) {
+            const cardStart = i * cardWidth;
+            const cardEnd = (i + 1) * cardWidth;
+
+            if (relativeX >= cardStart && relativeX < cardEnd) {
+                return i;
+            }
+        }
+
+        // If the mouse is beyond the last card, return the last index
+        return this.cards.length;
     }
 }
 

@@ -128,6 +128,13 @@ class CardElement extends HTMLElement {
         this.style.height = `${rect.height}px`;
         this.style.zIndex = '999999';
         this.style.transformOrigin = '0 0';
+
+        // Notify parent HandElement of drag start
+        this.dispatchEvent(new CustomEvent('card-dragstart', {
+            detail: { card: this },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     _onDragMove(e) {
@@ -137,7 +144,7 @@ class CardElement extends HTMLElement {
         this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
     }
 
-    _onDragEnd() {
+    _onDragEnd(e) {
         if (!this._dragging) return;
         this._dragging = false;
 
@@ -150,8 +157,9 @@ class CardElement extends HTMLElement {
         this.style.height = '';
         this.style.transformOrigin = '';
 
-        // Dispatch a custom event to notify the parent HandElement
-        this.dispatchEvent(new CustomEvent('card-dropped', {
+        // Notify parent HandElement of drag end
+        this.dispatchEvent(new CustomEvent('card-dragend', {
+            detail: { card: this, x: e.clientX, y: e.clientY },
             bubbles: true,
             composed: true
         }));
