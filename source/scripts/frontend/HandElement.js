@@ -24,6 +24,11 @@ class HandElement extends HTMLElement {
 
         // Internal state
         this.cards = [];
+
+        // Listen for card-dropped events
+        this.addEventListener('card-dropped', () => {
+            this._updateLayout();
+        });
     }
 
     /**
@@ -82,14 +87,18 @@ class HandElement extends HTMLElement {
         const cardWidth = 80; // Default card width
         const totalWidth = this.cards.length * cardWidth;
 
-        let overlap = 0;
-        if (totalWidth > handWidth && this.cards.length > 1) {
-            overlap = (totalWidth - handWidth) / (this.cards.length - 1);
+        let spacing;
+        if (totalWidth <= handWidth) {
+            // If all cards can fit side-by-side, set spacing to card width
+            spacing = cardWidth;
+        } else {
+            // Calculate overlap to fit cards within the hand's width
+            spacing = (handWidth - cardWidth) / (this.cards.length - 1);
         }
 
         this.cards.forEach((card, index) => {
             card.style.position = 'absolute';
-            card.style.left = `${index * (cardWidth - overlap)}px`;
+            card.style.left = `${index * spacing}px`;
             card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
             card.style.zIndex = ''; // Clear residual z-index
             card.style.width = `${cardWidth}px`; // Ensure consistent width

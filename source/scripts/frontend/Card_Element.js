@@ -149,6 +149,12 @@ class CardElement extends HTMLElement {
         this.style.width = '';
         this.style.height = '';
         this.style.transformOrigin = '';
+
+        // Dispatch a custom event to notify the parent HandElement
+        this.dispatchEvent(new CustomEvent('card-dropped', {
+            bubbles: true,
+            composed: true
+        }));
     }
 }
 
