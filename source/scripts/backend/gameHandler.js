@@ -246,6 +246,9 @@ export class gameHandler {
 			console.log(`Card ${card.type} of ${card.suit} scored: ${cardValue}`);
 
 			// TODO_UI: Call back to UI to update the scorekeeper
+
+			// TODO: Conditions for other increments
+			i += 1;
 		}
 		
 
@@ -254,14 +257,12 @@ export class gameHandler {
 		if (score > 21) {
 			console.log("Score exceeds 21. Hand is bust.");
 
-			this.handScore = 0;
-			this.handMult = 1;
+			this.state.handScore = 0;
+			this.state.handMult = 1;
 			
 			// TODO_UI: Call back to UI to display bust, update scorekeeper
 		} else {
-			console.log(`Hand scored: ${this.state.roundScore}`);
-
-			this.state.roundScore += this.handScore * this.handMult;
+			this.state.roundScore += this.state.handScore * this.state.handMult;
 			this.state.handScore = 0;
 			this.state.handMult = 1;
 
