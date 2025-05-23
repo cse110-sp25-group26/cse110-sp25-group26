@@ -1,76 +1,66 @@
-/** 
- * @type {(hand: object, fromIndex: number, toIndex: number) => void | null}
- */
-let reorderCallback =
-    null;
+import './HandElement.js'; // Ensure HandElement is loaded
 
-/**
- * Sets the callback to be called when a hand is reordered.
- * @param {(hand: object, fromIndex: number, toIndex: number) => void} cb - Callback with (hand, fromIndex, toIndex).
- */
-export function setHandReorderCallback(
-	cb
-) {
-	reorderCallback =
-        cb;
+export function enableReordering(handElement) {
+    let draggedCard = null;
+    let originalIndex = null;
+
+    handElement.addEventListener('dragstart', (event) => {
+        if (event.target.tagName === 'CARD-ELEMENT') {
+            draggedCard = event.target;
+            originalIndex = handElement.cards.indexOf(draggedCard);
+            event.dataTransfer.effectAllowed = 'move';
+        }
+    });
+
+    handElement.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        const targetCard = event.target.closest('card-element');
+        if (targetCard) {
+            targetCard.classList.add('drag-over');
+        }
+    });
+
+    handElement.addEventListener('dragleave', (event) => {
+        const targetCard = event.target.closest('card-element');
+        if (targetCard) {
+            targetCard.classList.remove('drag-over');
+        }
+    });
+
+    handElement.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const targetCard = event.target.closest('card-element');
+        if (draggedCard && targetCard && draggedCard !== targetCard) {
+            const targetIndex = handElement.cards.indexOf(targetCard);
+
+            // Reorder cards
+            handElement.cards.splice(originalIndex, 1);
+            handElement.cards.splice(targetIndex, 0, draggedCard);
+            handElement._updateLayout();
+
+            // Notify game logic
+            handElement.dispatchEvent(new CustomEvent('hand-reordered', {
+                detail: { cards: handElement.cards.map(card => card.getAttribute('id')) },
+                bubbles: true,
+                composed: true
+            }));
+        } else {
+            // Invalid drop, reset layout
+            handElement._updateLayout();
+        }
+        draggedCard = null;
+        originalIndex = null;
+    });
+
+    handElement.addEventListener('dragend', () => {
+        if (draggedCard) {
+            const currentIndex = handElement.cards.indexOf(draggedCard);
+            if (currentIndex === originalIndex) {
+                // Reset layout if no valid move
+                handElement._updateLayout();
+            }
+            draggedCard = null;
+            originalIndex = null;
+        }
+    });
 }
-
-/**
- * Called when a hand's cards are reordered.
- * @param {object} hand - The hand object being reordered.
- * @param {number} fromIndex - The original index of the card.
- * @param {number} toIndex - The new index for the card.
- */
-export function onHandReorder(
-	hand,
-	fromIndex,
-	toIndex
-) {
-	if (
-		fromIndex ===
-        toIndex
-	) {
-		return;
-	}
-
-	if (
-		typeof reorderCallback ===
-        'function'
-	) {
-		reorderCallback(
-			hand,
-			fromIndex,
-			toIndex
-		);
-	}
-
-	else if (
-		typeof hand.moveCard ===
-        'function'
-	) {
-		hand.moveCard(
-			fromIndex,
-			toIndex
-		);
-	}
-
-	else {
-		// Fallback if moveCard is not implemented
-		const [
-			card
-		] =
-            hand.cards.splice(
-            	fromIndex,
-            	1
-            );
-
-		hand.cards.splice(
-			toIndex,
-			0,
-			card
-		);
-	}
-
-	// Add additional game logic or notifications here if needed
-}
-
