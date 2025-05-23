@@ -41,8 +41,6 @@ class CardElement extends HTMLElement {
         // Drag state
         this._dragging = false;
         this._offset = { x: 0, y: 0 };
-        this._originalHand = null;
-        this._originalIndex = null;
 
         // Bind methods
         this._onDragStart = this._onDragStart.bind(this);
@@ -116,19 +114,13 @@ class CardElement extends HTMLElement {
         e.stopPropagation();
         this._dragging = true;
 
-        // Store original hand and index
-        this._originalHand = this.closest('hand-element');
-        if (this._originalHand) {
-            this._originalIndex = Array.from(this._originalHand.cards).indexOf(this);
-        }
-
-        const rect = this.getBoundingClientRect(); // Use CardElement's bounding rect
+        const rect = this.getBoundingClientRect();
         const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
 
         this._offset.x = e.clientX - rect.left;
         this._offset.y = e.clientY - rect.top;
 
-        // Apply position and z-index to CardElement itself
+        // Apply position and z-index to CardElement
         this.style.position = 'absolute';
         this.style.left = `${rect.left - parentRect.left}px`;
         this.style.top = `${rect.top - parentRect.top}px`;
@@ -149,19 +141,7 @@ class CardElement extends HTMLElement {
         if (!this._dragging) return;
         this._dragging = false;
 
-        // Dispatch card-dropped event with original position and mouse position
-        this.dispatchEvent(new CustomEvent('card-dropped', {
-            detail: {
-                card: this,
-                originalHand: this._originalHand,
-                originalIndex: this._originalIndex,
-                clientX: this.getBoundingClientRect().left + this._offset.x
-            },
-            bubbles: true,
-            composed: true
-        }));
-
-        // Reset styles
+        // Reset styles to return to original position
         this.style.position = '';
         this.style.zIndex = '';
         this.style.left = '';
@@ -169,10 +149,6 @@ class CardElement extends HTMLElement {
         this.style.width = '';
         this.style.height = '';
         this.style.transformOrigin = '';
-
-        // Clear original position
-        this._originalHand = null;
-        this._originalIndex = null;
     }
 }
 
