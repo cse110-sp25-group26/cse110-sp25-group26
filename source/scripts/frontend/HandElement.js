@@ -24,6 +24,9 @@ class HandElement extends HTMLElement {
 
         // Internal state
         this.cards = [];
+
+        // Listen for card-dropped events
+        this.addEventListener('card-dropped', this._onCardDropped.bind(this));
     }
 
     /**
@@ -34,6 +37,19 @@ class HandElement extends HTMLElement {
     addCard(cardElement) {
         cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
         this.cards.push(cardElement);
+        this._container.appendChild(cardElement);
+        this._updateLayout();
+    }
+
+    /**
+     * @function addCardAtIndex
+     * @description Adds a card at a specific index in the hand.
+     * @param {CardElement} cardElement - The card element to add.
+     * @param {number} index - The index to insert the card at.
+     */
+    addCardAtIndex(cardElement, index) {
+        cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+        this.cards.splice(index, 0, cardElement);
         this._container.appendChild(cardElement);
         this._updateLayout();
     }
@@ -88,6 +104,7 @@ class HandElement extends HTMLElement {
         this.cards.forEach((card, index) => {
             card.style.position = 'absolute';
             card.style.left = `${index * (cardWidth - overlap)}px`;
+            card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
         });
     }
 
@@ -104,6 +121,73 @@ class HandElement extends HTMLElement {
             bubbles: true,
             composed: true
         }));
+        this._updateLayout(); // Update layout to reflect selection
+    }
+
+    /**
+     * @function _onCardDropped
+     * @description Handles the card-dropped event to reorder cards.
+     * @param {CustomEvent} event - The card-dropped event.
+     */
+    _onCardDropped(event) {
+        const { card, originalHand, originalIndex, clientX } = event.detail;
+
+        // Only handle drops within this hand
+        if (originalHand !== this) {
+            // If dropped outside this hand, return to original hand
+            if (originalHand && originalIndex !== null) {
+                originalHand.addCardAtIndex(card, originalIndex);
+            }
+            return;
+        }
+
+        // Get the drop position
+        const newIndex = this._getInsertionIndex(clientX);
+
+        // Remove card from current position
+        const currentIndex = this.cards.indexOf(card);
+        if (currentIndex !== -1) {
+            this.cards.splice(currentIndex, 1);
+            this._container.removeChild(card);
+        }
+
+        // Insert card at new index
+        this.cards.splice(newIndex, 0, card);
+        this._container.appendChild(card);
+        this._updateLayout();
+
+        // Notify game logic if the position changed
+        if (currentIndex !== newIndex && newIndex !== originalIndex) {
+            this.dispatchEvent(new CustomEvent('card-reordered', {
+                detail: {
+                    card,
+                    oldIndex: originalIndex,
+                    newIndex
+                },
+                bubbles: true,
+                composed: true
+            }));
+        }
+    }
+
+    /**
+     * @function _getInsertionIndex
+     * @description Determines the insertion index based on mouse position.
+     * @param {number} mouseX - The x-coordinate of the mouse.
+     * @returns {number} The index where the card should be inserted.
+     */
+    _getInsertionIndex(mouseX) {
+        const handRect = this._container.getBoundingClientRect();
+        const cardWidth = 80; // Default card width
+        const overlap = this.cards.length > 1 ? (this.cards.length * cardWidth - handRect.width) / (this.cards.length - 1) : 0;
+        const effectiveCardWidth = cardWidth - overlap;
+
+        // Calculate relative mouse position
+        const relativeX = mouseX - handRect.left;
+
+        // Determine insertion index
+        let index = Math.round(relativeX / effectiveCardWidth);
+        return Math.max(0, Math.min(index, this.cards.length));
     }
 }
 
