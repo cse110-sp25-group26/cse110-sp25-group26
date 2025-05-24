@@ -1,169 +1,218 @@
+/**
+ *
+ */
 class CardElement extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
+	/**
+	 *
+	 */
+	constructor() {
+		super();
+		this.attachShadow({ mode: 'open' });
 
-        // Card container
-        this._container = document.createElement('div');
-        this._container.classList.add('card');
-        this._container.tabIndex = 0;
+		// Card container
+		this._container = document.createElement('div');
+		this._container.classList.add('card');
+		this._container.tabIndex = 0;
 
-        // Card inner for 3D flip
-        this._cardInner = document.createElement('div');
-        this._cardInner.classList.add('card-inner');
+		// Card inner for 3D flip
+		this._cardInner = document.createElement('div');
+		this._cardInner.classList.add('card-inner');
 
-        // Card front
-        this._cardFront = document.createElement('div');
-        this._cardFront.classList.add('card-front');
+		// Card front
+		this._cardFront = document.createElement('div');
+		this._cardFront.classList.add('card-front');
 
-        // Card back
-        this._cardBack = document.createElement('div');
-        this._cardBack.classList.add('card-back');
+		// Card back
+		this._cardBack = document.createElement('div');
+		this._cardBack.classList.add('card-back');
 
-        // Tooltip
-        this._tooltip = document.createElement('div');
-        this._tooltip.classList.add('tooltip');
-        this._tooltip.style.display = 'none';
+		// Tooltip
+		this._tooltip = document.createElement('div');
+		this._tooltip.classList.add('tooltip');
+		this._tooltip.style.display = 'none';
 
-        // Assemble elements
-        this._cardInner.appendChild(this._cardFront);
-        this._cardInner.appendChild(this._cardBack);
-        this._container.appendChild(this._cardInner);
-        this._container.appendChild(this._tooltip);
-        this.shadowRoot.appendChild(this._container);
+		// Assemble elements
+		this._cardInner.appendChild(this._cardFront);
+		this._cardInner.appendChild(this._cardBack);
+		this._container.appendChild(this._cardInner);
+		this._container.appendChild(this._tooltip);
+		this.shadowRoot.appendChild(this._container);
 
-        // Attach external CSS
-        const styleLink = document.createElement('link');
-        styleLink.setAttribute('rel', 'stylesheet');
-        styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
-        this.shadowRoot.appendChild(styleLink);
+		// Attach external CSS
+		const styleLink = document.createElement('link');
+		styleLink.setAttribute('rel', 'stylesheet');
+		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		this.shadowRoot.appendChild(styleLink);
 
-        // Drag state
-        this._dragging = false;
-        this._offset = { x: 0, y: 0 };
+		// Drag state
+		this._dragging = false;
+		this._offset = { x: 0, y: 0 };
 
-        // Bind methods
-        this._onDragStart = this._onDragStart.bind(this);
-        this._onDragMove = this._onDragMove.bind(this);
-        this._onDragEnd = this._onDragEnd.bind(this);
+		// Bind methods
+		this._onDragStart = this._onDragStart.bind(this);
+		this._onDragMove = this._onDragMove.bind(this);
+		this._onDragEnd = this._onDragEnd.bind(this);
 
-        // Event listeners
-        this._container.addEventListener('mousedown', this._onDragStart);
-        document.addEventListener('mousemove', this._onDragMove);
-        document.addEventListener('mouseup', this._onDragEnd);
-        this._cardFront.addEventListener('dblclick', () => this.flip());
-        this._cardBack.addEventListener('dblclick', () => this.flip());
-        this._container.addEventListener('mouseenter', () => {
-            this._tooltip.style.display = 'block';
-        });
-        this._container.addEventListener('mouseleave', () => {
-            this._tooltip.style.display = 'none';
-        });
-    }
+		// Event listeners
+		this._container.addEventListener('mousedown', this._onDragStart);
+		document.addEventListener('mousemove', this._onDragMove);
+		document.addEventListener('mouseup', this._onDragEnd);
+		this._cardFront.addEventListener('dblclick', () => this.flip());
+		this._cardBack.addEventListener('dblclick', () => this.flip());
+		this._container.addEventListener('mouseenter', () => {
+			this._tooltip.style.display = 'block';
+		});
+		this._container.addEventListener('mouseleave', () => {
+			this._tooltip.style.display = 'none';
+		});
+	}
 
-    static get observedAttributes() {
-        return ['suit', 'type', 'tooltip'];
-    }
+	/**
+	 * Returns the list of observed attributes for the card element.
+	 * @returns {string[]} The list of observed attributes.
+	 */
+	static get observedAttributes() {
+		return ['suit', 'type', 'tooltip'];
+	}
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'tooltip') {
-            this._tooltip.textContent = newValue || '';
-        } else if (name === 'suit' || name === 'type') {
-            this._updateCardFace();
-        }
-    }
+	/**
+	 * Handles attribute changes for the card element.
+	 * @param {string} name - The name of the attribute being changed.
+	 * @param {string} oldValue - The old value of the attribute.
+	 * @param {string} newValue - The new value of the attribute.
+	 */
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (name === 'tooltip') {
+			this._tooltip.textContent = newValue || '';
+		} else if (name === 'suit' || name === 'type') {
+			this._updateCardFace();
+		}
+	}
 
-    connectedCallback() {
-        this._updateCardFace();
-        this._tooltip.textContent = this.getAttribute('tooltip') || '';
-    }
+	/**
+	 *
+	 */
+	connectedCallback() {
+		this._updateCardFace();
+		this._tooltip.textContent = this.getAttribute('tooltip') || '';
+	}
 
-    _updateCardFace() {
-        const suit = this.getAttribute('suit');
-        const type = this.getAttribute('type');
-        this._cardFront.innerHTML = '';
+	/**
+	 *
+	 */
+	_updateCardFace() {
+		const suit = this.getAttribute('suit');
+		const type = this.getAttribute('type');
+		this._cardFront.innerHTML = '';
 
-        if (suit && type) {
-            const img = document.createElement('img');
-            const filename = `card_${type.toLowerCase()}_${suit.toLowerCase()}.png`;
-            img.src = `/source/res/img/${filename}`;
-            img.alt = `${type} of ${suit}`;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            this._cardFront.appendChild(img);
-        } else {
-            this._cardFront.textContent = type || '';
-        }
+		if (suit && type) {
+			const img = document.createElement('img');
+			const filename = `card_${type.toLowerCase()}_${suit.toLowerCase()}.png`;
+			img.src = `/source/res/img/${filename}`;
+			img.alt = `${type} of ${suit}`;
+			img.style.width = '100%';
+			img.style.height = '100%';
+			this._cardFront.appendChild(img);
+		} else {
+			this._cardFront.textContent = type || '';
+		}
 
-        // Card back image
-        this._cardBack.innerHTML = '';
-        const backImg = document.createElement('img');
-        backImg.src = '/source/res/img/back.png';
-        backImg.alt = 'Card back';
-        backImg.style.width = '100%';
-        backImg.style.height = '100%';
-        this._cardBack.appendChild(backImg);
-    }
+		// Card back image
+		this._cardBack.innerHTML = '';
+		const backImg = document.createElement('img');
+		backImg.src = '/source/res/img/back.png';
+		backImg.alt = 'Card back';
+		backImg.style.width = '100%';
+		backImg.style.height = '100%';
+		this._cardBack.appendChild(backImg);
+	}
 
-    flip() {
-        this._container.classList.toggle('flipped');
-    }
+	/**
+	 *
+	 */
+	flip() {
+		this._container.classList.toggle('flipped');
+	}
 
-    _onDragStart(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        this._dragging = true;
+	/**
+	 *
+	 * @param e
+	 */
+	/**
+	 * Handles the drag start event.
+	 * @param {MouseEvent} e - The drag start event.
+	 */
+	_onDragStart(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this._dragging = true;
 
-        const rect = this.getBoundingClientRect();
-        const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
+		const rect = this.getBoundingClientRect();
+		const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
 
-        this._offset.x = e.clientX - rect.left;
-        this._offset.y = e.clientY - rect.top;
+		this._offset.x = e.clientX - rect.left;
+		this._offset.y = e.clientY - rect.top;
 
-        // Apply position and z-index to CardElement
-        this.style.position = 'absolute';
-        this.style.left = `${rect.left - parentRect.left}px`;
-        this.style.top = `${rect.top - parentRect.top}px`;
-        this.style.width = `${rect.width}px`;
-        this.style.height = `${rect.height}px`;
-        this.style.zIndex = '999999';
-        this.style.transformOrigin = '0 0';
+		// Apply position and z-index to CardElement
+		this.style.position = 'absolute';
+		this.style.left = `${rect.left - parentRect.left}px`;
+		this.style.top = `${rect.top - parentRect.top}px`;
+		this.style.width = `${rect.width}px`;
+		this.style.height = `${rect.height}px`;
+		this.style.zIndex = '999999';
+		this.style.transformOrigin = '0 0';
 
-        // Notify parent HandElement of drag start
-        this.dispatchEvent(new CustomEvent('card-dragstart', {
-            detail: { card: this },
-            bubbles: true,
-            composed: true
-        }));
-    }
+		// Notify parent HandElement of drag start
+		this.dispatchEvent(new CustomEvent('card-dragstart', {
+			detail: { card: this },
+			bubbles: true,
+			composed: true
+		}));
+	}
 
-    _onDragMove(e) {
-        if (!this._dragging) return;
-        const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
-        this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
-        this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
-    }
+	/**
+	 *
+	 * @param e
+	 */
+	/**
+	 * Handles the drag move event.
+	 * @param {MouseEvent} e - The drag move event.
+	 */
+	_onDragMove(e) {
+		if (!this._dragging) return;
+		const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
+		this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+		this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+	}
 
-    _onDragEnd(e) {
-        if (!this._dragging) return;
-        this._dragging = false;
+	/**
+	 *
+	 * @param e
+	 */
+	/**
+	 * Handles the drag end event.
+	 * @param {MouseEvent} e - The drag end event.
+	 */
+	_onDragEnd(e) {
+		if (!this._dragging) return;
+		this._dragging = false;
 
-        // Reset styles to return to original position
-        this.style.position = '';
-        this.style.zIndex = '';
-        this.style.left = '';
-        this.style.top = '';
-        this.style.width = '';
-        this.style.height = '';
-        this.style.transformOrigin = '';
+		// Reset styles to return to original position
+		this.style.position = '';
+		this.style.zIndex = '';
+		this.style.left = '';
+		this.style.top = '';
+		this.style.width = '';
+		this.style.height = '';
+		this.style.transformOrigin = '';
 
-        // Notify parent HandElement of drag end
-        this.dispatchEvent(new CustomEvent('card-dragend', {
-            detail: { card: this, x: e.clientX, y: e.clientY },
-            bubbles: true,
-            composed: true
-        }));
-    }
+		// Notify parent HandElement of drag end
+		this.dispatchEvent(new CustomEvent('card-dragend', {
+			detail: { card: this, x: e.clientX, y: e.clientY },
+			bubbles: true,
+			composed: true
+		}));
+	}
 }
 
 customElements.define('card-element', CardElement);
