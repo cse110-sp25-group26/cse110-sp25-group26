@@ -19,6 +19,8 @@ export function createUICardForDeck(card) {
 	cardElement.setAttribute('suit', card.suit);
 	cardElement.setAttribute('type', card.type);
 	cardElement.setAttribute('tooltip', `${card.type} of ${card.suit}`);
+	//turn of drag and draw if in a deck
+	cardElement.setAttribute('in-deck', 'true');
 
 	cardElement.style.position = 'absolute';
 	cardElement.style.left = '0px';

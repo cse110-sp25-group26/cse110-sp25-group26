@@ -6,7 +6,7 @@
 	</head>
 	<body style="background: #2a2a2a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
 		<h2 style="color: #fff">DeckElement Frontend Demo</h2>
-		<div id="deck-container" style="width: 100px; height: 140px; position: relative; margin-bottom: 2em; border: 2px solid #fff; border-radius: 10px">
+		<div id="deck-container" style="width: 80px; height: 120px; position: relative; margin-bottom: 2em; border: 2px solid #fff; border-radius: 10px">
 			<!-- Cards will be stacked here -->
 		</div>
 		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px">Add Random Card</button>
@@ -22,6 +22,7 @@
 				card.setAttribute("suit", suit);
 				card.setAttribute("type", type);
 				card.setAttribute("tooltip", tooltip);
+				card.setAttribute("in-deck", "true");
 				// Position absolutely for stacking
 				card.style.position = "absolute";
 				card.style.left = "0px";
@@ -45,16 +46,19 @@
 			// Add a few cards initially
 			window.onload = () => {
 				const deckContainer = document.getElementById("deck-container");
-				[
-					["heart", "Ace", "Ace of Hearts"],
-					["spade", "King", "King of Spades"],
-					["diamond", "10", "Ten of Diamonds"],
-					["club", "2", "Two of Clubs"],
-				].forEach(([suit, type, tooltip], idx) => {
-					const card = createCardElement(suit, type, tooltip);
-					card.style.zIndex = (10 + idx).toString();
-					deckContainer.appendChild(card);
-				});
+				let idx = 0;
+				for (const suit of suits) {
+					for (const type of types) {
+						const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
+						const card = createCardElement(suit, type, tooltip);
+						card.style.zIndex = (10 + idx).toString();
+						// Optional: offset each card by 0.5px for a visible stack
+						card.style.top = `${idx * 0.5}px`;
+						card.style.left = `${idx * 0.5}px`;
+						deckContainer.appendChild(card);
+						idx++;
+					}
+				}
 			};
 		</script>
 	</body>

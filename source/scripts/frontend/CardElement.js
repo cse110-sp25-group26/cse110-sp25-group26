@@ -59,16 +59,21 @@ export class CardElement extends HTMLElement {
 		this._tiltFactor = 0.5; // Degrees of tilt per pixel of X movement
 
 		// Bind methods
-		this._onDragStart = this._onDragStart.bind(this);
-		this._onDragMove = this._onDragMove.bind(this);
-		this._onDragEnd = this._onDragEnd.bind(this);
+		if (!this.hasAttribute('in-deck')) {
+			this._onDragStart = this._onDragStart.bind(this);
+			this._onDragMove = this._onDragMove.bind(this);
+			this._onDragEnd = this._onDragEnd.bind(this);
+		}
+
 		this._onMouseEnterTooltip = this._onMouseEnterTooltip.bind(this);
 		this._onMouseLeaveTooltip = this._onMouseLeaveTooltip.bind(this);
 
 		// Event listeners
-		this._container.addEventListener('mousedown', this._onDragStart);
-		document.addEventListener('mousemove', this._onDragMove);
-		document.addEventListener('mouseup', this._onDragEnd);
+		if (!this.hasAttribute('in-deck')) {
+			this._container.addEventListener('mousedown', this._onDragStart);
+			document.addEventListener('mousemove', this._onDragMove);
+			document.addEventListener('mouseup', this._onDragEnd);
+		}
 
 		this._cardFront.addEventListener('dblclick', () => {
 			if (this._wasDragged) return;
@@ -179,6 +184,7 @@ export class CardElement extends HTMLElement {
 	 * @param {MouseEvent} e - The mousedown event.
 	 */
 	_onDragStart(e) {
+		if (this.hasAttribute('in-deck')) return; // Prevent dragging if in a deck
 		e.preventDefault();
 		e.stopPropagation();
 		this._dragging = true;
@@ -206,6 +212,8 @@ export class CardElement extends HTMLElement {
 	 * @param {MouseEvent} e - The mousemove event.
 	 */
 	_onDragMove(e) {
+		if (this.hasAttribute('in-deck')) return; // Prevent dragging if in a deck
+
 		if (!this._dragging) return;
 
 		if (!this._wasDragged) {
@@ -262,6 +270,8 @@ export class CardElement extends HTMLElement {
 	 * @param {MouseEvent} e - The mouseup event that ends the drag.
 	 */
 	_onDragEnd(e) {
+		if (this.hasAttribute('in-deck')) return; // Prevent dragging if in a deck
+
 		if (!this._dragging) return;
 		this._dragging = false;
 
