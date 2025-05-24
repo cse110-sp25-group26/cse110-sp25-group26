@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>DeckElement Frontend Test</title>
+	</head>
+	<body style="background: #2a2a2a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
+		<h2 style="color: #fff">DeckElement Frontend Demo</h2>
+		<div id="deck-container" style="width: 100px; height: 140px; position: relative; margin-bottom: 2em; border: 2px solid #fff; border-radius: 10px">
+			<!-- Cards will be stacked here -->
+		</div>
+		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px">Add Random Card</button>
+		<p style="color: #fff; margin-top: 2em">Double-click a card to flip. Drag to move. Cards are stacked in the deck.</p>
+
+		<script type="module" src="../../frontend/CardElement.js"></script>
+		<script type="module">
+			const suits = ["heart", "spade", "diamond", "club"];
+			const types = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
+
+			function createCardElement(suit, type, tooltip) {
+				const card = document.createElement("card-element");
+				card.setAttribute("suit", suit);
+				card.setAttribute("type", type);
+				card.setAttribute("tooltip", tooltip);
+				// Position absolutely for stacking
+				card.style.position = "absolute";
+				card.style.left = "0px";
+				card.style.top = "0px";
+				return card;
+			}
+
+			document.getElementById("addCardBtn").onclick = () => {
+				const suit = suits[Math.floor(Math.random() * suits.length)];
+				const type = types[Math.floor(Math.random() * types.length)];
+				const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
+				const card = createCardElement(suit, type, tooltip);
+
+				const deckContainer = document.getElementById("deck-container");
+				const numCards = deckContainer.children.length;
+				card.style.zIndex = (10 + numCards).toString();
+
+				deckContainer.appendChild(card);
+			};
+
+			// Add a few cards initially
+			window.onload = () => {
+				const deckContainer = document.getElementById("deck-container");
+				[
+					["heart", "Ace", "Ace of Hearts"],
+					["spade", "King", "King of Spades"],
+					["diamond", "10", "Ten of Diamonds"],
+					["club", "2", "Two of Clubs"],
+				].forEach(([suit, type, tooltip], idx) => {
+					const card = createCardElement(suit, type, tooltip);
+					card.style.zIndex = (10 + idx).toString();
+					deckContainer.appendChild(card);
+				});
+			};
+		</script>
+	</body>
+</html>

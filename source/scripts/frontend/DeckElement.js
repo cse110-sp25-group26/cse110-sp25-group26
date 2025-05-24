@@ -15,9 +15,11 @@ export function createUICardForDeck(card) {
 	}
 
 	// Create the card element
-	const cardElement = document.createElement('div');
-	cardElement.className = 'card';
-	cardElement.textContent = `${card.type} of ${card.suit}`;
+	const cardElement = document.createElement('card-element');
+	cardElement.setAttribute('suit', card.suit);
+	cardElement.setAttribute('type', card.type);
+	cardElement.setAttribute('tooltip', `${card.type} of ${card.suit}`);
+
 	cardElement.style.position = 'absolute';
 	cardElement.style.left = '0px';
 	cardElement.style.top = '0px';
