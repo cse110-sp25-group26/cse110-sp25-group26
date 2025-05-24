@@ -54,6 +54,10 @@ export class CardElement extends HTMLElement {
 		this._dragStartY = 0;
 		this._DRAG_THRESHOLD = 5; // Pixels
 
+		// Tilt properties
+		this._lastClientX = 0;
+		this._tiltFactor = 0.5; // Degrees of tilt per pixel of X movement
+
 		// Bind methods
 		this._onDragStart = this._onDragStart.bind(this);
 		this._onDragMove = this._onDragMove.bind(this);
@@ -183,6 +187,7 @@ export class CardElement extends HTMLElement {
 			const dy = e.clientY - this._dragStartY;
 			if (Math.sqrt(dx * dx + dy * dy) > this._DRAG_THRESHOLD) {
 				this._wasDragged = true;
+				this._lastClientX = e.clientX; // Initialize lastClientX when drag officially starts
 
 				// Drag has officially started, now apply dragging styles and center the card
 				const { rect, parentRect } = this._dragPreparationState;
@@ -208,6 +213,15 @@ export class CardElement extends HTMLElement {
 			const parentRect = this._dragPreparationState.parentRect; // Use stored parentRect
 			this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
 			this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+
+			// Calculate and apply tilt based on X velocity
+			const deltaX = e.clientX - this._lastClientX;
+			let tiltAngle = deltaX * this._tiltFactor;
+			const MAX_TILT = 15; // Maximum tilt angle in degrees
+			tiltAngle = Math.max(-MAX_TILT, Math.min(MAX_TILT, tiltAngle));
+			this.style.transform = `rotateZ(${tiltAngle}deg)`;
+
+			this._lastClientX = e.clientX;
 
 			this.dispatchEvent(new CustomEvent('custom-drag-move', {
 				bubbles: true,
