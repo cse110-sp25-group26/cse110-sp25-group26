@@ -2,7 +2,7 @@
  * @class CardElement
  * @classdesc Custom web component representing a card.
  */
-class CardElement extends HTMLElement {
+export class CardElement extends HTMLElement {
 	/**
 	 * @class
 	 * @description Initializes the CardElement and sets up its structure and event listeners.
