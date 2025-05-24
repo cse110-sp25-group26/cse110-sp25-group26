@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/Card_Element.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/Card_Element.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @class CardElement
+ * @classdesc Custom web component representing a card.
+ */
+class CardElement extends HTMLElement {
+	/**
+	 * @class
+	 * @description Initializes the CardElement and sets up its structure and event listeners.
+	 */
+	constructor() {
+		super();
+		this.attachShadow({ mode: 'open' });
+
+		// Card container
+		this._container = document.createElement('div');
+		this._container.classList.add('card');
+		this._container.tabIndex = 0;
+
+		// Card inner for 3D flip
+		this._cardInner = document.createElement('div');
+		this._cardInner.classList.add('card-inner');
+
+		// Card front
+		this._cardFront = document.createElement('div');
+		this._cardFront.classList.add('card-front');
+
+		// Card back
+		this._cardBack = document.createElement('div');
+		this._cardBack.classList.add('card-back');
+
+		// Tooltip
+		this._tooltip = document.createElement('div');
+		this._tooltip.classList.add('tooltip');
+		this._tooltip.style.display = 'none';
+
+		// Assemble elements
+		this._cardInner.appendChild(this._cardFront);
+		this._cardInner.appendChild(this._cardBack);
+		this._container.appendChild(this._cardInner);
+		this._container.appendChild(this._tooltip);
+		this.shadowRoot.appendChild(this._container);
+
+		// Attach external CSS
+		const styleLink = document.createElement('link');
+		styleLink.setAttribute('rel', 'stylesheet');
+		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		this.shadowRoot.appendChild(styleLink);
+
+		// Drag state
+		this._dragging = false;
+		this._offset = { x: 0, y: 0 };
+		this._wasDragged = false;
+		this._dragStartX = 0;
+		this._dragStartY = 0;
+		this._DRAG_THRESHOLD = 5; // Pixels
+
+		// Bind methods
+		this._onDragStart = this._onDragStart.bind(this);
+		this._onDragMove = this._onDragMove.bind(this);
+		this._onDragEnd = this._onDragEnd.bind(this);
+
+		// Event listeners
+		this._container.addEventListener('mousedown', this._onDragStart);
+		document.addEventListener('mousemove', this._onDragMove);
+		document.addEventListener('mouseup', this._onDragEnd);
+
+		this._cardFront.addEventListener('dblclick', () => {
+			if (this._wasDragged) return;
+			this.flip();
+		});
+		this._cardBack.addEventListener('dblclick', () => {
+			if (this._wasDragged) return;
+			this.flip();
+		});
+		this._container.addEventListener('mouseenter', () => {
+			this._tooltip.style.display = 'block';
+		});
+		this._container.addEventListener('mouseleave', () => {
+			this._tooltip.style.display = 'none';
+		});
+	}
+
+	/**
+	 * @returns {string[]} Observed attributes for the CardElement.
+	 */
+	static get observedAttributes() {
+		return ['suit', 'type', 'tooltip'];
+	}
+
+	/**
+	 * @param {string} name - The name of the attribute being changed.
+	 * @param {string} oldValue - The old value of the attribute.
+	 * @param {string} newValue - The new value of the attribute.
+	 */
+	attributeChangedCallback(name, oldValue, newValue) {
+		if (name === 'tooltip') {
+			this._tooltip.textContent = newValue || '';
+		} else if (name === 'suit' || name === 'type') {
+			this._updateCardFace();
+		}
+	}
+
+	/**
+	 * @description Called when the element is added to the DOM.
+	 */
+	connectedCallback() {
+		this._updateCardFace();
+		this._tooltip.textContent = this.getAttribute('tooltip') || '';
+	}
+
+	/**
+	 * @description Updates the card's front and back faces based on its attributes.
+	 */
+	_updateCardFace() {
+		const suit = this.getAttribute('suit');
+		const type = this.getAttribute('type');
+		this._cardFront.innerHTML = '';
+
+		if (suit &amp;&amp; type) {
+			const img = document.createElement('img');
+			const filename = `card_${type.toLowerCase()}_${suit.toLowerCase()}.png`;
+			img.src = `/source/res/img/${filename}`;
+			img.alt = `${type} of ${suit}`;
+			img.style.width = '100%';
+			img.style.height = '100%';
+			this._cardFront.appendChild(img);
+		} else {
+			this._cardFront.textContent = type || '';
+		}
+
+		// Card back image
+		this._cardBack.innerHTML = '';
+		const backImg = document.createElement('img');
+		backImg.src = '/source/res/img/back.png';
+		backImg.alt = 'Card back';
+		backImg.style.width = '100%';
+		backImg.style.height = '100%';
+		this._cardBack.appendChild(backImg);
+	}
+
+	/**
+	 * @description Flips the card to show the opposite side.
+	 */
+	flip() {
+		this._container.classList.toggle('flipped');
+	}
+
+	/**
+	 * @param {MouseEvent} e - The mousedown event.
+	 */
+	_onDragStart(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this._dragging = true;
+		this._wasDragged = false; // Reset until movement is detected
+		this._dragStartX = e.clientX;
+		this._dragStartY = e.clientY;
+
+		// Store initial state for when drag actually starts
+		this._dragPreparationState = {
+			rect: this.getBoundingClientRect(),
+			parentRect: this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 }
+		};
+
+		// Keep track of the original transform for restoration
+		this._preDragTransform = this.style.transform;
+	}
+
+	/**
+	 * @param {MouseEvent} e - The mousemove event.
+	 */
+	_onDragMove(e) {
+		if (!this._dragging) return;
+
+		if (!this._wasDragged) {
+			const dx = e.clientX - this._dragStartX;
+			const dy = e.clientY - this._dragStartY;
+			if (Math.sqrt(dx * dx + dy * dy) > this._DRAG_THRESHOLD) {
+				this._wasDragged = true;
+
+				// Drag has officially started, now apply dragging styles and center the card
+				const { rect, parentRect } = this._dragPreparationState;
+
+				this._offset.x = rect.width / 2;
+				this._offset.y = rect.height / 2;
+
+				this.style.position = 'absolute';
+				this.style.width = `${rect.width}px`;
+				this.style.height = `${rect.height}px`;
+				this.style.zIndex = '999999';
+				this.style.transformOrigin = 'center center';
+				this.style.transform = 'none'; // Remove any existing transform
+
+				// Position the card so its center is at the current mouse cursor.
+				this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+				this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+			}
+		}
+
+		if (this._wasDragged) {
+			// Continue moving the card if drag has started
+			const parentRect = this._dragPreparationState.parentRect; // Use stored parentRect
+			this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+			this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+		}
+	}
+
+	/**
+	 * @description Ends the drag operation and resets the card's position.
+	 */
+	_onDragEnd() {
+		if (!this._dragging) return;
+		this._dragging = false;
+
+		if (this._wasDragged) {
+			// Reset styles only if the card was actually dragged and styles were changed
+			this.style.position = '';
+			this.style.zIndex = '';
+			this.style.left = '';
+			this.style.top = '';
+			this.style.width = '';
+			this.style.height = '';
+			this.style.transformOrigin = '';
+
+			if (this._preDragTransform !== undefined) {
+				this.style.transform = this._preDragTransform;
+				this._preDragTransform = undefined;
+			}
+
+			this.dispatchEvent(new CustomEvent('card-dropped', {
+				bubbles: true,
+				composed: true
+			}));
+		}
+
+		this._dragPreparationState = null; // Clean up
+	}
+}
+
+customElements.define('card-element', CardElement);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

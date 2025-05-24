@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>HandElement Frontend Test</title>
-  </head>
-  <body
-    style="
+
+<head>
+	<meta charset="UTF-8" />
+	<title>HandElement Frontend Test</title>
+</head>
+
+<body style="
       background: #2a2a2a;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    "
-  >
-    <h2 style="color: #fff">HandElement Frontend Demo</h2>
-    <hand-element id="hand" style="width: 400px; height: 120px; position: relative;"></hand-element>
-    <div style="margin-top: 1em;">
-      <button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px; margin-right: 10px;">Add Random Card</button>
-      <button id="removeCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px;">Remove Selected Cards</button>
-    </div>
-    <p style="color: #fff; margin-top: 2em">
-      Click a card to select. Use buttons to add/remove cards.
-    </p>
+    ">
+	<h2 style="color: #fff">HandElement Frontend Demo</h2>
+	<hand-element id="hand" style="width: 400px; height: 120px; position: relative;"></hand-element>
+	<div style="margin-top: 1em;">
+		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px; margin-right: 10px;">Add
+			Random Card</button>
+		<button id="removeCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px;">Remove Selected
+			Cards</button>
+	</div>
+	<p style="color: #fff; margin-top: 2em">
+		Click a card to select. Use buttons to add/remove cards.
+	</p>
 
-    <!-- Include your CardElement and HandElement modules -->
-    <script type="module" src="../../frontend/Card_Element.js"></script>
-    <script type="module" src="../../frontend/HandElement.js"></script>
+	<!-- Include your CardElement and HandElement modules -->
+	<script type="module" src="../../frontend/Card_Element.js"></script>
+	<script type="module" src="../../frontend/HandElement.js"></script>
 
-    <!-- Main demo logic -->
-    <script type="module">
-      function createCard(suit, type, tooltip) {
-        const card = document.createElement('card-element');
-        card.setAttribute('suit', suit);
-        card.setAttribute('type', type);
-        card.setAttribute('tooltip', tooltip);
-        return card;
-      }
+	<!-- Main demo logic -->
+	<script type="module">
+		function createCard(suit, type, tooltip) {
+			const card = document.createElement('card-element');
+			card.setAttribute('suit', suit);
+			card.setAttribute('type', type);
+			card.setAttribute('tooltip', tooltip);
+			return card;
+		}
 
-      const suits = ['heart', 'spade', 'diamond', 'club'];
-      const types = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'];
+		const suits = ['heart', 'spade', 'diamond', 'club'];
+		const types = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'];
 
-      Promise.all([
-        customElements.whenDefined('hand-element'),
-        customElements.whenDefined('card-element')
-      ]).then(() => {
-        const hand = document.getElementById('hand');
+		Promise.all([
+			customElements.whenDefined('hand-element'),
+			customElements.whenDefined('card-element')
+		]).then(() => {
+			const hand = document.getElementById('hand');
 
-        [
-          ['heart', 'Ace', 'Ace of Hearts'],
-          ['spade', 'King', 'King of Spades'],
-          ['diamond', '10', 'Ten of Diamonds'],
-          ['club', '2', 'Two of Clubs']
-        ].forEach(([suit, type, tooltip]) => {
-          const card = createCard(suit, type, tooltip);
-          hand.addCard(card);
-        });
+			[
+				['heart', 'Ace', 'Ace of Hearts'],
+				['spade', 'King', 'King of Spades'],
+				['diamond', '10', 'Ten of Diamonds'],
+				['club', '2', 'Two of Clubs']
+			].forEach(([suit, type, tooltip]) => {
+				const card = createCard(suit, type, tooltip);
+				hand.addCard(card);
+			});
 
-        hand.addEventListener('card-selected', e => {
-          console.log('Card selected:', e.detail.card, 'Selected:', e.detail.selected);
-        });
+			hand.addEventListener('card-selected', e => {
+				console.log('Card selected:', e.detail.card, 'Selected:', e.detail.selected);
+			});
 
-        document.getElementById('addCardBtn').onclick = () => {
-          const suit = suits[Math.floor(Math.random() * suits.length)];
-          const type = types[Math.floor(Math.random() * types.length)];
-          const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
-          const card = createCard(suit, type, tooltip);
-          hand.addCard(card);
-        };
+			document.getElementById('addCardBtn').onclick = () => {
+				const suit = suits[Math.floor(Math.random() * suits.length)];
+				const type = types[Math.floor(Math.random() * types.length)];
+				const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
+				const card = createCard(suit, type, tooltip);
+				hand.addCard(card);
+			};
 
-        document.getElementById('removeCardBtn').onclick = () => {
-          hand.removeSelectedCards();
-        };
-      });
-    </script>
-  </body>
+			document.getElementById('removeCardBtn').onclick = () => {
+				hand.removeSelectedCards();
+			};
+		});
+	</script>
+</body>
+
 </html>
-

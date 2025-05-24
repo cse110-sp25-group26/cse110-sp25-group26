@@ -49,6 +49,10 @@ class CardElement extends HTMLElement {
 		// Drag state
 		this._dragging = false;
 		this._offset = { x: 0, y: 0 };
+		this._wasDragged = false;
+		this._dragStartX = 0;
+		this._dragStartY = 0;
+		this._DRAG_THRESHOLD = 5; // Pixels
 
 		// Bind methods
 		this._onDragStart = this._onDragStart.bind(this);
@@ -59,8 +63,15 @@ class CardElement extends HTMLElement {
 		this._container.addEventListener('mousedown', this._onDragStart);
 		document.addEventListener('mousemove', this._onDragMove);
 		document.addEventListener('mouseup', this._onDragEnd);
-		this._cardFront.addEventListener('dblclick', () => this.flip());
-		this._cardBack.addEventListener('dblclick', () => this.flip());
+
+		this._cardFront.addEventListener('dblclick', () => {
+			if (this._wasDragged) return;
+			this.flip();
+		});
+		this._cardBack.addEventListener('dblclick', () => {
+			if (this._wasDragged) return;
+			this.flip();
+		});
 		this._container.addEventListener('mouseenter', () => {
 			this._tooltip.style.display = 'block';
 		});
@@ -141,21 +152,18 @@ class CardElement extends HTMLElement {
 		e.preventDefault();
 		e.stopPropagation();
 		this._dragging = true;
+		this._wasDragged = false; // Reset until movement is detected
+		this._dragStartX = e.clientX;
+		this._dragStartY = e.clientY;
 
-		const rect = this.getBoundingClientRect();
-		const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
+		// Store initial state for when drag actually starts
+		this._dragPreparationState = {
+			rect: this.getBoundingClientRect(),
+			parentRect: this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 }
+		};
 
-		this._offset.x = e.clientX - rect.left;
-		this._offset.y = e.clientY - rect.top;
-
-		// Apply position and z-index to CardElement
-		this.style.position = 'absolute';
-		this.style.left = `${rect.left - parentRect.left}px`;
-		this.style.top = `${rect.top - parentRect.top}px`;
-		this.style.width = `${rect.width}px`;
-		this.style.height = `${rect.height}px`;
-		this.style.zIndex = '999999';
-		this.style.transformOrigin = '0 0';
+		// Keep track of the original transform for restoration
+		this._preDragTransform = this.style.transform;
 	}
 
 	/**
@@ -163,9 +171,38 @@ class CardElement extends HTMLElement {
 	 */
 	_onDragMove(e) {
 		if (!this._dragging) return;
-		const parentRect = this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 };
-		this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
-		this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+
+		if (!this._wasDragged) {
+			const dx = e.clientX - this._dragStartX;
+			const dy = e.clientY - this._dragStartY;
+			if (Math.sqrt(dx * dx + dy * dy) > this._DRAG_THRESHOLD) {
+				this._wasDragged = true;
+
+				// Drag has officially started, now apply dragging styles and center the card
+				const { rect, parentRect } = this._dragPreparationState;
+
+				this._offset.x = rect.width / 2;
+				this._offset.y = rect.height / 2;
+
+				this.style.position = 'absolute';
+				this.style.width = `${rect.width}px`;
+				this.style.height = `${rect.height}px`;
+				this.style.zIndex = '999999';
+				this.style.transformOrigin = 'center center';
+				this.style.transform = 'none'; // Remove any existing transform
+
+				// Position the card so its center is at the current mouse cursor.
+				this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+				this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+			}
+		}
+
+		if (this._wasDragged) {
+			// Continue moving the card if drag has started
+			const parentRect = this._dragPreparationState.parentRect; // Use stored parentRect
+			this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+			this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+		}
 	}
 
 	/**
@@ -175,14 +212,28 @@ class CardElement extends HTMLElement {
 		if (!this._dragging) return;
 		this._dragging = false;
 
-		// Reset styles to return to original position
-		this.style.position = '';
-		this.style.zIndex = '';
-		this.style.left = '';
-		this.style.top = '';
-		this.style.width = '';
-		this.style.height = '';
-		this.style.transformOrigin = '';
+		if (this._wasDragged) {
+			// Reset styles only if the card was actually dragged and styles were changed
+			this.style.position = '';
+			this.style.zIndex = '';
+			this.style.left = '';
+			this.style.top = '';
+			this.style.width = '';
+			this.style.height = '';
+			this.style.transformOrigin = '';
+
+			if (this._preDragTransform !== undefined) {
+				this.style.transform = this._preDragTransform;
+				this._preDragTransform = undefined;
+			}
+
+			this.dispatchEvent(new CustomEvent('card-dropped', {
+				bubbles: true,
+				composed: true
+			}));
+		}
+
+		this._dragPreparationState = null; // Clean up
 	}
 }
 

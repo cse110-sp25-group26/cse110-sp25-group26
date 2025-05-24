@@ -1,8 +1,4 @@
-import './HandElement.js'; // Ensure HandElement is loaded
-
-/**
- * @typedef {import('./HandElement.js').HandElement} HandElement
- */
+import { HandElement } from './HandElement.js';
 
 /**
  * @function enableReordering
