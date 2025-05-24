@@ -5,6 +5,11 @@
     position: relative;
     cursor: grab;
     user-select: none;
+    transition: transform 0.3s, left 0.3s;
+}
+
+.card.selected {
+    transform: translateY(-20px);
 }
 
 .card-inner {

@@ -4,7 +4,7 @@ import { CardElement } from './CardElement.js';
  * @class HandElement
  * @classdesc Custom web component representing a hand of cards.
  */
-class HandElement extends HTMLElement {
+export class HandElement extends HTMLElement {
 	/**
 	 * @class
 	 * @description Sets up shadow DOM, structure, and event listeners.
@@ -98,7 +98,7 @@ class HandElement extends HTMLElement {
 			card.style.position = 'absolute';
 			card.style.left = `${index * (cardWidth - overlap)}px`;
 			card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
-			card.style.zIndex = ''; // Clear residual z-index
+			card.style.zIndex = index.toString(); // Set zIndex for stacking
 			card.style.width = `${cardWidth}px`; // Ensure consistent width
 		});
 	}

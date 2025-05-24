@@ -6,11 +6,3 @@
     align-items: center;
     justify-content: flex-start;
 }
-
-.card {
-    transition: transform 0.3s, left 0.3s;
-}
-
-.card.selected {
-    transform: translateY(-20px);
-}

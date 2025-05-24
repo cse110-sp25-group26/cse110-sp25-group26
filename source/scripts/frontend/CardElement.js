@@ -164,6 +164,12 @@ export class CardElement extends HTMLElement {
 
 		// Keep track of the original transform for restoration
 		this._preDragTransform = this.style.transform;
+
+		this.dispatchEvent(new CustomEvent('custom-drag-start', {
+			bubbles: true,
+			composed: true,
+			detail: { card: this }
+		}));
 	}
 
 	/**
@@ -202,13 +208,19 @@ export class CardElement extends HTMLElement {
 			const parentRect = this._dragPreparationState.parentRect; // Use stored parentRect
 			this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
 			this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+
+			this.dispatchEvent(new CustomEvent('custom-drag-move', {
+				bubbles: true,
+				composed: true,
+				detail: { card: this, clientX: e.clientX, clientY: e.clientY }
+			}));
 		}
 	}
 
 	/**
 	 * @description Ends the drag operation and resets the card's position.
 	 */
-	_onDragEnd() {
+	_onDragEnd(e) {
 		if (!this._dragging) return;
 		this._dragging = false;
 
@@ -229,7 +241,8 @@ export class CardElement extends HTMLElement {
 
 			this.dispatchEvent(new CustomEvent('card-dropped', {
 				bubbles: true,
-				composed: true
+				composed: true,
+				detail: { card: this, clientX: e.clientX, clientY: e.clientY }
 			}));
 		}
 

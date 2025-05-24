@@ -29,9 +29,13 @@
 	<!-- Include your CardElement and HandElement modules -->
 	<script type="module" src="../../frontend/CardElement.js"></script>
 	<script type="module" src="../../frontend/HandElement.js"></script>
+	<!-- Add CardMove module -->
+	<script type="module" src="../../frontend/CardMove.js"></script>
 
 	<!-- Main demo logic -->
 	<script type="module">
+		import { enableReordering } from '../../frontend/CardMove.js';
+
 		function createCard(suit, type, tooltip) {
 			const card = document.createElement('card-element');
 			card.setAttribute('suit', suit);
@@ -59,8 +63,16 @@
 				hand.addCard(card);
 			});
 
+			// Enable card reordering
+			enableReordering(hand);
+
 			hand.addEventListener('card-selected', e => {
 				console.log('Card selected:', e.detail.card, 'Selected:', e.detail.selected);
+			});
+
+			// Listen for reordering events
+			hand.addEventListener('hand-reordered', e => {
+				console.log('Cards reordered:', e.detail.cards);
 			});
 
 			document.getElementById('addCardBtn').onclick = () => {
