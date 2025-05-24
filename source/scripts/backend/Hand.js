@@ -71,6 +71,8 @@ export class Hand {
 			}
 		});
 		this.sortMethod = 'suit';
+
+		// TODO_UI: Call back to the UI to update the hand organization
 	}
 
 	/**
@@ -87,6 +89,8 @@ export class Hand {
 			}
 		});
 		this.sortMethod = 'value';
+
+		// TODO_UI: Call back to the UI to update the hand organization
 	}
 
 	/**
@@ -157,6 +161,8 @@ export class Hand {
 		}
 
 		this.cards.splice(index, 0, card);
+
+		// TODO_UI: Call back to the UI to put the card in the hand
 	}
 
 	/**
@@ -169,7 +175,7 @@ export class Hand {
 	moveCard(fromIndex, toIndex) {
 		if (fromIndex < 0 || fromIndex >= this.cards.length || toIndex < 0 || toIndex >= this.cards.length) {
 			console.error("Hand::moveCard - Invalid indices.");
-			return false; 
+			return false;
 		}
 		if (fromIndex === toIndex) {
 			return true; // No move needed
@@ -178,6 +184,9 @@ export class Hand {
 		const card = this.cards.splice(fromIndex, 1)[0];
 		this.cards.splice(toIndex, 0, card);
 		this.sortMethod = null; // Manual rearrangement disables sorting
+
+		// TODO_UI: Call back to the UI hand to update the hand organization
+
 		return true;
 	}
 
@@ -191,6 +200,9 @@ export class Hand {
 		if (index < 0 || index >= this.cards.length) {
 			return null; // Invalid index
 		}
+
+		// TODO_UI: Call back to the UI hand to remove the card from the hand
+
 		return this.cards.splice(index, 1)[0];
 	}
 }

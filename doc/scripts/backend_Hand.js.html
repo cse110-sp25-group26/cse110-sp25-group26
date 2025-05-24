@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Hand.js</title>
+    <title>JSDoc: Source: backend/Hand.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Hand.js</h1>
+    <h1 class="page-title">Source: backend/Hand.js</h1>
 
     
 
@@ -99,6 +99,8 @@ export class Hand {
 			}
 		});
 		this.sortMethod = 'suit';
+
+		// TODO_UI: Call back to the UI to update the hand organization
 	}
 
 	/**
@@ -115,6 +117,8 @@ export class Hand {
 			}
 		});
 		this.sortMethod = 'value';
+
+		// TODO_UI: Call back to the UI to update the hand organization
 	}
 
 	/**
@@ -185,6 +189,8 @@ export class Hand {
 		}
 
 		this.cards.splice(index, 0, card);
+
+		// TODO_UI: Call back to the UI to put the card in the hand
 	}
 
 	/**
@@ -197,7 +203,7 @@ export class Hand {
 	moveCard(fromIndex, toIndex) {
 		if (fromIndex &lt; 0 || fromIndex >= this.cards.length || toIndex &lt; 0 || toIndex >= this.cards.length) {
 			console.error("Hand::moveCard - Invalid indices.");
-			return false; 
+			return false;
 		}
 		if (fromIndex === toIndex) {
 			return true; // No move needed
@@ -206,6 +212,9 @@ export class Hand {
 		const card = this.cards.splice(fromIndex, 1)[0];
 		this.cards.splice(toIndex, 0, card);
 		this.sortMethod = null; // Manual rearrangement disables sorting
+
+		// TODO_UI: Call back to the UI hand to update the hand organization
+
 		return true;
 	}
 
@@ -219,6 +228,9 @@ export class Hand {
 		if (index &lt; 0 || index >= this.cards.length) {
 			return null; // Invalid index
 		}
+
+		// TODO_UI: Call back to the UI hand to remove the card from the hand
+
 		return this.cards.splice(index, 1)[0];
 	}
 }</code></pre>
@@ -231,7 +243,7 @@ export class Hand {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="CardElement_CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">
