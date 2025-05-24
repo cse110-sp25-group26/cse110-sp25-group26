@@ -8,7 +8,6 @@ import { HandElement } from './HandElement.js';
 export function enableReordering(handElement) {
 	let draggedCard = null;
 	let originalIndex = -1;
-	let currentTargetIndicatorCard = null;
 
 	handElement.addEventListener('custom-drag-start', (event) => {
 		const card = event.detail.card;
@@ -26,67 +25,104 @@ export function enableReordering(handElement) {
 		if (!draggedCard) return;
 
 		const { clientX, clientY } = event.detail;
-		
+
 		const originalPointerEvents = draggedCard.style.pointerEvents;
 		draggedCard.style.pointerEvents = 'none'; // Temporarily hide to find element underneath
 		const elementUnderMouse = handElement.shadowRoot.elementFromPoint(clientX, clientY) || document.elementFromPoint(clientX, clientY);
 		draggedCard.style.pointerEvents = originalPointerEvents;
 
 		let newTargetIndex = -1;
-		let newTargetIndicatorCardCandidate = null;
 
+		const otherCards = handElement.cards.filter(c => c !== draggedCard);
 		const potentialTargetCard = elementUnderMouse ? elementUnderMouse.closest('card-element') : null;
 
 		if (potentialTargetCard && potentialTargetCard !== draggedCard && handElement.cards.includes(potentialTargetCard)) {
-			newTargetIndicatorCardCandidate = potentialTargetCard;
-			const rect = potentialTargetCard.getBoundingClientRect();
-			const isOverFirstHalf = clientX < rect.left + rect.width / 2;
-			const idxInHand = handElement.cards.indexOf(potentialTargetCard);
-			
-			// Calculate index relative to the list *excluding* the dragged card for easier insertion later
-			let tempIdx = idxInHand;
-			if (originalIndex !== -1 && idxInHand > originalIndex) {
-				tempIdx--; // Adjust for the dragged card being in the list
-			}
-			
-			if (isOverFirstHalf) {
-				newTargetIndex = tempIdx;
-			} else {
-				newTargetIndex = tempIdx + 1;
+			const idxInOtherCards = otherCards.indexOf(potentialTargetCard);
+
+			if (idxInOtherCards !== -1) {
+				const rect = potentialTargetCard.getBoundingClientRect();
+				const isOverFirstHalf = clientX < rect.left + rect.width / 2;
+				if (isOverFirstHalf) {
+					newTargetIndex = idxInOtherCards;
+				} else {
+					newTargetIndex = idxInOtherCards + 1;
+				}
 			}
 		} else if (elementUnderMouse === handElement._container || handElement._container.contains(elementUnderMouse)) {
-			const otherCards = handElement.cards.filter(c => c !== draggedCard);
 			if (otherCards.length === 0) {
 				newTargetIndex = 0;
 			} else {
-				let found = false;
+				let foundTargetSlot = false;
 				for (let i = 0; i < otherCards.length; i++) {
 					const card = otherCards[i];
 					const rect = card.getBoundingClientRect();
 					if (clientX < rect.left + rect.width / 2) {
 						newTargetIndex = i;
-						found = true;
+						foundTargetSlot = true;
 						break;
 					}
 				}
-				if (!found) {
+				if (!foundTargetSlot) {
 					newTargetIndex = otherCards.length;
 				}
 			}
 		}
 
-		if (currentTargetIndicatorCard && currentTargetIndicatorCard !== newTargetIndicatorCardCandidate) {
-			currentTargetIndicatorCard.classList.remove('drag-over');
-		}
-		if (newTargetIndicatorCardCandidate && newTargetIndicatorCardCandidate !== currentTargetIndicatorCard) {
-			newTargetIndicatorCardCandidate.classList.add('drag-over');
-		}
-		currentTargetIndicatorCard = newTargetIndicatorCardCandidate;
-		
+		const cardWidth = parseFloat(getComputedStyle(draggedCard).width) || 80;
+
 		if (newTargetIndex !== -1) {
 			draggedCard._currentDropTargetIndex = newTargetIndex;
+
+			const handWidth = handElement._container.offsetWidth || 1;
+			const numLayoutSlots = otherCards.length + 1; // Other cards + 1 gap
+
+			let overlap = 0;
+			const totalWidthForLayout = numLayoutSlots * cardWidth;
+			if (totalWidthForLayout > handWidth && numLayoutSlots > 1) {
+				overlap = (totalWidthForLayout - handWidth) / (numLayoutSlots - 1);
+			}
+
+			let currentX = 0;
+			let otherCardCursor = 0;
+			for (let layoutSlotIndex = 0; layoutSlotIndex < numLayoutSlots; layoutSlotIndex++) {
+				if (layoutSlotIndex === newTargetIndex) {
+					// This is the gap
+					currentX += (cardWidth - overlap);
+				} else {
+					// This is a slot for an actual card from otherCards
+					if (otherCardCursor < otherCards.length) {
+						const cardToStyle = otherCards[otherCardCursor];
+						cardToStyle.style.position = 'absolute';
+						cardToStyle.style.left = `${currentX}px`;
+						cardToStyle.style.transform = cardToStyle.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
+						cardToStyle.style.zIndex = layoutSlotIndex.toString();
+						cardToStyle.style.width = `${cardWidth}px`;
+						currentX += (cardWidth - overlap);
+						otherCardCursor++;
+					}
+				}
+			}
 		} else {
+			// No valid drop target, reset preview for other cards
 			delete draggedCard._currentDropTargetIndex;
+			const handWidth = handElement._container.offsetWidth || 1;
+			// otherCards already defined above
+
+			let overlap = 0;
+			if (otherCards.length > 0) {
+				const totalNonDraggedCardWidth = otherCards.length * cardWidth;
+				if (totalNonDraggedCardWidth > handWidth && otherCards.length > 1) {
+					overlap = (totalNonDraggedCardWidth - handWidth) / (otherCards.length - 1);
+				}
+			}
+
+			otherCards.forEach((card, index) => {
+				card.style.position = 'absolute';
+				card.style.left = `${index * (cardWidth - overlap)}px`;
+				card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
+				card.style.zIndex = index.toString();
+				card.style.width = `${cardWidth}px`;
+			});
 		}
 	});
 
@@ -94,23 +130,12 @@ export function enableReordering(handElement) {
 		const cardBeingDropped = event.detail.card;
 
 		if (!draggedCard || cardBeingDropped !== draggedCard) {
-			if (draggedCard) { // A drag was in progress, but this is not its drop event or it's an unexpected drop
+			if (draggedCard) {
 				delete draggedCard._currentDropTargetIndex;
 			}
-			if (currentTargetIndicatorCard) {
-				currentTargetIndicatorCard.classList.remove('drag-over');
-			}
-			// Safety net. Reset if the dragged card is not the one being dropped.
 			draggedCard = null;
 			originalIndex = -1;
-			currentTargetIndicatorCard = null;
 			return;
-		}
-
-		// Reset styles and classes
-		if (currentTargetIndicatorCard) {
-			currentTargetIndicatorCard.classList.remove('drag-over');
-			currentTargetIndicatorCard = null;
 		}
 
 		const newProposedIndex = draggedCard._currentDropTargetIndex;
@@ -118,18 +143,16 @@ export function enableReordering(handElement) {
 
 		if (originalIndex === -1) { // Safety check
 			draggedCard = null;
-			handElement._updateLayout(); // Layout is likely broken if that happened
+			handElement._updateLayout();
 			return;
 		}
-		
+
 		if (newProposedIndex !== undefined) {
 			const itemToMove = handElement.cards[originalIndex];
-			
-			// Remove the card from its original position
+
 			const tempCards = [...handElement.cards];
 			tempCards.splice(originalIndex, 1);
 
-			// Insert the card at the new position
 			const actualInsertionIndex = Math.max(0, Math.min(newProposedIndex, tempCards.length));
 			tempCards.splice(actualInsertionIndex, 0, itemToMove);
 
@@ -143,15 +166,13 @@ export function enableReordering(handElement) {
 
 			if (orderChanged) {
 				handElement.cards = tempCards;
-				handElement._updateLayout();
 				handElement.dispatchEvent(new CustomEvent('hand-reordered', {
 					detail: { cards: handElement.cards },
 					bubbles: true,
 					composed: true
 				}));
-			} else {
-				handElement._updateLayout(); // No order change, but another safety net
 			}
+			handElement._updateLayout(); // Finalize positions
 		} else {
 			// Dropped in an invalid location or no reorder needed
 			handElement._updateLayout(); // Fix layout

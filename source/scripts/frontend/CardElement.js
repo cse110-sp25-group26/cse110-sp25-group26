@@ -219,6 +219,7 @@ export class CardElement extends HTMLElement {
 
 	/**
 	 * @description Ends the drag operation and resets the card's position.
+	 * @param {MouseEvent} e - The mouseup event that ends the drag.
 	 */
 	_onDragEnd(e) {
 		if (!this._dragging) return;
