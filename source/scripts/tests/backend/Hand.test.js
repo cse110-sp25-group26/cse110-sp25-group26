@@ -129,7 +129,7 @@ describe('Hand', () => {
         hand.addCard(new Card('clubs', 'A'));
         hand.addCard(new Card('clubs', '5'));
         hand.sortBySuit();
-        
+
         // Hearts should come first, then diamonds, then clubs, then spades
         // Within each suit, cards should be sorted by value
         expect(hand.cards[0].suit).toBe('hearts');
@@ -149,7 +149,7 @@ describe('Hand', () => {
         hand.addCard(new Card('diamonds', '10'));
         hand.addCard(new Card('spades', '10'));
         hand.sortByValue();
-        
+
         // All cards have the same value '10'
         // Should be sorted by suit: hearts, diamonds, clubs, spades
         expect(hand.cards[0].type).toBe('10');
@@ -170,7 +170,7 @@ describe('Hand', () => {
         hand.addCard(new Card('spades', '10'));
         hand.addCard(new Card('diamonds', '5'));
         hand.addCard(new Card('hearts', '3'));
-        
+
         expect(hand.cards.map(c => c.type)).toEqual(['2', '3', '5', '10', 'K']);
     });
 
@@ -180,16 +180,55 @@ describe('Hand', () => {
         hand.addCard(new Card('clubs', 'K'));
         hand.addCard(new Card('spades', '2'));
         hand.sortBySuit();
-        
+
         expect(hand.cards[0].suit).toBe('hearts');
         expect(hand.cards[1].suit).toBe('clubs');
         expect(hand.cards[2].suit).toBe('spades');
 
         hand.removeCard(1);
         expect(hand.cards.length).toBe(2);
-        
+
         hand.sortByValue();
         expect(hand.cards[0].type).toBe('2');
         expect(hand.cards[1].type).toBe('A');
+    });
+
+    test('selectCard selects a card and deselects others', () => {
+        const hand = new Hand();
+        const card1 = new Card('hearts', 'A');
+        const card2 = new Card('clubs', 'K');
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.selectCard(0);
+        expect(card1.isSelected).toBe(true);   // was card1.selected
+        expect(card2.isSelected).toBe(false);  // was card2.selected
+        hand.selectCard(1);
+        expect(card1.isSelected).toBe(false);  // was card1.selected
+        expect(card2.isSelected).toBe(true);   // was card2.selected
+    });
+
+    test('selectCard with invalid index returns false', () => {
+        const hand = new Hand();
+        hand.addCard(new Card('hearts', 'A'));
+        expect(hand.selectCard(-1)).toBe(false);
+        expect(hand.selectCard(1)).toBe(false);
+    });
+
+    test('getSelectedCard returns the selected card', () => {
+        const hand = new Hand();
+        const card1 = new Card('hearts', 'A');
+        const card2 = new Card('clubs', 'K');
+        hand.addCard(card1);
+        hand.addCard(card2);
+        hand.selectCard(1);
+        expect(hand.getSelectedCard()).toBe(card2);
+        hand.selectCard(0);
+        expect(hand.getSelectedCard()).toBe(card1);
+    });
+
+    test('getSelectedCard returns null if no card is selected', () => {
+        const hand = new Hand();
+        hand.addCard(new Card('hearts', 'A'));
+        expect(hand.getSelectedCard()).toBeNull();
     });
 });
