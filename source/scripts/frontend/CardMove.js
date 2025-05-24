@@ -8,6 +8,7 @@ import { HandElement } from './HandElement.js';
 export function enableReordering(handElement) {
 	let draggedCard = null;
 	let originalIndex = -1;
+	let draggedCardWidth = 80;
 
 	handElement.addEventListener('custom-drag-start', (event) => {
 		const card = event.detail.card;
@@ -15,6 +16,7 @@ export function enableReordering(handElement) {
 		if (card.parentElement === handElement._container) {
 			draggedCard = card;
 			originalIndex = handElement.cards.indexOf(draggedCard);
+			draggedCardWidth = parseFloat(getComputedStyle(draggedCard).width) || 80;
 		} else {
 			draggedCard = null;
 			originalIndex = -1;
@@ -68,7 +70,7 @@ export function enableReordering(handElement) {
 			}
 		}
 
-		const cardWidth = parseFloat(getComputedStyle(draggedCard).width) || 80;
+		const cardWidth = draggedCardWidth;
 
 		if (newTargetIndex !== -1) {
 			draggedCard._currentDropTargetIndex = newTargetIndex;

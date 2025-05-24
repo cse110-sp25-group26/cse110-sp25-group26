@@ -62,6 +62,8 @@ export class CardElement extends HTMLElement {
 		this._onDragStart = this._onDragStart.bind(this);
 		this._onDragMove = this._onDragMove.bind(this);
 		this._onDragEnd = this._onDragEnd.bind(this);
+		this._onMouseEnterTooltip = this._onMouseEnterTooltip.bind(this);
+		this._onMouseLeaveTooltip = this._onMouseLeaveTooltip.bind(this);
 
 		// Event listeners
 		this._container.addEventListener('mousedown', this._onDragStart);
@@ -76,12 +78,8 @@ export class CardElement extends HTMLElement {
 			if (this._wasDragged) return;
 			this.flip();
 		});
-		this._container.addEventListener('mouseenter', () => {
-			this._tooltip.style.display = 'block';
-		});
-		this._container.addEventListener('mouseleave', () => {
-			this._tooltip.style.display = 'none';
-		});
+		this._container.addEventListener('mouseenter', this._onMouseEnterTooltip);
+		this._container.addEventListener('mouseleave', this._onMouseLeaveTooltip);
 	}
 
 	/**
@@ -110,6 +108,20 @@ export class CardElement extends HTMLElement {
 	connectedCallback() {
 		this._updateCardFace();
 		this._tooltip.textContent = this.getAttribute('tooltip') || '';
+	}
+
+	/**
+	 * @description Called when the element is removed from the DOM.
+	 */
+	disconnectedCallback() {
+		// Clear all event listeners
+		this._container.removeEventListener('mousedown', this._onDragStart);
+		document.removeEventListener('mousemove', this._onDragMove);
+		document.removeEventListener('mouseup', this._onDragEnd);
+		this._cardFront.removeEventListener('dblclick', this.flip);
+		this._cardBack.removeEventListener('dblclick', this.flip);
+		this._container.removeEventListener('mouseenter', this._onMouseEnterTooltip);
+		this._container.removeEventListener('mouseleave', this._onMouseLeaveTooltip);
 	}
 
 	/**
@@ -147,6 +159,20 @@ export class CardElement extends HTMLElement {
 	 */
 	flip() {
 		this._container.classList.toggle('flipped');
+	}
+
+	/**
+	 * @description Shows the tooltip.
+	 */
+	_onMouseEnterTooltip() {
+		this._tooltip.style.display = 'block';
+	}
+
+	/**
+	 * @description Hides the tooltip.
+	 */
+	_onMouseLeaveTooltip() {
+		this._tooltip.style.display = 'none';
 	}
 
 	/**
