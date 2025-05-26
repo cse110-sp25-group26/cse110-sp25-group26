@@ -5,6 +5,7 @@ import { Card } from "../backend/Card.js";
  * @classdesc UI component representing the Deck.
  * 
  * @param {HTMLElement} deckContainer - The DOM element for the Deck.
+ * @param {CardElement[]} cards - The array of CardElement objects currently created.
  */
 export class DeckElement {
 	/**
@@ -38,6 +39,9 @@ export class DeckElement {
 		this.deckContainer.style.justifyContent = "center";
 		this.deckContainer.style.alignItems = "center";
 		this.deckContainer.appendChild(this.deckImage);
+
+		// Initialize the cards array
+		this.cards = [];
 	}
 
 	/**
@@ -62,5 +66,6 @@ export class DeckElement {
 			cardElements.push(cardElement);
 		});
 		this.deckContainer.append(...cardElements);
+		this.cards.push(...cardElements);
 	}
 }

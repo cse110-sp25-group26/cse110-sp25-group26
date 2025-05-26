@@ -10,7 +10,8 @@
 			<!-- Cards will be stacked here -->
 		</div>
 		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px">Add Random Cards</button>
-		<p style="color: #fff; margin-top: 2em">Double-click a card to flip. Drag to move. Cards are stacked in the deck.</p>
+        <input type="checkbox" id="offsetCardsCheckbox" style="margin-left: 1em">
+		<p style="color: #fff; margin-top: 2em">Double-click a card to flip. Drag to move. Cards are stacked in the deck.</p>\
 
         <script type="module">
             import { DeckElement } from '../../frontend/DeckElement.js';
@@ -31,7 +32,29 @@
                 }
 
                 deck.addCards(cards);
+
+                recalculateOffset({ target: { checked: document.getElementById('offsetCardsCheckbox').checked } });
             }
+
+            function recalculateOffset(e) {
+                let cardElements = deck.cards;
+                if (e.target.checked) {
+                    for (let i = 0; i < cardElements.length; i++) {
+                        let cardElement = cardElements[i];
+                        cardElement.style.left = `${10 * i}px`; // Stack cards with a slight offset
+                        // Set the z indices to ensure they stack correctly
+                        cardElement.style.zIndex = i;
+                    }
+                } else {
+                    for (let i = 0; i < cardElements.length; i++) {
+                        let cardElement = cardElements[i];
+                        cardElement.style.left = '0px'; // Reset position
+                        cardElement.style.zIndex = ''; // Reset z-index
+                    }
+                }
+            }
+
+            document.getElementById('offsetCardsCheckbox').onchange = recalculateOffset;
         </script>
 	</body>
 </html>
