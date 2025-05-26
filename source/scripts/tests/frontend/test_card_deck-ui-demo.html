@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CardElement, DeckElement, and HandElement Test</title>
+
+    <style>
+        body {
+            background: #2a2a2a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            color: #fff;
+        }
+
+        #hand {
+            position: relative;
+            width: 400px;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+        }
+
+        #deck-container {
+            width: 80px;
+            height: 120px;
+            position: relative;
+            background: #444;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        p {
+            color: #fff;
+            margin-top: 2em;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Combined Demo of CardElement, DeckElement and HandElement</h2>
+
+    <div id="container">
+        <hand-element id="hand"></hand-element>
+        <div id="deck-container"></div>
+    </div>
+
+    <button id="dealCardsBtn">Deal Cards from Deck</button>
+
+    <p>
+        todo: explain the demo
+    </p>
+
+    <script type="module">
+        import { CardElement } from '../../frontend/CardElement.js';
+        import { DeckElement } from '../../frontend/DeckElement.js';
+        import { HandElement } from '../../frontend/HandElement.js';
+        import { Card } from '../../backend/Card.js';
+        import { enableReordering } from '../../frontend/CardMove.js';
+        
+        // Initialize Deck
+        let deck = new DeckElement("back", document.getElementById('deck-container'));
+
+        // Initialize Hand
+        let hand = document.getElementById('hand');
+        enableReordering(hand);
+
+        // Init the button
+        document.getElementById('dealCardsBtn').onclick = async () => {
+            // Get a random number of cards to deal
+            let count = Math.floor(Math.random() * 5) + 1; // Deal 1 to 5 cards
+
+            // Create an array of random backend Card objects
+            let backendCards = [];
+            for (let i = 0; i < count; i++) {
+                let suit = ['heart', 'spade', 'diamond', 'club'][Math.floor(Math.random() * 4)];
+                let type = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'][Math.floor(Math.random() * 13)];
+                let card = new Card(suit, type);
+                backendCards.push(card);
+            }
+
+            // Add backend cards to the deck, which creates CardElement instances
+            deck.addCards(backendCards);
+
+            // Get the newly added CardElement instances from the deck
+            const addedCardElements = backendCards.map(card => card.UIel);
+
+            // Make sure these cards are draggable when they reach the hand
+            addedCardElements.forEach(cardEl => cardEl._draggable = true);
+
+            // Capture the current positions of cards relative to the viewport
+            const sourcePositions = addedCardElements.map(card => {
+                const rect = card.getBoundingClientRect();
+                return { x: rect.left, y: rect.top };
+            });
+
+            // Move cards to document body temporarily to avoid clipping
+            addedCardElements.forEach((card, index) => {
+                // Capture current position and size
+                const rect = card.getBoundingClientRect();
+                
+                // Remove from deck and append to body
+                card.remove();
+                document.body.appendChild(card);
+                
+                // Position at the same screen coordinates
+                card.style.position = 'fixed';
+                card.style.left = `${sourcePositions[index].x}px`;
+                card.style.top = `${sourcePositions[index].y}px`;
+                card.style.zIndex = '1000';
+                card.style.width = `${rect.width}px`;
+                card.style.height = `${rect.height}px`;
+            });
+
+            // Calculate target position (hand element position in viewport coordinates)
+            const handRect = hand.getBoundingClientRect();
+            
+            const targetPositions = addedCardElements.map((card, index) => {
+                const cardRect = card.getBoundingClientRect();
+                return {
+                    x: handRect.left + (handRect.width - cardRect.width) / 2,
+                    y: handRect.top + (handRect.height - cardRect.height) / 2
+                };
+            });
+
+            // Define the callback for when a card finishes moving
+            const onCardMoveComplete = (cardElement) => {
+                // Remove the fixed positioning styles
+                cardElement.style.position = '';
+                cardElement.style.left = '';
+                cardElement.style.top = '';
+                cardElement.style.zIndex = '';
+                
+                // Remove from body and add to hand
+                cardElement.remove();
+                hand.addCard(cardElement);
+            };
+
+            // Move the cards from their current positions to the hand
+            if (addedCardElements.length > 0) {
+                await CardElement.move_multiple(addedCardElements, targetPositions, 600, onCardMoveComplete);
+            }
+            
+            // Remove card elements from deck.cards array
+            addedCardElements.forEach(movedCardEl => {
+                const indexInDeck = deck.cards.indexOf(movedCardEl);
+                if (indexInDeck > -1) {
+                    deck.cards.splice(indexInDeck, 1);
+                }
+            });
+            
+            // If deck has no more cards, show deck image, else hide it
+            if (deck.cards.length === 0) {
+                deck.deckImage.style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
