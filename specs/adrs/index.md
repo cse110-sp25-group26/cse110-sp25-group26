@@ -11,3 +11,5 @@ A chronological list of all ADRs in this repository.
 | 0004 | 05/11/2025 | Hand Position      | accepted |
 | 0005 | 05/25/2025 | <title TBD>        | proposed |
 | 0006 | 05/25/2025 | Engine Separation  | accepted |
+| 0007 | 05/25/2025 | Scorekeeper Pos.\  | accepted |
+| 0008 | 05/05/2025 | Shuffle Algorithm  | accepted |

@@ -1,7 +1,7 @@
 ---
 # Configuration for the Jekyll "Just the Docs" theme (optional)
 parent: Decisions
-nav_order: 104
+nav_order: 105
 title: Separate Frontend and Backend Files
 # status: "accepted"
 # date: 2025-05-12
