@@ -2,6 +2,10 @@
  * Represents a scorekeeper UI element that displays various game scores and stats.
  */
 export default class ScoreKeeper {
+	/**
+	 * Creates an instance of ScoreKeeper.
+	 * Initializes references to the DOM elements that display game scores and stats.
+	 */
 	constructor() {
 		this.goal = document.getElementById('goal-score');
 		this.round = document.getElementById('round-score');
