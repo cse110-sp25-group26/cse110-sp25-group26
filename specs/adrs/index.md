@@ -9,4 +9,7 @@ A chronological list of all ADRs in this repository.
 | 0002 | 05/11/2025 | Keyboard Controls  | accepted |
 | 0003 | 05/11/2025 | Card Animation     | accepted |
 | 0004 | 05/11/2025 | Hand Position      | accepted |
-| 0005 | 05/11/2025 | Scorekeeper &  UI  | pending  |
+| 0005 | 05/25/2025 | Hand Interactions  | accepted |
+| 0006 | 05/25/2025 | Engine Separation  | accepted |
+| 0007 | 05/25/2025 | Scorekeeper & UI   | accepted |
+| 0008 | 05/05/2025 | Shuffle Algorithm  | accepted |
