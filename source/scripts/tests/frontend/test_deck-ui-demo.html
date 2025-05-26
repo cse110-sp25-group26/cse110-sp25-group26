@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>DeckElement Frontend Test</title>
+	</head>
+	<body style="background: #2a2a2a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
+		<h2 style="color: #fff">DeckElement Frontend Demo</h2>
+		<div id="deck-container" style="width: 80px; height: 120px; position: relative; margin-bottom: 2em;">
+			<!-- Cards will be stacked here -->
+		</div>
+		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px">Add Random Cards</button>
+		<p style="color: #fff; margin-top: 2em">Double-click a card to flip. Drag to move. Cards are stacked in the deck.</p>
+
+        <script type="module">
+            import { DeckElement } from '../../frontend/DeckElement.js';
+            import { CardElement } from '../../frontend/CardElement.js';
+            import { Card } from '../../backend/Card.js';
+
+            let deck = new DeckElement("back", document.getElementById('deck-container'));
+
+            document.getElementById('addCardBtn').onclick = () => {
+                let count = Math.floor(Math.random() * 10) + 1;
+
+                let cards = [];
+                for (let i = 0; i < count; i++) {
+                    let suit = ['heart', 'spade', 'diamond', 'club'][Math.floor(Math.random() * 4)];
+                    let type = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'][Math.floor(Math.random() * 13)];
+                    let tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
+                    let card = new Card(suit, type);
+                    cards.push(card);
+                }
+
+                deck.addCards(cards);
+            }
+        </script>
+	</body>
+</html>

@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>CardElement<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>CardElement<span class="signature">(card, draggable<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
             <div class="class-description">Custom web component representing a card.</div>
         
@@ -45,13 +45,16 @@
     
 
     
-    <h4 class="name" id="CardElement"><span class="type-signature"></span>new CardElement<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CardElement"><span class="type-signature"></span>new CardElement<span class="signature">(card, draggable<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
 
 
 
+<div class="description">
+    Initializes the CardElement and sets up its structure and event listeners.
+</div>
 
 
 
@@ -60,6 +63,531 @@
 
 
 
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Card.html">Card</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The backend Card object associated with this element.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>draggable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Whether the card is draggable. Defaults to true.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The main container for the card.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_cardInner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The inner container for the card's 3D flip effect.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_cardFront</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The front face of the card.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_cardBack</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The back face of the card.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_tooltip</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tooltip element for displaying additional information.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_dragging</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Indicates if the card is currently being dragged.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The offset of the card from the mouse cursor during drag.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_wasDragged</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Indicates if the card was dragged before flipping.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_dragStartX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The X coordinate where the drag started.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_dragStartY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Y coordinate where the drag started.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_DRAG_THRESHOLD</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The pixel threshold to consider a drag action.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_lastClientX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The last X coordinate of the mouse during drag.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_tiltFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The factor by which the card tilts based on mouse movement.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_dragPreparationState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Stores the initial state of the card before dragging starts.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_preDragTransform</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The original transform style of the card before dragging.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Mirror of the backend Card object associated with this element.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_draggable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Indicates if the card is draggable.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -93,7 +621,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line1">line 1</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -134,7 +662,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="CardElement_CardElement.html">CardElement</a></dt>
+            <dt><a href="CardElement.html">CardElement</a></dt>
             <dd></dd>
         </dl>
     
@@ -190,7 +718,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line86">line 86</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -319,7 +847,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line224">line 224</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line284">line 284</a>
     </li></ul></dd>
     
 
@@ -452,7 +980,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line178">line 178</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line228">line 228</a>
     </li></ul></dd>
     
 
@@ -585,7 +1113,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line151">line 151</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -621,7 +1149,7 @@
     
 
     
-    <h4 class="name" id="_updateCardFace"><span class="type-signature"></span>_updateCardFace<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_onMouseEnterTooltip"><span class="type-signature"></span>_onMouseEnterTooltip<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -629,7 +1157,7 @@
 
 
 <div class="description">
-    Updates the card's front and back faces based on its attributes.
+    Shows the tooltip.
 </div>
 
 
@@ -673,7 +1201,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line114">line 114</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -709,13 +1237,16 @@
     
 
     
-    <h4 class="name" id="attributeChangedCallback"><span class="type-signature"></span>attributeChangedCallback<span class="signature">(name, oldValue, newValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_onMouseLeaveTooltip"><span class="type-signature"></span>_onMouseLeaveTooltip<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
 
+<div class="description">
+    Hides the tooltip.
+</div>
 
 
 
@@ -723,100 +1254,6 @@
 
 
 
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the attribute being changed.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>oldValue</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The old value of the attribute.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>newValue</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The new value of the attribute.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -852,7 +1289,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line95">line 95</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -940,7 +1377,95 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line106">line 106</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="disconnectedCallback"><span class="type-signature"></span>disconnectedCallback<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Called when the element is removed from the DOM.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -1028,7 +1553,95 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line144">line 144</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateCardFace"><span class="type-signature"></span>updateCardFace<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the card's front and back faces based on its attributes.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -1074,7 +1687,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="CardElement_CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">

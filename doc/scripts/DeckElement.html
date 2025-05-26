@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Hand</title>
+    <title>JSDoc: Class: DeckElement</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Hand</h1>
+    <h1 class="page-title">Class: DeckElement</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Hand<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>DeckElement<span class="signature">(back, deckContainer)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Hand"><span class="type-signature"></span>new Hand<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DeckElement"><span class="type-signature"></span>new DeckElement<span class="signature">(back, deckContainer)</span><span class="type-signature"></span></h4>
     
 
     
@@ -54,6 +54,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>back</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The card back to use for the Deck.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deckContainer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The DOM element for the Deck.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -89,7 +161,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line10">line 10</a>
+        <a href="frontend_DeckElement.js.html">frontend/DeckElement.js</a>, <a href="frontend_DeckElement.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -130,7 +202,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Hand.html">Hand</a></dt>
+            <dt><a href="DeckElement.html">DeckElement</a></dt>
             <dd></dd>
         </dl>
     
@@ -163,9 +235,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="Hand.html">Hand</a></span>Hand<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="DeckElement.html">DeckElement</a></span>DeckElement<span class="signature">(deckContainer)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents a hand of cards in the game.</div>
+            <div class="class-description">UI component representing the Deck.</div>
         
     
 </header>
@@ -180,7 +252,7 @@
     
 
     
-    <h4 class="name" id="Hand"><span class="type-signature"></span>new Hand<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DeckElement"><span class="type-signature"></span>new DeckElement<span class="signature">(deckContainer)</span><span class="type-signature"></span></h4>
     
 
     
@@ -195,15 +267,10 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -225,13 +292,13 @@
 
         <tr>
             
-                <td class="name"><code>cards</code></td>
+                <td class="name"><code>deckContainer</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -241,35 +308,14 @@
 
             
 
-            <td class="description last">The cards in the hand.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sortMethod</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The sorting method used for the hand.</td>
+            <td class="description last">The DOM element for the Deck.</td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -303,7 +349,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line9">line 9</a>
+        <a href="frontend_DeckElement.js.html">frontend/DeckElement.js</a>, <a href="frontend_DeckElement.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -344,7 +390,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Hand.html">Hand</a></dt>
+            <dt><a href="DeckElement.html">DeckElement</a></dt>
             <dd></dd>
         </dl>
     
