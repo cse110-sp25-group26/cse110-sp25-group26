@@ -22,7 +22,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Set the current round score
+   * Set the current round score.
    * @param {number|string} value - The value to display as the round score.
    */
   setRoundScore(value) {
@@ -30,7 +30,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Update the number of chips
+   * Update the number of chips.
    * @param {number|string} count - The new number of chips to display.
    */
   updateChips(count) {
@@ -38,7 +38,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Update the multiplier
+   * Update the multiplier.
    * @param {number|string} multiplier - The new multiplier value to display.
    */
   updateMultiplier(multiplier) {
@@ -46,7 +46,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Update the bank total
+   * Update the bank total.
    * @param {number|string} amount - The new bank amount to display.
    */
   setBank(amount) {
@@ -54,7 +54,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Update the discards count
+   * Update the discards count.
    * @param {number|string} count - The new discards count to display.
    */
   setDiscards(count) {
@@ -62,7 +62,7 @@ export default class ScoreKeeper {
   }
 
   /**
-   * Reset all fields to zero or placeholder
+   * Reset all fields to zero or placeholder.
    */
   reset() {
     this.setGoalScore('—');
