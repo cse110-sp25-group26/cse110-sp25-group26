@@ -302,6 +302,54 @@ export class CardElement extends HTMLElement {
 
 		this._dragPreparationState = null; // Clean up
 	}
+
+	async moveTo(x, y, duration = 600, callback) {
+		if (!this.style.position || this.style.position === 'static') {
+			this.style.position = 'absolute';
+		}
+		// Cancel previous animation listener if any
+		if (this._transitionEndHandler) {
+			this.removeEventListener('transitionend', this._transitionEndHandler);
+		}
+		this.style.transition = 'none';
+		// Force fetch to apply the new styles immediately
+		void this.offsetWidth;
+
+		// Ensure the card is on top during transition
+		const originalZIndex = this.style.zIndex;
+		this.style.zIndex = '10000';
+
+		this.style.left = `${x}px`;
+		this.style.top = `${y}px`;
+
+		return new Promise(resolve => {
+			this._transitionEndHandler = () => {
+				this.removeEventListener('transitionend', this._transitionEndHandler);
+				this.style.zIndex = originalZIndex; // Restore original z-index
+				if (callback) {
+					callback(this);
+				}
+				resolve();
+			};
+			this.addEventListener('transitionend', this._transitionEndHandler);
+			this.style.transition = `left ${duration}ms ease-in, top ${duration}ms ease-in`;
+		});
+	}
+
+	static async move_multiple(cards, positions, duration = 600, callback) {
+		let promises = [];
+		cards.forEach((card, i) => {
+			const { x, y } = positions[i];
+			const delay = 400 * i;
+			promises.push(new Promise(r => {
+				setTimeout(() => {
+					// Pass the callback to each individual moveTo call
+					card.moveTo(x, y, duration, callback).then(r);
+				}, delay);
+			}));
+		});
+		await Promise.all(promises);
+	}
 }
 
 customElements.define('card-element', CardElement);

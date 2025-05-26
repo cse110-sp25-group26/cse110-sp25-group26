@@ -53,17 +53,15 @@ export class DeckElement {
 		let zindex = 0;
 		let cardElements = [];
 		cards.forEach(card => {
-			console.log("Adding card:", card);
-
 			const cardElement = new CardElement(card, false);
-
-			console.log("Created card element:", cardElement);
 			cardElement.style.position = "absolute";
 			cardElement.style.zIndex = zindex++;
 			cardElement.style.left = "0px";
 			cardElement.style.top = "0px";
 
 			cardElements.push(cardElement);
+
+			card.UIel = cardElement;
 		});
 		this.deckContainer.append(...cardElements);
 		this.cards.push(...cardElements);
