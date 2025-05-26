@@ -303,6 +303,16 @@ export class CardElement extends HTMLElement {
 		this._dragPreparationState = null; // Clean up
 	}
 
+	/**
+	 * @function moveTo
+	 * @description Moves the card to a specified position with a smooth transition.
+	 * 
+	 * @param {number} x - The x-coordinate to move the card to.
+	 * @param {number} y - The y-coordinate to move the card to.
+	 * @param {number} [duration=600] - The duration of the transition in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after the move is complete.
+	 * @returns {Promise<void>} A promise that resolves when the move is complete.
+	 */
 	async moveTo(x, y, duration = 600, callback) {
 		if (!this.style.position || this.style.position === 'static') {
 			this.style.position = 'absolute';
@@ -336,7 +346,17 @@ export class CardElement extends HTMLElement {
 		});
 	}
 
-	static async move_multiple(cards, positions, duration = 600, callback) {
+	/**
+	 * @function moveMultiple
+	 * @description Moves multiple cards to specified positions with a staggered delay.
+	 * 
+	 * @param {CardElement[]} cards - An array of CardElement instances to move.
+	 * @param {Array<{x: number, y: number}>} positions - An array of objects containing x and y coordinates for each card.
+	 * @param {number} [duration=600] - The duration of the transition for each card in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after all moves are complete.
+	 * @returns {Promise<void>} A promise that resolves when all cards have been moved.
+	 */
+	static async moveMultiple(cards, positions, duration = 600, callback) {
 		let promises = [];
 		cards.forEach((card, i) => {
 			const { x, y } = positions[i];

@@ -2881,6 +2881,574 @@ console.log(score); // Outputs 16</code></pre>
     
 
     
+    <h4 class="name" id="moveMultiple"><span class="type-signature"></span>moveMultiple<span class="signature">(cards, positions, duration<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Moves multiple cards to specified positions with a staggered delay.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cards</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="CardElement.html">CardElement</a>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">An array of CardElement instances to move.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>positions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;{x: number, y: number}></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">An array of objects containing x and y coordinates for each card.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>duration</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    600
+                
+                </td>
+            
+
+            <td class="description last">The duration of the transition for each card in milliseconds. Defaults to 600ms.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Optional callback function to execute after all moves are complete.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line349">line 349</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise that resolves when all cards have been moved.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="moveTo"><span class="type-signature"></span>moveTo<span class="signature">(x, y, duration<span class="signature-attributes">opt</span>, callback)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Moves the card to a specified position with a smooth transition.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The x-coordinate to move the card to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The y-coordinate to move the card to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>duration</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    600
+                
+                </td>
+            
+
+            <td class="description last">The duration of the transition in milliseconds. Defaults to 600ms.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Optional callback function to execute after the move is complete.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line306">line 306</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A promise that resolves when the move is complete.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="playCards"><span class="type-signature"></span>playCards<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -5434,7 +6002,7 @@ console.log(score); // Outputs 16</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">

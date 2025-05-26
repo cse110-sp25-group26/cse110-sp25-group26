@@ -149,7 +149,7 @@
 
             // Move the cards from their current positions to the hand
             if (addedCardElements.length > 0) {
-                await CardElement.move_multiple(addedCardElements, targetPositions, 600, onCardMoveComplete);
+                await CardElement.moveMultiple(addedCardElements, targetPositions, 600, onCardMoveComplete);
             }
             
             // Remove card elements from deck.cards array

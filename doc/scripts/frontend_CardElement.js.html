@@ -330,6 +330,74 @@ export class CardElement extends HTMLElement {
 
 		this._dragPreparationState = null; // Clean up
 	}
+
+	/**
+	 * @function moveTo
+	 * @description Moves the card to a specified position with a smooth transition.
+	 * 
+	 * @param {number} x - The x-coordinate to move the card to.
+	 * @param {number} y - The y-coordinate to move the card to.
+	 * @param {number} [duration=600] - The duration of the transition in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after the move is complete.
+	 * @returns {Promise&lt;void>} A promise that resolves when the move is complete.
+	 */
+	async moveTo(x, y, duration = 600, callback) {
+		if (!this.style.position || this.style.position === 'static') {
+			this.style.position = 'absolute';
+		}
+		// Cancel previous animation listener if any
+		if (this._transitionEndHandler) {
+			this.removeEventListener('transitionend', this._transitionEndHandler);
+		}
+		this.style.transition = 'none';
+		// Force fetch to apply the new styles immediately
+		void this.offsetWidth;
+
+		// Ensure the card is on top during transition
+		const originalZIndex = this.style.zIndex;
+		this.style.zIndex = '10000';
+
+		this.style.left = `${x}px`;
+		this.style.top = `${y}px`;
+
+		return new Promise(resolve => {
+			this._transitionEndHandler = () => {
+				this.removeEventListener('transitionend', this._transitionEndHandler);
+				this.style.zIndex = originalZIndex; // Restore original z-index
+				if (callback) {
+					callback(this);
+				}
+				resolve();
+			};
+			this.addEventListener('transitionend', this._transitionEndHandler);
+			this.style.transition = `left ${duration}ms ease-in, top ${duration}ms ease-in`;
+		});
+	}
+
+	/**
+	 * @function moveMultiple
+	 * @description Moves multiple cards to specified positions with a staggered delay.
+	 * 
+	 * @param {CardElement[]} cards - An array of CardElement instances to move.
+	 * @param {Array&lt;{x: number, y: number}>} positions - An array of objects containing x and y coordinates for each card.
+	 * @param {number} [duration=600] - The duration of the transition for each card in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after all moves are complete.
+	 * @returns {Promise&lt;void>} A promise that resolves when all cards have been moved.
+	 */
+	static async moveMultiple(cards, positions, duration = 600, callback) {
+		let promises = [];
+		cards.forEach((card, i) => {
+			const { x, y } = positions[i];
+			const delay = 400 * i;
+			promises.push(new Promise(r => {
+				setTimeout(() => {
+					// Pass the callback to each individual moveTo call
+					card.moveTo(x, y, duration, callback).then(r);
+				}, delay);
+			}));
+		});
+		await Promise.all(promises);
+	}
 }
 
 customElements.define('card-element', CardElement);</code></pre>
@@ -342,7 +410,7 @@ customElements.define('card-element', CardElement);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">

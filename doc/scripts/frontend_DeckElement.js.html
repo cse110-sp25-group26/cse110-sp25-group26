@@ -81,17 +81,15 @@ export class DeckElement {
 		let zindex = 0;
 		let cardElements = [];
 		cards.forEach(card => {
-			console.log("Adding card:", card);
-
 			const cardElement = new CardElement(card, false);
-
-			console.log("Created card element:", cardElement);
 			cardElement.style.position = "absolute";
 			cardElement.style.zIndex = zindex++;
 			cardElement.style.left = "0px";
 			cardElement.style.top = "0px";
 
 			cardElements.push(cardElement);
+
+			card.UIel = cardElement;
 		});
 		this.deckContainer.append(...cardElements);
 		this.cards.push(...cardElements);
@@ -106,7 +104,7 @@ export class DeckElement {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="gameHandler.html">gameHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li></ul>
 </nav>
 
 <br class="clear">
