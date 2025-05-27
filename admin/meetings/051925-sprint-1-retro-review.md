@@ -9,7 +9,7 @@ This retrospective/review did not have much to cover, as for the majority of the
 ### Starting Earlier
 It is difficult to tell at this point, but I believe this was a combination of business with midterms and a lack of established communication channels. I believe that gaining momentum over the past 2 days will carry on through this sprint, but I will also more actively discuss the repo during class meetings and over Slack to try to ensure progress is happening.
 
-### Updating Deadline Task Assignmentshave have
+### Updating Deadline Task Assignments
 As stated above, this will be a point of discussion for the next retrospective and sprint planning on the 25th/26th. I believe that we will have a functional game by the proposed end time, but it is still too early to reasonably tell what changes will be necessary to the timeline. However, I can already tell that Agile does introduce a lot of overhead, which I will track and attempt to account for in updated timelines.
 
 ## Attendance
