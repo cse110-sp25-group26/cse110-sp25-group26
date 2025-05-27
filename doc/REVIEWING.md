@@ -1,5 +1,7 @@
 # Code Review Guidelines
+
 This document defines the standard process and quality criteria for reviewing pull requests. This process is meant to ensure that any code merged into `main` or `develop` is:
+
 - **Correct**: Working as intended without regressions.
 - **Readable**: Clear, consistent, and easy for others to understand.
 - **Maintainable**: Structured and documented to facilitate future updates.
@@ -9,6 +11,7 @@ This document defines the standard process and quality criteria for reviewing pu
 These guidelines apply to all contributors and contributions, whether submitting a one-line typo fix or a multi-page feature.
 
 # High-Level Review Workflow
+
 1. **Prepare your code**
    - Run linters and formatters (TBD: linter not yet standardized)
    - Verify local functionality, responsiveness, and accessibility.
@@ -30,12 +33,15 @@ These guidelines apply to all contributors and contributions, whether submitting
    - Final sign-off by reviewer; merge moves to merge coordinator
 
 # Code Review Checklist
+
 > Note: Items are catrgorized by priority:<br>
+>
 > - [P1]: Critical, must pass before merge<br>
 > - [P2]: Major, highly reccomended. Exceptional cases may defer to later
 > - [P3]: Minor, style or enhancement suggestions. May be logged and deferred if time requires
 
 ## General
+
 - [P1] CI Status
   - All required automated checks are passing.
 - [P2] Commit Hygiene
@@ -45,6 +51,7 @@ These guidelines apply to all contributors and contributions, whether submitting
   - Clearly explains scope, approach, and any trade-offs.
 
 ## HTML
+
 This section also appllies to HTML created or modified via JavaScript.
 
 - [P1] Semantics and Structure
@@ -54,6 +61,7 @@ This section also appllies to HTML created or modified via JavaScript.
 [WIP] More detailed requirements will be added as the project structure becomes more well-formed.
 
 ## CSS
+
 This section also applies to CSS created or modified via JavaScript.
 
 - [P1] Consistency and Organization
@@ -68,6 +76,7 @@ This section also applies to CSS created or modified via JavaScript.
   - No unused or redundant rules.
 
 ## JavaScript
+
 - [P1] Language Features
   - Do not use `var`. Use `let`/`const` in its stead.
   - Do not use globals unless entirely necessary. Utilize the game state object for common variables.
@@ -84,8 +93,8 @@ This section also applies to CSS created or modified via JavaScript.
   - Complex algorithms or workarounds explained.
   - JSDoc comments present on functions, classes, and properties.
 
-
 # When a PR is Ready to Merge
+
 1. Automated Checks
    - Linting passes without error
    - Formatting applied.

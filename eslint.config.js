@@ -9,26 +9,32 @@ export default defineConfig([
       "source/scripts/backend/*.{js,mjs,cjs}",
       "source/scripts/frontend/*.{js,mjs,cjs}",
     ],
-    plugins: { 
+    plugins: {
       js,
-      jsdoc 
+      jsdoc,
     },
-    extends: [
-      "js/recommended",
-      "jsdoc/flat/recommended"
-    ],
+    extends: ["js/recommended", "jsdoc/flat/recommended"],
     languageOptions: { globals: globals.browser },
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "warn",
-      "semi": ["error", "always"],
-      "camelcase": "error",
-      "indent": ["error", "tab"],
-      "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 0 }],
+      semi: ["error", "always"],
+      camelcase: "error",
+      indent: ["error", "tab"],
+      "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }],
       // Add or override specific jsdoc rules here if needed, for example:
-      "jsdoc/require-jsdoc": ["warn", { "require": { "FunctionDeclaration": true, "MethodDefinition": true, "ClassDeclaration": true } }],
+      "jsdoc/require-jsdoc": [
+        "warn",
+        {
+          require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+            ClassDeclaration: true,
+          },
+        },
+      ],
       "jsdoc/tag-lines": "off",
       "jsdoc/no-defaults": "off",
-    }
-  }
+    },
+  },
 ]);

@@ -16,24 +16,24 @@ How should keyboard interactions allow selecting and playing cards?
 
 ## Decision Drivers
 
-- Accessibility: WCAG compliance, support for keyboard-only users  
-- Learning curve: ease of memorizing key-bindings  
-- Consistency: align with common game-control conventions  
+- Accessibility: WCAG compliance, support for keyboard-only users
+- Learning curve: ease of memorizing key-bindings
+- Consistency: align with common game-control conventions
 
 ## Considered Options
 
-- Implement arrow-key navigation + Enter to play  
-- Mouse-only interaction (no keyboard support)  
-- Customizable key bindings for all actions  
+- Implement arrow-key navigation + Enter to play
+- Mouse-only interaction (no keyboard support)
+- Customizable key bindings for all actions
 
 ## Decision Outcome
 
-Chosen option: **"Implement arrow-key navigation + Enter to play"**, because it balances accessibility with simplicity.  
+Chosen option: **"Implement arrow-key navigation + Enter to play"**, because it balances accessibility with simplicity.
 
 ### Consequences
 
-- Good: Enables keyboard-only play; minimal new UI  
-- Bad: Must document and tutorialize controls; potential key-binding conflicts  
+- Good: Enables keyboard-only play; minimal new UI
+- Bad: Must document and tutorialize controls; potential key-binding conflicts
 
 ### Confirmation
 

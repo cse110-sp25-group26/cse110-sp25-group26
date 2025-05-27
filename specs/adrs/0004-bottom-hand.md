@@ -16,24 +16,24 @@ Where should the player’s hand be placed on the game interface for optimal com
 
 ## Decision Drivers
 
-- Ergonomics: ease of reach on large screens  
-- Readability: minimal occlusion of central play area  
-- Conventions: matches most digital card games  
+- Ergonomics: ease of reach on large screens
+- Readability: minimal occlusion of central play area
+- Conventions: matches most digital card games
 
 ## Considered Options
 
-- Hand at bottom of screen  
-- Hand at top of screen  
-- Hand on left/right side  
+- Hand at bottom of screen
+- Hand at top of screen
+- Hand on left/right side
 
 ## Decision Outcome
 
-Chosen option: **"Hand at bottom of screen"**, because it maximizes visibility of the play area and aligns with user expectations.  
+Chosen option: **"Hand at bottom of screen"**, because it maximizes visibility of the play area and aligns with user expectations.
 
 ### Consequences
 
-- Good: Clear view of table; comfortable for mouse and keyboard users  
-- Bad: Less screen space for UI elements at bottom; may need responsive adjustments  
+- Good: Clear view of table; comfortable for mouse and keyboard users
+- Bad: Less screen space for UI elements at bottom; may need responsive adjustments
 
 ### Confirmation
 

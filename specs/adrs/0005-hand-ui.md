@@ -43,14 +43,17 @@ This option most closely mirrors physical card games and aligns with conventions
 ## Implementation Details
 
 - **Card Management**:
+
   - The `Hand` component reflects the game logic's `Hand` class.
   - Cards can be dynamically added and removed from the Hand.
 
 - **Card Scaling and Layout**:
+
   - If cards fit side-by-side within the Hand's width, they are laid out with no overlap.
   - If the total card width exceeds the Hand's width, cards overlap just enough to fit the space precisely (within floating-point accuracy).
 
 - **Card Selection**:
+
   - Players can click to select a card.
   - A selected card appears slightly raised relative to others.
   - The Hand notifies the game logic of selection via events.
@@ -80,4 +83,3 @@ This option most closely mirrors physical card games and aligns with conventions
   - Cards are packed correctly based on available width.
   - Selected cards are visually distinct and correctly reported to the game logic.
   - Drag operations behave predictably and accurately.
-

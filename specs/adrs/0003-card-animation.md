@@ -16,24 +16,24 @@ How should the UI communicate card transfers to improve user perception?
 
 ## Decision Drivers
 
-- User perception: clarity of state changes  
-- Performance: smoothness on target devices  
-- Development effort: animation complexity  
+- User perception: clarity of state changes
+- Performance: smoothness on target devices
+- Development effort: animation complexity
 
 ## Considered Options
 
-- Tween-based animations for moves  
-- Instant reposition (no animation)  
-- Simple fade-out/fade-in effect  
+- Tween-based animations for moves
+- Instant reposition (no animation)
+- Simple fade-out/fade-in effect
 
 ## Decision Outcome
 
-Chosen option: **"Tween-based animations for moves"**, because they provide clear motion cues and a polished feel.  
+Chosen option: **"Tween-based animations for moves"**, because they provide clear motion cues and a polished feel.
 
 ### Consequences
 
-- Good: Improves player understanding of card movements; enhances feel  
-- Bad: Requires animation library integration; potential performance tuning  
+- Good: Improves player understanding of card movements; enhances feel
+- Bad: Requires animation library integration; potential performance tuning
 
 ### Confirmation
 

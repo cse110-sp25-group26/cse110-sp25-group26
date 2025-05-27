@@ -1,10 +1,12 @@
 # Branch Specifications
 
 1. `main`: Holds production-ready code. _Protected_ - requires:
-  - Two approving reviews, at least one from a team lead
-  - Passing CI (lint, tests, build, documentation)
+
+- Two approving reviews, at least one from a team lead
+- Passing CI (lint, tests, build, documentation)
 
 2. `develop`: Integrates feature work for the next major build. Merges into `main` only via release PRs. _Protected_ - requires:
+
 - At least one approving review
 - Passing CI (lint, tests, build)
 

@@ -16,24 +16,24 @@ How should users move cards within their hand and onto the table: via direct man
 
 ## Decision Drivers
 
-- Usability: how naturally players can interact with cards  
-- Implementation complexity: engineering effort to support smooth dragging  
-- Consistency: matches common digital card-game conventions  
+- Usability: how naturally players can interact with cards
+- Implementation complexity: engineering effort to support smooth dragging
+- Consistency: matches common digital card-game conventions
 
 ## Considered Options
 
-- Drag cards with the mouse  
-- Select cards then use arrow-buttons or on-screen buttons to move  
-- Use a context menu on click to choose "play," "discard," etc.  
+- Drag cards with the mouse
+- Select cards then use arrow-buttons or on-screen buttons to move
+- Use a context menu on click to choose "play," "discard," etc.
 
 ## Decision Outcome
 
-Chosen option: **"Drag cards with the mouse"**, because it provides the most direct and familiar interaction for players.  
+Chosen option: **"Drag cards with the mouse"**, because it provides the most direct and familiar interaction for players.
 
 ### Consequences
 
-- Good: Intuitive, low friction; aligns with user expectations in digital card games  
-- Bad: Requires robust hit-testing and drag-and-drop handling; may introduce edge-case bugs  
+- Good: Intuitive, low friction; aligns with user expectations in digital card games
+- Bad: Requires robust hit-testing and drag-and-drop handling; may introduce edge-case bugs
 
 ### Confirmation
 
