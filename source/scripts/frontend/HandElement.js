@@ -18,6 +18,41 @@ export class HandElement extends HTMLElement {
 		this._container.classList.add('hand');
 		this.shadowRoot.appendChild(this._container);
 
+		// card animation movement test
+		const animationStyle = document.createElement('style');
+		animationStyle.textContent = `
+			@keyframes fly-from-deck {
+				0% {
+					transform: translate(var(--from-x), var(--from-y)) scale(0.1);
+					opacity: 0.1;
+				}
+				100% {
+					transform: translate(0, 0) scale(1);
+					opacity: 1;
+				}
+			}
+
+			@keyframes fly-to-trash {
+				0% {
+					transform: translate(0, 0) scale(1);
+					opacity: 1;
+				}
+				100% {
+					transform: translate(var(--to-x), var(--to-y)) scale(0.1);
+					opacity: 0;
+				}
+			}
+
+			.card-fly-in {
+				animation: fly-from-deck 0.5s ease-out;
+			}
+
+			.card-fly-out {
+				animation: fly-to-trash 0.5s ease-in forwards;
+			}
+		`;
+		this.shadowRoot.appendChild(animationStyle);
+		
 		// Attach external CSS
 		const styleLink = document.createElement('link');
 		styleLink.setAttribute('rel', 'stylesheet');
@@ -120,6 +155,50 @@ export class HandElement extends HTMLElement {
 			composed: true
 		}));
 		this._updateLayout();
+	}
+	
+    // card animation movement test
+	addCard(cardElement) {
+		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+		this.cards.push(cardElement);
+		this._container.appendChild(cardElement);
+
+		// ✅ 등장 애니메이션
+		const deckBox = document.getElementById('card-deck')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+		if (deckBox && handBox) {
+			const offsetX = deckBox.left - handBox.left;
+			const offsetY = deckBox.top - handBox.top;
+			cardElement.style.setProperty('--from-x', `${offsetX}px`);
+			cardElement.style.setProperty('--from-y', `${offsetY}px`);
+			cardElement._container?.classList.add('card-fly-in');
+		}
+
+		this._updateLayout();
+	}
+
+	removeSelectedCards() {
+		const selectedCards = this.getSelectedCards();
+
+		const trashBox = document.getElementById('discard-pile')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+
+		selectedCards.forEach(card => {
+			if (trashBox && handBox) {
+				const offsetX = trashBox.left - handBox.left;
+				const offsetY = trashBox.top - handBox.top;
+				card.style.setProperty('--to-x', `${offsetX}px`);
+				card.style.setProperty('--to-y', `${offsetY}px`);
+				card._container?.classList.add('card-fly-out');
+
+				// ✅ 애니메이션 후 제거
+				setTimeout(() => {
+					this.removeCard(card);
+				}, 500);
+			} else {
+				this.removeCard(card); // fallback
+			}
+		});
 	}
 }
 

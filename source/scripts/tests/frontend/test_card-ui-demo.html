@@ -22,6 +22,41 @@
 		<button id="removeCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px;">Remove Selected
 			Cards</button>
 	</div>
+
+
+	<!-- For Card movement animation test place. -->
+	<div id="discard-pile" style="
+		position: absolute;
+		top: 20px;
+		right: 40px;
+		width: 80px;
+		height: 120px;
+		border: 2px dashed #ccc;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 14px;
+	">Trash</div>
+
+		<div id="card-deck" style="
+		position: absolute;
+		bottom: 20px;
+		right: 40px;
+		width: 80px;
+		height: 120px;
+		border: 2px dashed #ccc;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 14px;
+		">Deck</div>
+
+
+
 	<p style="color: #fff; margin-top: 2em">
 		Click a card to select. Use buttons to add/remove cards.
 	</p>
@@ -80,11 +115,42 @@
 				const type = types[Math.floor(Math.random() * types.length)];
 				const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
 				const card = createCard(suit, type, tooltip);
+
+				// card movement 
+				const deckBox = document.getElementById('card-deck').getBoundingClientRect();
+				const handBox = hand.getBoundingClientRect();
+
+				const offsetX = deckBox.left - handBox.left;
+				const offsetY = deckBox.top - handBox.top;
+
+				card.style.setProperty('--from-x', `${offsetX}px`);
+				card.style.setProperty('--from-y', `${offsetY}px`);
+				card.classList.add('card-fly-in');
+
+
+
 				hand.addCard(card);
 			};
 
 			document.getElementById('removeCardBtn').onclick = () => {
-				hand.removeSelectedCards();
+				// adding position and animation
+				const selected = hand.getSelectedCards();
+				const trashBox = document.getElementById('discard-pile').getBoundingClientRect();
+				const handBox = hand.getBoundingClientRect();
+
+				const offsetX = trashBox.left - handBox.left;
+				const offsetY = trashBox.top - handBox.top;
+
+				selected.forEach(card => {
+					card.style.setProperty('--to-x', `${offsetX}px`);
+					card.style.setProperty('--to-y', `${offsetY}px`);
+					card.classList.add('card-fly-out');
+
+					// actually removing the card
+					setTimeout(() => {
+					hand.removeSelectedCards();
+					}, 500);
+				});
 			};
 		});
 	</script>
