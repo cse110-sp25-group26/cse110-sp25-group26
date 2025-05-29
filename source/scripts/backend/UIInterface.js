@@ -1,4 +1,5 @@
 import { Card } from "./Card.js";
+import { gameHandler } from "./gameHandler.js";
 
 // This is an abstract class, it's one case where we actually don't mind
 // unused function parameters.
@@ -9,6 +10,10 @@ import { Card } from "./Card.js";
  *            This provides a simple interface for the UI to implement to allow
  *            for easy integration with the game loop. These functions should
  * 			  be overridden by the child class to provide the required functinality.
+ * 
+ * @property {gameHandler} gameHandler - The game handler object which the UI should
+ * 									     interact with to get the game state. Initialized
+ * 									     when this is passed to the gameHandler.
  */
 export class UIInterface {
 	/**
@@ -39,13 +44,13 @@ export class UIInterface {
 	 * @description Moves cards from one location on-screen to another.
 	 * @param {Card[]} cards - The cards to move. Likely uses UIel to determine the
 	 * 						   respective UI elements to work with.
-	 * @param {string[]} origins - The origin locations of each card to move from.
-	 *                             ex: "hand_main", "deck", "shop_cards", "offscreen" etc.
-	 * @param {string[]} dests - The destination locations of each card to move to.
+	 * @param {string} origin - The origin location to move each card from.
+	 *                          ex: "hand_main", "deck", "shop_cards", "offscreen" etc.
+	 * @param {string} dest - The destination location to move each card to.
 	 * 							 ex: "hand_played", "offscreen", "deck", etc.
 	 * @param {number} delay - The offset between each card dispatch.
 	 */
-	moveMultiple(cards, origins, dests, delay) {
+	moveMultiple(cards, origin, dest, delay) {
 		throw new Error("moveMultiple must be overridden in extending class!");
 	}
 
@@ -126,5 +131,23 @@ export class UIInterface {
 	 */
 	displayMoney(base, extras) {
 		throw new Error("displayMoney must be overridden in extending class!");
+	}
+
+	/**
+	 * @function disallowPlay
+	 * @description Disallow the user from pressing buttons that interact with
+	 *              the gameplay, backend is still processing.
+	 */
+	disallowPlay() {
+		throw new Error("disallowPlay must be overridden in extending class!");
+	}
+
+	/**
+	 * @function allowPlay
+	 * @description Allow the user to press buttons again now that the backend
+	 *              has finished processing.
+	 */
+	allowPlay() {
+		throw new Error("allowPlay must be overridden in extending class!");
 	}
 };

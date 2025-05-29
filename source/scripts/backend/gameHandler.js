@@ -51,6 +51,7 @@ export class gameHandler {
 	constructor(uiInterface) {
 		this.uiInterface = uiInterface;
 		this.resetGame();
+		uiInterface.gameHandler = this;
 	}
 
 	/**
@@ -110,6 +111,8 @@ export class gameHandler {
 	 * @description Deals cards to the main hand until the hand is full or no cards are left in the deck.
 	 */
 	dealCards() {
+		let cards = [];
+
 		while (this.state.hands.main.cards.length < this.state.handSize && this.state.deck.availableCards.length > 0) {
 			const card = this.state.deck.drawCard();
 			if (card) {
@@ -118,9 +121,15 @@ export class gameHandler {
 				console.log("No more cards to deal.");
 				break;
 			}
-
-			// TODO_UI: Call back to UI to create card UI elements, move_multiple them to the main hand
+			cards.push(card);
 		}
+
+		// TODO_UI: Call back to UI to create card UI elements, move_multiple them to the main hand
+
+		cards.forEach(card => {
+			this.uiInterface.createUIel(card);
+		});
+		this.uiInterface.moveMultiple(cards, "deck", "hand_main", 0);
 	}
 
 	/**

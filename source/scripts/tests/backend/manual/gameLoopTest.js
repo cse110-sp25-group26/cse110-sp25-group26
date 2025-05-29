@@ -2,7 +2,7 @@
  * @fileoverview Test file for the game loop implementation
  */
 
-import { createConsoleGameLoop } from "../backend/gameLoop.js";
+import { createConsoleGameLoop } from "../../../backend/gameLoop.js";
 
 /**
  * Simple test function to demonstrate the game loop functionality
