@@ -2,6 +2,7 @@ import { Deck } from "./Deck.js";
 import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
 import { calculateBlackjackScore } from "./utils.js";
+import { UIInterface } from "./UIInterface.js";
 
 /**
  * @typedef {object} HandHolder
@@ -30,6 +31,7 @@ import { calculateBlackjackScore } from "./utils.js";
  * @property {number}         handScore	  	   – score for the current hand
  * @property {number}         handMult 	  	   – multiplier for the current hand
  * @property {boolean}        endlessMode      – whether the game is in endless mode
+ * @property {UIInterface}	  uiInterface      - interface provided by the UI to interact with the game
  */
 
 /**
@@ -43,8 +45,11 @@ import { calculateBlackjackScore } from "./utils.js";
 export class gameHandler {
 	/**
 	 * @class gameHandler
+	 * @description Initializes the game handler with default values and resets the game state.
+	 * @param {UIInterface} uiInterface - The UI interface to interact with the game.
 	 */
-	constructor() {
+	constructor(uiInterface) {
+		this.uiInterface = uiInterface;
 		this.resetGame();
 	}
 
@@ -282,7 +287,10 @@ export class gameHandler {
 	nextBlind() {
 		// TODO_UI: Call back to UI to display blind selection screen
 
+		// Stubbed, should use the UI return value to determine whether to skip
+		// a blind or not
 		let nextBlind = this.state.currBlind + 1;
+
 		if (nextBlind > this.state.blindsPerAnte) {
 			this.state.currBlind = 1;
 			this.state.currAnte++;
