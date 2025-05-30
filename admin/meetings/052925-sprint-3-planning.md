@@ -10,3 +10,13 @@ The tasks we will be trying to attempt are:
 5. We now have enough to begin work on some of the initial interactive elements, such as the main menu, Card animations, and some backend save game formats with the code in `gameHandler`.
 
 Issues have been made or are already in progress for these in accordance to this meeting.
+
+## Attendance
+- Nathan Reed (Meating Leader)
+- Anthony Velikov
+- Min Paing
+- Hanbin Tan
+- Yifei Xue
+- Jason Huang
+- Kevin Lee
+- Sruti Mani
