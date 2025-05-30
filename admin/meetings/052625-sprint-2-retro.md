@@ -28,3 +28,16 @@ Successfully resolved. Momentum continued as I anticipated, and more frequent in
 
 ### Updating Deadline Task Assignments
 I do not believe we will be meeting the initially proposed deadlines for game features. I still believe we will have a fully functional game by the proposed end time, but the overhead of the Agile process has made development significantly slower than I had originally anticipated. I will bring it up with our TA on Wednesday to see what changes we should make due to this.
+
+## Attendance
+- Nathan Reed (Meeting Leader)
+- Anthony Velikov
+- Yifei Xue
+- Jason Huang
+- Min Paing
+- Long Hodac
+- Kevin Lee
+- Hanbin Tan
+- Min Paing
+- Sruti Mani
+- Mahdi Najjar

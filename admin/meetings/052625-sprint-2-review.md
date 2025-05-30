@@ -20,3 +20,16 @@ The [PR Checklist](../../doc/REVIEWING.md) is thorough, but that makes it long. 
 
 ## 4. Merge Wrangling (Min)
 Behind these changes Min has been managing all of the merges so far, making sure that the code works properly with other simultaneous changes and keeping the code uniform. To most of us it doesn't even look like there are merge conflicts, which is amazing work especially given the increase in code volume throughout this sprint.
+
+## Attendance
+- Nathan Reed (Meeting Leader)
+- Anthony Velikov
+- Yifei Xue
+- Jason Huang
+- Min Paing
+- Long Hodac
+- Kevin Lee
+- Hanbin Tan
+- Min Paing
+- Sruti Mani
+- Mahdi Najjar
