@@ -36,7 +36,6 @@ Chosen option: **"Separate frontend and backend files/directories"**, because it
 
 - **Good:** Frontend and backend teams can work independently; less waiting and fewer merge conflicts; easier to test and maintain code.
 - **Bad:** Requires clear interface definitions and some duplication of types or data structures.
-- …  
 
 ### Confirmation
 
