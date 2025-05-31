@@ -27,11 +27,25 @@ export class HandElement extends HTMLElement {
 		// Internal state
 		this.cards = [];
 
+		// Default card width, can be overridden by attribute
+		this.configuredCardWidth = 80;
+
 		// Listen for card-dropped events to re-run layout
 		// This ensures cards re-home correctly after being dragged and dropped.
 		this._container.addEventListener('card-dropped', () => {
 			this._updateLayout();
 		});
+	}
+
+	connectedCallback() {
+		if (this.hasAttribute('data-card-width')) {
+			const newWidth = parseInt(this.getAttribute('data-card-width'), 10);
+			if (!isNaN(newWidth) && newWidth > 0) {
+				this.configuredCardWidth = newWidth;
+			}
+		}
+		// Initial layout update if cards are added before connection, or just to apply config
+		this._updateLayout();
 	}
 
 	/**
@@ -55,8 +69,19 @@ export class HandElement extends HTMLElement {
 		const index = this.cards.indexOf(cardElement);
 		if (index !== -1) {
 			this.cards.splice(index, 1);
-			if (cardElement.isConnected) {
+			if (cardElement.parentElement === this._container) {
 				this._container.removeChild(cardElement);
+			} else if (cardElement.isConnected) {
+				console.warn('CardElement parent is not the expected container during removeCard. Card:', cardElement, 'Actual Parent:', cardElement.parentElement, 'Expected Parent Container:', this._container);
+				if (cardElement.parentElement) {
+					try {
+						cardElement.parentElement.removeChild(cardElement);
+					} catch (e) {
+						console.error('Failed to remove card from its unexpected parent:', e);
+					}
+				}
+			} else {
+				console.log('CardElement was not connected during removal or already removed from DOM.');
 			}
 			this._updateLayout();
 		}
@@ -86,7 +111,7 @@ export class HandElement extends HTMLElement {
 	 */
 	_updateLayout() {
 		const handWidth = this._container.offsetWidth || 1; // Avoid division by zero
-		const cardWidth = 80; // Default card width
+		const cardWidth = this.configuredCardWidth; // Use configured card width
 		const totalWidth = this.cards.length * cardWidth;
 
 		let overlap = 0;

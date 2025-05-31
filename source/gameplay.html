@@ -12,9 +12,11 @@
     <div id="stage">
         <!-- SCOREKEEPER SIDEBAR -->
         <aside id="scoreboard">
-            <button class="btn-pill" id="buy-in">Buy In</button>
+            <!-- Removed Buy In button, can be re-added if it's for a different game phase -->
+            <!-- <button class="btn-pill" id="buy-in">Buy In</button> -->
 
             <section class="card card-goal">
+                <p id="current-blind-name">Big Blind</p> <!-- Added for blind name -->
                 <p>Score at least</p>
                 <h1 id="goal-score">—</h1>
             </section>
@@ -22,6 +24,11 @@
             <section class="card card-round">
                 <p>Current Round Score</p>
                 <h1 id="round-score">—</h1>
+            </section>
+
+            <section class="card card-hand-type"> <!-- Added for current hand type -->
+                <p>Hand Type</p>
+                <h2 id="current-hand-type">—</h2>
             </section>
 
             <section class="card card-chips">
@@ -43,42 +50,126 @@
             </div>
 
             <ul class="stats-list">
-                <li>Discards: <strong id="discards">0</strong></li>
+                <li>Discards Left: <strong id="discards-left">0</strong></li> <!-- Renamed from 'discards' for clarity -->
+                <li>Hands Left: <strong id="hands-left">0</strong></li> <!-- Renamed from 'hands-played' assuming it means remaining -->
+                <li>Ante: <strong id="current-ante">1</strong></li>
+                <!-- Round is often part of Ante structure, e.g., Ante 1, Round 1/3. Consolidating if it refers to overall game round. -->
             </ul>
         </aside>
 
         <!-- MAIN GAME AREA -->
         <main id="board">
-            <section id="play-area" aria-label="Game play area">
-                <!-- game canvas / elements go here -->
+            <section id="top-info-bar">
+                <hand-element id="jokers-area" class="card-placeholder-area" aria-label="Jokers area" data-card-width="60">
+                    <!-- Joker card elements will be injected here -->
+                </hand-element>
+                <div id="round-status-display" aria-label="Round status">
+                    <!-- e.g., "Ante 1", "Small Blind" -->
+                </div>
+                <hand-element id="consumables-area" class="card-placeholder-area" aria-label="Consumables area" data-card-width="60">
+                    <!-- Consumable card elements will be injected here -->
+                </hand-element>
             </section>
 
+            <hand-element id="played-cards-display" aria-label="Played cards area" data-card-width="70">
+                <!-- cards played move here -->
+            </hand-element>
+
             <footer id="hand-strip">
-                <p id="card-count">0/0</p>
-
-                <section id="hand-cards" aria-label="Player hand">
-                    <!-- cards injected by JS -->
-                </section>
-
-                <nav class="hand-actions">
-                    <button class="btn-pill" id="discard">Discard</button>
-                    <button class="btn-pill" id="draw">Draw</button>
+                <nav class="player-hand-actions">
+                    <button class="btn-pill" id="play-selected-cards">Play Selected</button>
+                    <button class="btn-pill" id="discard-selected-cards">Discard Selected</button>
                 </nav>
 
-                <div id="deck" aria-label="Deck"></div>
+                <hand-element id="player-hand-cards" aria-label="Player hand cards" data-card-width="80">
+                    <!-- player hand cards injected by JS -->
+                </hand-element>
+
+                <div id="deck-area">
+                    <div id="deck" aria-label="Deck"></div>
+                    <p id="deck-card-count">0/0</p> <!-- Was card-count -->
+                </div>
+                <!-- Removed general Draw button, specific actions will trigger draws -->
             </footer>
         </main>
     </div>
 
     <script type="module">
         import Scorekeeper from './scripts/frontend/UI_scorekeeper.js';
-         window.ui = new Scorekeeper();
-        ui.setGoalScore(40);
-        ui.setRoundScore(12);
-        ui.updateChips(3);
-        ui.updateMultiplier(2);
-        ui.setBank(24);
-        ui.setDiscards(4);
+        import GameManager from './scripts/frontend/GameManager.js';
+        import { HandElement } from './scripts/frontend/HandElement.js'; // Ensure HandElement is defined
+        import { CardElement } from './scripts/frontend/CardElement.js'; // Ensure CardElement is defined
+        import { enableReordering } from './scripts/frontend/CardMove.js';
+
+        // Initialize UI Scorekeeper
+        window.ui = new Scorekeeper();
+        // ui.setGoalScore(40); 
+        // ... other initial ui calls
+
+        // Initialize Game Manager
+        window.gameManager = new GameManager();
+
+        // Enable reordering for hand elements
+        // Need to ensure these elements are upgraded to HandElement before calling this
+        // customElements.whenDefined('hand-element').then(() => {
+        //     const playerHand = document.getElementById('player-hand-cards');
+        //     const jokersArea = document.getElementById('jokers-area');
+        //     const consumablesArea = document.getElementById('consumables-area');
+            // const playedCardsArea = document.getElementById('played-cards-display');
+
+        //     if (playerHand instanceof HandElement) enableReordering(playerHand);
+        //     if (jokersArea instanceof HandElement) enableReordering(jokersArea);
+        //     if (consumablesArea instanceof HandElement) enableReordering(consumablesArea);
+            // if (playedCardsArea instanceof HandElement) enableReordering(playedCardsArea); // If reordering is desired here
+        // });
+
+        // Example: Deal a few cards on load for testing
+        // setTimeout(() => { // Timeout to ensure elements are ready
+        //    if (window.gameManager) {
+        //        window.gameManager.dealCardToPlayerHand();
+        //        window.gameManager.dealCardToPlayerHand();
+        //        window.gameManager.dealCardToPlayerHand();
+        //    }
+        // }, 500);
+
+        // It's important that HandElement definitions run and upgrade the custom tags
+        // before GameManager tries to use them as HandElement instances.
+        // The GameManager constructor currently tries to getElementById immediately.
+        // This might require a slight refactor in GameManager or careful script ordering/
+        // customElements.whenDefined blocks if issues arise.
+
+        // For now, assuming elements are available when GameManager is constructed.
+        // The TODO in GameManager about enableReordering should be addressed here too.
+
+        // Updated way to enable reordering after GameManager has its references:
+        customElements.whenDefined('hand-element').then(() => {
+            if (window.gameManager) {
+                // Initialize GameManager's DOM element references now that custom elements are defined
+                window.gameManager.initDOMElements();
+
+                if (window.gameManager.playerHand instanceof HandElement) {
+                    enableReordering(window.gameManager.playerHand);
+                }
+                if (window.gameManager.jokersArea instanceof HandElement) {
+                    enableReordering(window.gameManager.jokersArea);
+                }
+                if (window.gameManager.consumablesArea instanceof HandElement) {
+                    enableReordering(window.gameManager.consumablesArea);
+                }
+                if (window.gameManager.playedCardsArea instanceof HandElement) {
+                    // enableReordering(window.gameManager.playedCardsArea); // Only if reordering in played area is a feature
+                }
+
+                // Test dealing cards
+                console.log("Attempting to deal initial cards after elements defined.");
+                // Uncomment to test dealing
+                // window.gameManager.dealCardToPlayerHand();
+                // window.gameManager.dealCardToPlayerHand();
+                // window.gameManager.dealCardToPlayerHand();
+                // ui.setDiscardsLeft(window.gameManager.playerHand.cards.length); // Example update
+            }
+        });
+
     </script>
 </body>
 
