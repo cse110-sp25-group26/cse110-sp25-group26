@@ -83,23 +83,15 @@ export class CardElement extends HTMLElement {
 	}
 
 	/**
-	 * @returns {string[]} Observed attributes for the CardElement.
+	 * @function calculateTooltipText
+	 * @description Calculates the tooltip text based on the card's suit and type.
+	 * @returns {string} The tooltip text for the card.
 	 */
-	static get observedAttributes() {
-		return ['suit', 'type', 'tooltip'];
-	}
-
-	/**
-	 * @param {string} name - The name of the attribute being changed.
-	 * @param {string} oldValue - The old value of the attribute.
-	 * @param {string} newValue - The new value of the attribute.
-	 */
-	attributeChangedCallback(name, oldValue, newValue) {
-		if (name === 'tooltip') {
-			this._tooltip.textContent = newValue || '';
-		} else if (name === 'suit' || name === 'type') {
-			this._updateCardFace();
-		}
+	calculateTooltipText() {
+		if (!this._card) return '';
+		const suit = this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
+		const type = this._card.type.toUpperCase();
+		return `${type} of ${suit}`;
 	}
 
 	/**
