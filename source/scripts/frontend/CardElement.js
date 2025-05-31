@@ -1,15 +1,40 @@
+import { Card } from '../backend/Card.js';
+
 /**
- * @class CardElement
  * @classdesc Custom web component representing a card.
+ * 
+ * @property {HTMLElement} _container - The main container for the card.
+ * @property {HTMLElement} _cardInner - The inner container for the card's 3D flip effect.
+ * @property {HTMLElement} _cardFront - The front face of the card.
+ * @property {HTMLElement} _cardBack - The back face of the card.
+ * @property {HTMLElement} _tooltip - The tooltip element for displaying additional information.
+ * @property {boolean} _dragging - Indicates if the card is currently being dragged.
+ * @property {object} _offset - The offset of the card from the mouse cursor during drag.
+ * @property {boolean} _wasDragged - Indicates if the card was dragged before flipping.
+ * @property {number} _dragStartX - The X coordinate where the drag started.
+ * @property {number} _dragStartY - The Y coordinate where the drag started.
+ * @property {number} _DRAG_THRESHOLD - The pixel threshold to consider a drag action.
+ * @property {number} _lastClientX - The last X coordinate of the mouse during drag.
+ * @property {number} _tiltFactor - The factor by which the card tilts based on mouse movement.
+ * @property {object} _dragPreparationState - Stores the initial state of the card before dragging starts.
+ * @property {string} _preDragTransform - The original transform style of the card before dragging.
+ * @property {string} _card - Mirror of the backend Card object associated with this element.
+ * @property {boolean} _draggable - Indicates if the card is draggable.
  */
 export class CardElement extends HTMLElement {
 	/**
 	 * @class
 	 * @description Initializes the CardElement and sets up its structure and event listeners.
+	 * 
+	 * @param {Card} card - The backend Card object associated with this element.
+	 * @param {boolean} [draggable=true] - Whether the card is draggable. Defaults to true.
 	 */
-	constructor() {
+	constructor(card, draggable = true) {
 		super();
 		this.attachShadow({ mode: 'open' });
+
+		this._card = card;
+		this._draggable = draggable;
 
 		// Card container
 		this._container = document.createElement('div');
@@ -23,15 +48,29 @@ export class CardElement extends HTMLElement {
 		// Card front
 		this._cardFront = document.createElement('div');
 		this._cardFront.classList.add('card-front');
+		this._frontImg = document.createElement('img');
+		this._frontImg.style.width = '100%';
+		this._frontImg.style.height = '100%';
+		this._cardFront.appendChild(this._frontImg);
 
 		// Card back
 		this._cardBack = document.createElement('div');
 		this._cardBack.classList.add('card-back');
 
+		// Card back image
+		this._cardBack.innerHTML = '';
+		const backImg = document.createElement('img');
+		backImg.src = '/source/res/img/back.png';
+		backImg.alt = 'Card back';
+		backImg.style.width = '100%';
+		backImg.style.height = '100%';
+		this._cardBack.appendChild(backImg);
+
 		// Tooltip
 		this._tooltip = document.createElement('div');
 		this._tooltip.classList.add('tooltip');
 		this._tooltip.style.display = 'none';
+		this._tooltip.textContent = this.calculateTooltipText();
 
 		// Assemble elements
 		this._cardInner.appendChild(this._cardFront);
@@ -98,8 +137,8 @@ export class CardElement extends HTMLElement {
 	 * @description Called when the element is added to the DOM.
 	 */
 	connectedCallback() {
-		this._updateCardFace();
-		this._tooltip.textContent = this.getAttribute('tooltip') || '';
+		// TODO: Is this even called? One could just call updateCardFace directly.
+		this.updateCardFace();
 	}
 
 	/**
@@ -119,31 +158,11 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @description Updates the card's front and back faces based on its attributes.
 	 */
-	_updateCardFace() {
-		const suit = this.getAttribute('suit');
-		const type = this.getAttribute('type');
-		this._cardFront.innerHTML = '';
-
-		if (suit && type) {
-			const img = document.createElement('img');
-			const filename = `card_${type.toLowerCase()}_${suit.toLowerCase()}.png`;
-			img.src = `/source/res/img/${filename}`;
-			img.alt = `${type} of ${suit}`;
-			img.style.width = '100%';
-			img.style.height = '100%';
-			this._cardFront.appendChild(img);
-		} else {
-			this._cardFront.textContent = type || '';
-		}
-
-		// Card back image
-		this._cardBack.innerHTML = '';
-		const backImg = document.createElement('img');
-		backImg.src = '/source/res/img/back.png';
-		backImg.alt = 'Card back';
-		backImg.style.width = '100%';
-		backImg.style.height = '100%';
-		this._cardBack.appendChild(backImg);
+	updateCardFace() {
+		// Update existing front image
+		const filename = `card_${this._card.type.toLowerCase()}_${this._card.suit.toLowerCase()}.png`;
+		this._frontImg.src = `/source/res/img/${filename}`;
+		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
 	}
 
 	/**
@@ -171,6 +190,8 @@ export class CardElement extends HTMLElement {
 	 * @param {MouseEvent} e - The mousedown event.
 	 */
 	_onDragStart(e) {
+		if (!this._draggable) return;
+
 		e.preventDefault();
 		e.stopPropagation();
 		this._dragging = true;
@@ -280,6 +301,74 @@ export class CardElement extends HTMLElement {
 		}
 
 		this._dragPreparationState = null; // Clean up
+	}
+
+	/**
+	 * @function moveTo
+	 * @description Moves the card to a specified position with a smooth transition.
+	 * 
+	 * @param {number} x - The x-coordinate to move the card to.
+	 * @param {number} y - The y-coordinate to move the card to.
+	 * @param {number} [duration=600] - The duration of the transition in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after the move is complete.
+	 * @returns {Promise<void>} A promise that resolves when the move is complete.
+	 */
+	async moveTo(x, y, duration = 600, callback) {
+		if (!this.style.position || this.style.position === 'static') {
+			this.style.position = 'absolute';
+		}
+		// Cancel previous animation listener if any
+		if (this._transitionEndHandler) {
+			this.removeEventListener('transitionend', this._transitionEndHandler);
+		}
+		this.style.transition = 'none';
+		// Force fetch to apply the new styles immediately
+		void this.offsetWidth;
+
+		// Ensure the card is on top during transition
+		const originalZIndex = this.style.zIndex;
+		this.style.zIndex = '10000';
+
+		this.style.left = `${x}px`;
+		this.style.top = `${y}px`;
+
+		return new Promise(resolve => {
+			this._transitionEndHandler = () => {
+				this.removeEventListener('transitionend', this._transitionEndHandler);
+				this.style.zIndex = originalZIndex; // Restore original z-index
+				if (callback) {
+					callback(this);
+				}
+				resolve();
+			};
+			this.addEventListener('transitionend', this._transitionEndHandler);
+			this.style.transition = `left ${duration}ms ease-in, top ${duration}ms ease-in`;
+		});
+	}
+
+	/**
+	 * @function moveMultiple
+	 * @description Moves multiple cards to specified positions with a staggered delay.
+	 * 
+	 * @param {CardElement[]} cards - An array of CardElement instances to move.
+	 * @param {Array<{x: number, y: number}>} positions - An array of objects containing x and y coordinates for each card.
+	 * @param {number} [duration=600] - The duration of the transition for each card in milliseconds. Defaults to 600ms.
+	 * @param {Function} callback - Optional callback function to execute after all moves are complete.
+	 * @returns {Promise<void>} A promise that resolves when all cards have been moved.
+	 */
+	static async moveMultiple(cards, positions, duration = 600, callback) {
+		let promises = [];
+		cards.forEach((card, i) => {
+			const { x, y } = positions[i];
+			const delay = 400 * i;
+			promises.push(new Promise(r => {
+				setTimeout(() => {
+					// Pass the callback to each individual moveTo call
+					card.moveTo(x, y, duration, callback).then(r);
+				}, delay);
+			}));
+		});
+		await Promise.all(promises);
 	}
 }
 
