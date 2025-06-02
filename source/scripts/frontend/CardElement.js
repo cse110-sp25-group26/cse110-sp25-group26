@@ -45,7 +45,7 @@ export class CardElement extends HTMLElement {
 		// Attach external CSS
 		const styleLink = document.createElement('link');
 		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		styleLink.setAttribute('href', 'card.css');
 		this.shadowRoot.appendChild(styleLink);
 
 		// Drag state
@@ -144,7 +144,6 @@ export class CardElement extends HTMLElement {
 			};
 			const fileType = typeMap[type.toUpperCase()] || type.toLowerCase();
 
-			// Convert plural suit names from attributes to singular for filenames
 			let fileSuit = suitAttr.toLowerCase();
 			if (fileSuit.endsWith('s')) {
 				fileSuit = fileSuit.substring(0, fileSuit.length - 1);
@@ -152,7 +151,10 @@ export class CardElement extends HTMLElement {
 
 			const img = document.createElement('img');
 			const filename = `card_${fileType}_${fileSuit}.png`;
-			img.src = `/source/res/img/${filename}`;
+
+			// Path relative to gameplay.html
+			img.src = `res/img/${filename}`;
+
 			img.alt = `${type} of ${suitAttr}`;
 			img.style.width = '100%';
 			img.style.height = '100%';
@@ -161,10 +163,12 @@ export class CardElement extends HTMLElement {
 			this._cardFront.textContent = type || '';
 		}
 
-		// Card back image
 		this._cardBack.innerHTML = '';
 		const backImg = document.createElement('img');
-		backImg.src = '/source/res/img/back.png';
+
+		// Path relative to gameplay.html
+		backImg.src = 'res/img/back.png';
+
 		backImg.alt = 'Card back';
 		backImg.style.width = '100%';
 		backImg.style.height = '100%';
