@@ -139,6 +139,11 @@ export class ConsoleUI extends UIInterface {
 			originContainer.removeCard(uiel);
 
 			// Add the card to its destination
+			if (!destContainer) {
+				// Do not implement it like this in the proper UI, this is just a debug
+				// tool. This should be an actual error if the destination is not found.
+				continue;
+			}
 			destContainer.addCard(uiel);
 		}
 	}
@@ -246,10 +251,66 @@ export class ConsoleUI extends UIInterface {
 	showHand() {
 		console.log("Current Hand:");
 		this.hand_main.contents.forEach((uiel, index) => {
-			console.log(`[${index}] ${uiel.display}`);
+			let str = `[${index}]`;
+			if (uiel.card.isSelected) {
+				str += "*";
+			}
+			str += ` ${uiel.display}`;
+			console.log(str);
 		});
 		if (this.hand_main.contents.length === 0) {
 			console.log("No cards in hand.");
 		}
+	}
+
+	/**
+	 * @function selectCard
+	 * @description Toggles the selection state of a card in the hand.
+	 * @param {number} index - The index of the card to select/deselect.
+	 */
+	selectCard(index) {
+		if (index < 0 || index >= this.hand_main.contents.length) {
+			console.warn("Invalid card index:", index);
+			return;
+		}
+
+		let card = this.hand_main.contents[index].card;
+		card.toggleSelect();
+
+		console.log(`Card at index ${index} is now ${card.isSelected ? "selected" : "deselected"}.`);
+	}
+
+	/**
+	 * @function selectCards
+	 * @description Selects multiple cards in the hand.
+	 * @param {number[]} indices - An array of indices of the cards to select.
+	 */
+	selectCards(indices) {
+		if (!Array.isArray(indices)) {
+			console.warn("Indices must be an array.");
+			return;
+		}
+
+		indices.forEach(index => {
+			this.selectCard(index);
+		});
+	}
+
+	/**
+	 * @function discard
+	 * @description Discards the selected cards from the hand.
+	 */
+	discard() {
+		this.gameHandler.discardCards();
+		this.gameHandler.dealCards();
+	}
+
+	/**
+	 * @function play
+	 * @description Plays the selected cards from the hand.
+	 */
+	play() {
+		this.gameHandler.playCards();
+		this.gameHandler.dealCards();
 	}
 }

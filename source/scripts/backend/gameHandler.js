@@ -176,6 +176,10 @@ export class gameHandler {
 		});
 
 		// TODO_UI: Call move_multiple to move said cards from main to discard pile, remove UI element for each card
+		this.uiInterface.moveMultiple(selectedCards, "hand_main", "discard_pile", 0);
+		selectedCards.forEach(card => {
+			this.uiInterface.removeUIel(card);
+		});
 
 		this.state.discardsUsed++;
 	}
@@ -201,13 +205,15 @@ export class gameHandler {
 		});
 
 		// TODO_UI: Call move_multiple to move said cards from main to played
+		this.uiInterface.moveMultiple(selectedCards, "hand_main", "hand_played", 0);
 
 		this.scoreHand();
 
 		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
-			this.state.hands.main.cards = [];
-
 			// TODO_UI: Call back to UI to move_multiple the main hand cards back to the deck
+			this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
+
+			this.state.hands.main.cards = [];
 			
 			if (this.state.roundScore < this.state.blindRequirements[this.state.currBlind - 1]) {
 				console.log("Not enough score to advance to the next blind.");
@@ -280,12 +286,15 @@ export class gameHandler {
 			this.state.handScore = 0;
 			this.state.handMult = 1;
 
-			this.state.handsPlayed++;
-			this.state.hands.played.cards = [];
-
 			// TODO_UI: Call back to UI to display won money, update scorekeeper,
 			//          move_multiple the played cards offscreen and remove their UI elements
 		}
+
+		this.state.handsPlayed++;
+
+		this.uiInterface.moveMultiple(this.state.hands.played.cards, "hand_played", "deck", 0);
+		
+		this.state.hands.played.cards = [];
 	}
 
 	/**
@@ -317,6 +326,7 @@ export class gameHandler {
 					this.state.endlessMode = true;
 				} else {
 					// TODO_UI: Call back to UI to exit the game (not game over)
+					this.uiInterface.exitGame();
 					console.log("Game finished.");
 					return false;
 				}
