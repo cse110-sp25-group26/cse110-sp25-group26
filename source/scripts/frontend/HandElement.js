@@ -37,6 +37,9 @@ export class HandElement extends HTMLElement {
 		});
 	}
 
+	/**
+	 *
+	 */
 	connectedCallback() {
 		if (this.hasAttribute('data-card-width')) {
 			const newWidth = parseInt(this.getAttribute('data-card-width'), 10);
