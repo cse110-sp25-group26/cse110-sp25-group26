@@ -1,6 +1,7 @@
 import GameManager from '../frontend/GameManager.js';
 import { HandElement } from '../frontend/HandElement.js'; // Import for customElements.define
 import { CardElement } from '../frontend/CardElement.js'; // Import for customElements.define and instanceof
+import { jest } from '@jest/globals';
 
 // Define custom elements for JSDOM if they aren't already defined by Jest's environment
 // This is often needed for tests involving web components.
