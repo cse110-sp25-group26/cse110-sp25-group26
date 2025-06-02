@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
-      background: url('https://www.transparenttextures.com/patterns/felt.png'), #1b3a2f;
+      background: url('https://www.transparenttextures.com/patterns/felt.png'), #0e2d1d;
       font-family: 'Cardo', serif;
       overflow: hidden;
     }
@@ -22,41 +22,14 @@
       z-index: 0;
     }
 
-    .card-decor:nth-child(1) {
-      top: 10%;
-      left: 5%;
-      transform: rotate(-15deg);
-      animation-delay: 0s;
-    }
-
-    .card-decor:nth-child(2) {
-      top: 30%;
-      right: 10%;
-      transform: rotate(10deg);
-      animation-delay: 1s;
-    }
-
-    .card-decor:nth-child(3) {
-      bottom: 10%;
-      left: 20%;
-      transform: rotate(-10deg);
-      animation-delay: 2s;
-    }
-
-    .card-decor:nth-child(4) {
-      bottom: 15%;
-      right: 15%;
-      transform: rotate(5deg);
-      animation-delay: 3s;
-    }
+    .card-decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(-15deg); animation-delay: 0s; }
+    .card-decor:nth-child(2) { top: 30%; right: 10%; transform: rotate(10deg); animation-delay: 1s; }
+    .card-decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(-10deg); animation-delay: 2s; }
+    .card-decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(5deg); animation-delay: 3s; }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0) rotate(var(--rotate));
-      }
-      50% {
-        transform: translateY(-10px) rotate(var(--rotate));
-      }
+      0%, 100% { transform: translateY(0) rotate(var(--rotate)); }
+      50% { transform: translateY(-10px) rotate(var(--rotate)); }
     }
 
     .menu-content {
@@ -64,19 +37,35 @@
       z-index: 10;
     }
 
-    .card {
-      background: white;
-      border: 3px solid #222;
-      border-radius: 1rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      color: #2d1a05;
+    .fancy-btn {
+      background: linear-gradient(145deg, #d4af37, #b8860b);
+      color: white;
+      font-weight: bold;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      text-shadow: 1px 1px 2px #000;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 16rem;
       text-align: center;
-      transition: transform 0.2s;
     }
 
-    .card:hover {
+    .fancy-btn:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 1);
     }
+
+    .joker-card {
+      width: 60px;
+      height: auto;
+      position: absolute;
+      top: 0;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .joker-left { left: -80px; transform: rotate(-10deg); }
+    .joker-right { right: -80px; transform: rotate(10deg); }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 relative">
@@ -101,21 +90,16 @@
 
     function showMainMenu() {
       setContent(`
-        <div class="flex flex-col items-center space-y-6">
-          <h1 class="text-5xl font-bold text-white drop-shadow-lg mb-8">🎴 Card Game Menu 🎴</h1>
+        <div class="flex flex-col items-center space-y-8 relative">
+          <div class="relative">
+            <img src="https://deckofcardsapi.com/static/img/joker.png" alt="Joker Left" class="joker-card joker-left" style="--rotate:-10deg;">
+            <h1 class="text-5xl font-bold text-yellow-400 drop-shadow-lg mb-8"> BlackJack Game Menu </h1>
+            <img src="https://deckofcardsapi.com/static/img/joker2.png" alt="Joker Right" class="joker-card joker-right" style="--rotate:10deg;">
+          </div>
           <div class="flex flex-col items-center space-y-6">
-            <div class="card p-6 w-64 h-40 cursor-pointer" onclick="showStats()">
-              <h2 class="text-xl font-bold text-red-800">📊 Stats</h2>
-              <p>View your statistics</p>
-            </div>
-            <div class="card p-6 w-64 h-40 cursor-pointer" onclick="showSavedGames()">
-              <h2 class="text-xl font-bold text-red-800">💾 Saved Games</h2>
-              <p>Manage your saves</p>
-            </div>
-            <div class="card p-6 w-64 h-40 cursor-pointer" onclick="showStartMenu()">
-              <h2 class="text-xl font-bold text-red-800">🎮 Start Game</h2>
-              <p>Begin or resume play</p>
-            </div>
+            <button class="fancy-btn" onclick="showStats()">📊 Stats</button>
+            <button class="fancy-btn" onclick="showSavedGames()">💾 Saved Games</button>
+            <button class="fancy-btn" onclick="showStartMenu()">🎮 Start Game</button>
           </div>
         </div>
       `);
@@ -127,7 +111,7 @@
           <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
             <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Statistics</h2>
             <p class="mb-4 text-center">Statistics will be implemented in task #47.</p>
-            <button class="mt-4 w-full bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded" onclick="showMainMenu()">⬅ Back</button>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);
@@ -139,7 +123,7 @@
           <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
             <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Saved Games</h2>
             <p class="mb-4 text-center">Saved game management will be implemented in task #47.</p>
-            <button class="mt-4 w-full bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded" onclick="showMainMenu()">⬅ Back</button>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);
@@ -150,9 +134,9 @@
         <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800 text-center">
             <h2 class="text-2xl font-bold mb-4 text-red-800">Start Game</h2>
-            <button class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded mb-3" onclick="startGame()">🆕 New Game</button>
-            <button class="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded mb-3">▶ Resume</button>
-            <button class="w-full bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded" onclick="showMainMenu()">⬅ Back</button>
+            <button class="fancy-btn w-full mb-3" onclick="startGame()">🆕 New Game</button>
+            <button class="fancy-btn w-full mb-3">▶ Resume</button>
+            <button class="fancy-btn w-full" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);
@@ -164,7 +148,7 @@
           <div class="bg-white p-8 rounded-lg max-w-md w-full border-4 border-red-800">
             <h2 class="text-2xl font-bold mb-4 text-red-800">🂠 Game Screen</h2>
             <p class="mb-4">Game content coming soon...</p>
-            <button class="mt-4 w-full bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded" onclick="showMainMenu()">⬅ Back</button>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);
