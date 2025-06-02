@@ -116,41 +116,12 @@
 				const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
 				const card = createCard(suit, type, tooltip);
 
-				// card movement 
-				const deckBox = document.getElementById('card-deck').getBoundingClientRect();
-				const handBox = hand.getBoundingClientRect();
-
-				const offsetX = deckBox.left - handBox.left;
-				const offsetY = deckBox.top - handBox.top;
-
-				card.style.setProperty('--from-x', `${offsetX}px`);
-				card.style.setProperty('--from-y', `${offsetY}px`);
-				card.classList.add('card-fly-in');
-
-
-
 				hand.addCard(card);
 			};
 
 			document.getElementById('removeCardBtn').onclick = () => {
-				// adding position and animation
-				const selected = hand.getSelectedCards();
-				const trashBox = document.getElementById('discard-pile').getBoundingClientRect();
-				const handBox = hand.getBoundingClientRect();
-
-				const offsetX = trashBox.left - handBox.left;
-				const offsetY = trashBox.top - handBox.top;
-
-				selected.forEach(card => {
-					card.style.setProperty('--to-x', `${offsetX}px`);
-					card.style.setProperty('--to-y', `${offsetY}px`);
-					card.classList.add('card-fly-out');
-
-					// actually removing the card
-					setTimeout(() => {
-					hand.removeSelectedCards();
-					}, 500);
-				});
+				// actually removing the card
+				hand.removeSelectedCards();
 			};
 		});
 	</script>

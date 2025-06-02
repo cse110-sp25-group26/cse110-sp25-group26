@@ -19,39 +19,10 @@ export class HandElement extends HTMLElement {
 		this.shadowRoot.appendChild(this._container);
 
 		// card animation movement test
-		const animationStyle = document.createElement('style');
-		animationStyle.textContent = `
-			@keyframes fly-from-deck {
-				0% {
-					transform: translate(var(--from-x), var(--from-y)) scale(0.1);
-					opacity: 0.1;
-				}
-				100% {
-					transform: translate(0, 0) scale(1);
-					opacity: 1;
-				}
-			}
-
-			@keyframes fly-to-trash {
-				0% {
-					transform: translate(0, 0) scale(1);
-					opacity: 1;
-				}
-				100% {
-					transform: translate(var(--to-x), var(--to-y)) scale(0.1);
-					opacity: 0;
-				}
-			}
-
-			.card-fly-in {
-				animation: fly-from-deck 0.5s ease-out;
-			}
-
-			.card-fly-out {
-				animation: fly-to-trash 0.5s ease-in forwards;
-			}
-		`;
-		this.shadowRoot.appendChild(animationStyle);
+		const animationLink = document.createElement('link');
+		animationLink.setAttribute('rel', 'stylesheet');
+		animationLink.setAttribute('href', '/source/scripts/frontend/card-animations.css');
+		this.shadowRoot.appendChild(animationLink);
 		
 		// Attach external CSS
 		const styleLink = document.createElement('link');
@@ -157,13 +128,17 @@ export class HandElement extends HTMLElement {
 		this._updateLayout();
 	}
 	
-    // card animation movement test
+    /**
+	 * @function addCard
+	 * @description adding the card to player hand
+	 * @param {CardElement} cardElement - The selected card element.
+	 */
 	addCard(cardElement) {
 		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
 		this.cards.push(cardElement);
 		this._container.appendChild(cardElement);
 
-		// ✅ 등장 애니메이션
+		// For movement animation
 		const deckBox = document.getElementById('card-deck')?.getBoundingClientRect();
 		const handBox = this.getBoundingClientRect();
 		if (deckBox && handBox) {
@@ -177,9 +152,12 @@ export class HandElement extends HTMLElement {
 		this._updateLayout();
 	}
 
+	/**
+	 * @function removeSelectedCards
+	 * @description removing card from player hand to trash 
+	 */
 	removeSelectedCards() {
 		const selectedCards = this.getSelectedCards();
-
 		const trashBox = document.getElementById('discard-pile')?.getBoundingClientRect();
 		const handBox = this.getBoundingClientRect();
 
@@ -191,7 +169,7 @@ export class HandElement extends HTMLElement {
 				card.style.setProperty('--to-y', `${offsetY}px`);
 				card._container?.classList.add('card-fly-out');
 
-				// ✅ 애니메이션 후 제거
+				// 
 				setTimeout(() => {
 					this.removeCard(card);
 				}, 500);
