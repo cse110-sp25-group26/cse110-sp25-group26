@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Card</title>
+    <title>JSDoc: Class: Deck</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Card</h1>
+    <h1 class="page-title">Class: Deck</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Card<span class="signature">(suit, type)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Deck<span class="signature">(cards)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,12 +41,16 @@
     
 
     
-    <h4 class="name" id="Card"><span class="type-signature"></span>new Card<span class="signature">(suit, type)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">(cards)</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    Creates a new deck of cards.
+</div>
 
 
 
@@ -81,13 +85,13 @@
 
         <tr>
             
-                <td class="name"><code>suit</code></td>
+                <td class="name"><code>cards</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
 
 
             
@@ -97,30 +101,7 @@
 
             
 
-            <td class="description last">The suit of the card.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The rank of the card.</td>
+            <td class="description last">The cards to be included in the deck.</td>
         </tr>
 
     
@@ -161,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Card.js.html">backend/Card.js</a>, <a href="backend_Card.js.html#line12">line 12</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -202,7 +183,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Card.html">Card</a></dt>
+            <dt><a href="Deck.html">Deck</a></dt>
             <dd></dd>
         </dl>
     
@@ -235,9 +216,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="Card.html">Card</a></span>Card<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="Deck.html">Deck</a></span>Deck<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents a playing card in the game.</div>
+            <div class="class-description">Represents a deck of cards in the game.</div>
         
     
 </header>
@@ -252,7 +233,7 @@
     
 
     
-    <h4 class="name" id="Card"><span class="type-signature"></span>new Card<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -297,13 +278,13 @@
 
         <tr>
             
-                <td class="name"><code>isFlipped</code></td>
+                <td class="name"><code>availableCards</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
 
 
             
@@ -313,20 +294,20 @@
 
             
 
-            <td class="description last">Indicates if the card is flipped.</td>
+            <td class="description last">The cards available in the deck.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isSelected</code></td>
+                <td class="name"><code>usedCards</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
 
 
             
@@ -336,20 +317,20 @@
 
             
 
-            <td class="description last">Indicates if the card is selected.</td>
+            <td class="description last">The cards that have been used from the deck.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>suit</code></td>
+                <td class="name"><code>allCards</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
 
 
             
@@ -359,76 +340,7 @@
 
             
 
-            <td class="description last">The suit of the card (e.g., 'hearts', 'diamonds'). Contains 'joker' or 'consumable' if the card is a joker or consumable.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The rank of the card (e.g., 'A', '2', '3', ..., 'K'). Contains the joker or consumable type if the card is a joker or consumable.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The properties of the card (e.g., 'seal_gold', 'holo', 'alwaysFlipped')</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>UIel</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The UI element associated with the card. Type depends on the UI implementation.</td>
+            <td class="description last">All cards in the deck, including available and used cards.</td>
         </tr>
 
     
@@ -467,7 +379,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Card.js.html">backend/Card.js</a>, <a href="backend_Card.js.html#line11">line 11</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -508,7 +420,7 @@
         <h3 class="subsection-title">Classes</h3>
 
         <dl>
-            <dt><a href="Card.html">Card</a></dt>
+            <dt><a href="Deck.html">Deck</a></dt>
             <dd></dd>
         </dl>
     
