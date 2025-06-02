@@ -116,12 +116,12 @@
 				const tooltip = `${type} of ${suit.charAt(0).toUpperCase() + suit.slice(1)}s`;
 				const card = createCard(suit, type, tooltip);
 
-				hand.addCard(card);
+				hand.addCardwithAnimation(card);
 			};
 
 			document.getElementById('removeCardBtn').onclick = () => {
 				// actually removing the card
-				hand.removeSelectedCards();
+				hand.removeSelectedCardswithAnimation();
 			};
 		});
 	</script>

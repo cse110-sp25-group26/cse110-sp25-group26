@@ -128,12 +128,12 @@ export class HandElement extends HTMLElement {
 		this._updateLayout();
 	}
 	
-    /**
-	 * @function addCard
+	/**
+	 * @function addCardwithAnimation
 	 * @description adding the card to player hand
 	 * @param {CardElement} cardElement - The selected card element.
 	 */
-	addCard(cardElement) {
+	addCardwithAnimation(cardElement) {
 		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
 		this.cards.push(cardElement);
 		this._container.appendChild(cardElement);
@@ -153,10 +153,10 @@ export class HandElement extends HTMLElement {
 	}
 
 	/**
-	 * @function removeSelectedCards
+	 * @function removeSelectedCardswithAnimation
 	 * @description removing card from player hand to trash 
 	 */
-	removeSelectedCards() {
+	removeSelectedCardswithAnimation() {
 		const selectedCards = this.getSelectedCards();
 		const trashBox = document.getElementById('discard-pile')?.getBoundingClientRect();
 		const handBox = this.getBoundingClientRect();
