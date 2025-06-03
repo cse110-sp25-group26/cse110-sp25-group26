@@ -1,5 +1,5 @@
 import { CardElement } from "./CardElement.js";
-import { Card } from "../backend/Card.js";
+//import { Card } from "../backend/Card.js";
 
 /**
  * @classdesc UI component representing the Deck.

@@ -1,4 +1,4 @@
-import { Card } from '../backend/Card.js';
+//import { Card } from '../backend/Card.js';
 
 /**
  * @classdesc Custom web component representing a card.
