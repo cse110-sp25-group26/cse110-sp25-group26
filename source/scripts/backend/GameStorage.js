@@ -31,17 +31,20 @@
 export class GameStorage {
 
 	constructor() {
-		this.storageKey = 'gameData';
-		this.currentVersion = '1.0.0';
-		this.defaultPlayerStats = {
-			currentMoney: 24,        // I don't know how much money we starting with
-			currentPoints: 0,        // Current score/points
-			currentAnte: 1,          // Current ante level
-			currentBlind: 1,         // Current blind level
-			handsRemaining: 4,       // Hands left this blind
-			gamesPlayed: 0,         
-			gamesCompleted: 0        // Games finished successfully
-		};
+		this.defaultStats = {
+        gamesStarted: 0,              // Total games ever started
+        gamesCompleted: 0,            // Total games completed (reached ante 8)
+        
+        highestAnteReached: 0,        // Furthest ante ever reached (1-8)
+        highestRoundScore: 0,         // Best roundScore ever achieved
+        
+        totalHandsPlayed: 0,          // Total hands played across all games
+        
+        totalJokersUsed: 0,           // Total joker cards activated
+        uniqueJokersFound: 0,         // Different types of jokers discovered
+        
+        firstGameDate: null,          // When they first played
+    };
 		this.initializeStorage();
 	}
 }
