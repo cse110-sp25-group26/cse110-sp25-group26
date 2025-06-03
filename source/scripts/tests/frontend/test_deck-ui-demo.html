@@ -6,32 +6,56 @@
 	</head>
 	<body style="background: #2a2a2a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
 		<h2 style="color: #fff">DeckElement Frontend Demo</h2>
-		<div id="deck-container" style="width: 80px; height: 120px; position: relative; margin-bottom: 2em;">
+		<div id="deck-container" style="width: 80px; height: 120px; position: relative; margin-bottom: 2em">
 			<!-- Cards will be stacked here -->
 		</div>
 		<button id="addCardBtn" style="padding: 12px 24px; font-size: 16px; border-radius: 8px">Add Random Cards</button>
+		<input type="checkbox" id="offsetCardsCheckbox" style="margin-left: 1em" />
 		<p style="color: #fff; margin-top: 2em">Double-click a card to flip. Drag to move. Cards are stacked in the deck.</p>
+		\
 
-        <script type="module">
-            import { DeckElement } from '../../frontend/DeckElement.js';
-            import { CardElement } from '../../frontend/CardElement.js';
-            import { Card } from '../../backend/Card.js';
+		<script type="module">
+			import { DeckElement } from "../../frontend/DeckElement.js";
+			import { CardElement } from "../../frontend/CardElement.js";
+			import { Card } from "../../backend/Card.js";
 
-            let deck = new DeckElement("back", document.getElementById('deck-container'));
+			let deck = new DeckElement("back", document.getElementById("deck-container"));
 
-            document.getElementById('addCardBtn').onclick = () => {
-                let count = Math.floor(Math.random() * 10) + 1;
+			document.getElementById("addCardBtn").onclick = () => {
+				let count = Math.floor(Math.random() * 10) + 1;
 
-                let cards = [];
-                for (let i = 0; i < count; i++) {
-                    let suit = ['heart', 'spade', 'diamond', 'club'][Math.floor(Math.random() * 4)];
-                    let type = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'][Math.floor(Math.random() * 13)];
-                    let card = new Card(suit, type);
-                    cards.push(card);
-                }
+				let cards = [];
+				for (let i = 0; i < count; i++) {
+					let suit = ["heart", "spade", "diamond", "club"][Math.floor(Math.random() * 4)];
+					let type = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"][Math.floor(Math.random() * 13)];
+					let card = new Card(suit, type);
+					cards.push(card);
+				}
 
-                deck.addCards(cards);
-            }
-        </script>
+				deck.addCards(cards);
+
+				recalculateOffset({ target: { checked: document.getElementById("offsetCardsCheckbox").checked } });
+			};
+
+			function recalculateOffset(e) {
+				let cardElements = deck.cards;
+				if (e.target.checked) {
+					for (let i = 0; i < cardElements.length; i++) {
+						let cardElement = cardElements[i];
+						cardElement.style.left = `${10 * i}px`; // Stack cards with a slight offset
+						// Set the z indices to ensure they stack correctly
+						cardElement.style.zIndex = i;
+					}
+				} else {
+					for (let i = 0; i < cardElements.length; i++) {
+						let cardElement = cardElements[i];
+						cardElement.style.left = "0px"; // Reset position
+						cardElement.style.zIndex = ""; // Reset z-index
+					}
+				}
+			}
+
+			document.getElementById("offsetCardsCheckbox").onchange = recalculateOffset;
+		</script>
 	</body>
 </html>
