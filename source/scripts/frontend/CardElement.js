@@ -389,7 +389,9 @@ export class CardElement extends HTMLElement {
 		let promises = [];
 		cards.forEach((card, i) => {
 			// codacy-disable-next-line object-injection
-			const { x, y } = positions[i];
+			const pos = positions[i];
+			const { x, y } = pos;
+
 
 			const delay = 400 * i;
 			promises.push(new Promise(r => {
