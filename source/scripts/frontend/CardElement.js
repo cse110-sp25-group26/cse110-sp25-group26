@@ -388,6 +388,9 @@ export class CardElement extends HTMLElement {
 	static async moveMultiple(cards, positions, duration = 600, callback) {
 		let promises = [];
 		cards.forEach((card, i) => {
+
+			const delay = 400 * i;
+
 			const pos = positions[i];
 			if (!pos || typeof pos !== 'object') {
 				throw new Error(`Invalid position object at index ${i}`);
@@ -395,11 +398,12 @@ export class CardElement extends HTMLElement {
 
 			let x = Number(pos.x);
 			let y = Number(pos.y);
+
 			if (!Number.isFinite(x) || !Number.isFinite(y)) {
 				throw new Error(`Invalid coordinates at index ${i}: x=${pos.x}, y=${pos.y}`);
 			}
 
-			const delay = 400 * i;
+
 			promises.push(new Promise(r => {
 				setTimeout(() => {
 					// Pass the callback to each individual moveTo call
