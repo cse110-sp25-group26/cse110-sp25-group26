@@ -50,7 +50,7 @@ export class CardElement extends HTMLElement {
 	 * @description Creates the DOM structure for the card, including its front and back faces, tooltip, and event listeners.
 	 * @private
 	 * @returns {void}
-	 * */
+	 */
 	_createDOM() {
 		// Card container
 		this._container = document.createElement('div');
@@ -107,7 +107,7 @@ export class CardElement extends HTMLElement {
 	 * @description Sets up event listeners for drag and tooltip interactions.
 	 * @private
 	 * @returns {void}
-	 * */
+	 */
 	_setupDragState() {
 		// Initialize drag state
 		this._dragging = false;
@@ -124,7 +124,7 @@ export class CardElement extends HTMLElement {
 	 * @description Sets up event listeners for drag and tooltip interactions.
 	 * @private
 	 * @returns {void}
-	 * */
+	 */
 	_setupEventListeners() {
 		// Bind methods
 		this._onDragStart = this._onDragStart.bind(this);
@@ -390,7 +390,9 @@ export class CardElement extends HTMLElement {
 	static async moveMultiple(cards, positions, duration = 600, callback) {
 		let promises = [];
 		cards.forEach((card, i) => {
-			const { x, y } = positions[i];
+			const pos = positions[i];
+			let x = Number(pos && pos.x);
+			let y = Number(pos && pos.y);
 			const delay = 400 * i;
 			promises.push(new Promise(r => {
 				setTimeout(() => {
