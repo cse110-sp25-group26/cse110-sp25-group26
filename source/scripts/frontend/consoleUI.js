@@ -86,6 +86,61 @@ class ConsoleDeckElement extends ConsoleCardContainerElement {
 	}
 }
 
+/**
+ * @classdesc A class representing the scorekeeper in the ConsoleUI.
+ * 
+ * @property {string} blindName - The name of the current blind.
+ * @property {string} blindDescription - The description of the current blind.
+ * @property {minScore} minScore - The minimum score required for the current blind.
+ * @property {baseReward} baseReward - The base reward for the current blind.
+ * @property {number} roundScore - The round score for the current blind.
+ * @property {number} handScore - The score for the current hand.
+ * @property {number} handMult - The multiplier for the current hand.
+ * @property {number} handsRemaining - The number of hands remaining in the current blind.
+ * @property {number} discardsRemaining - The number of discards remaining in the current blind.
+ * @property {number} ante - The current Ante.
+ * @property {number} round - The current round within the blind.
+ */
+class ConsoleScorekeeperElement {
+	/**
+	 * @class ConsoleScorekeeperElement
+	 * @description Constructs a ConsoleUI scorekeeper.
+	 */
+	constructor() {
+		this.blindName = "No Blind (Game not started)";
+		this.blindDescription = "No description available.";
+		this.minScore = 0;
+		this.baseReward = 0;
+		this.roundScore = 0;
+		this.handScore = 0;
+		this.handMult = 1;
+		this.handsRemaining = 0;
+		this.discardsRemaining = 0;
+		this.ante = 0;
+		this.round = 0;
+	}
+
+	/**
+	 * @function update
+	 * @description Updates the scorekeeper with some display information.
+	 * @param {string} key - The property to update.
+	 * @param {any} value - The value to set the property to.
+	 */
+	update(key, value) {
+		switch (key) {
+			default:
+				if (this.hasOwnProperty(key)) {
+					this[key] = value;
+					console.log(`Scorekeeper updated: ${key} = ${value}`);
+				}
+				else {
+					console.warn(`Scorekeeper property "${key}" does not exist.`);
+				}
+				break;
+		}
+	}
+}
+
 
 /**
  * @classdesc A console interface for the game for game loop testing.
@@ -204,13 +259,11 @@ export class ConsoleUI extends UIInterface {
 			["hand_played", this.hand_played],
 			["deck", this.deck]
 		]);
+		this.scorekeeper = new ConsoleScorekeeperElement();
 
 		if (reset) {
 			this.gameHandler.resetGame();
-			console.log("Game state has been reset.");
 		}
-
-		this.gameHandler.dealCards();
 
 		console.log("New game initialized.");
 	}
@@ -220,14 +273,14 @@ export class ConsoleUI extends UIInterface {
 	 * @description Plays the scoring animation and displays text messages for a card.
 	 *              If no messages given, should just play the animation.
 	 * @param {Card} card - The card to animate and display text for.
-	 * @param {string[]} messages - The messages to use, ex. "+10 Chips"
-	 * @param {string[]} colors - 6-digit hexadecimal color codes to use for the messages.
+	 * @param {string[]} messages - The message to use, ex. "+10 Chips"
+	 * @param {string[]} colors - 6-digit hexadecimal color code to use for the message.
 	 */
-	scoreCard(card, messages, colors) {
+	scoreCard(card, message, color) {
 		// Console doesn't support colors, so we ignore them
-		colors = colors;
+		color = color;
 
-		console.log(`${card.UIel.display}: ${messages.join(", ")}`);
+		console.log(`${card.UIel.display}: ${message}`);
 	}
 
 	/**
@@ -302,7 +355,6 @@ export class ConsoleUI extends UIInterface {
 	 */
 	discard() {
 		this.gameHandler.discardCards();
-		this.gameHandler.dealCards();
 	}
 
 	/**
@@ -311,6 +363,89 @@ export class ConsoleUI extends UIInterface {
 	 */
 	play() {
 		this.gameHandler.playCards();
-		this.gameHandler.dealCards();
+	}
+
+	/**
+	 * @typedef {Object} ScorekeeperData
+	 * @property {string} name - The name of the scorekeeper entry.
+	 * @property {number} value - The value of the scorekeeper entry.
+	 */
+
+	/**
+	 * @function updateScorekeeper
+	 * @description Tells the UI that the scorekeeper changed and it should update.
+	 * 
+	 * @param {ScorekeeperData[]} data - An array of objects containing the name and value
+	 * 									of the scorekeeper entries to update.
+	 */
+	updateScorekeeper(data) {
+		if (Array.isArray(data)) {
+			data.forEach(entry => {
+				this.scorekeeper.update(entry.name, entry.value);
+			});
+		} else if (typeof data === 'object') {
+			Object.entries(data).forEach(([key, value]) => {
+				this.scorekeeper.update(key, value);
+			});
+		} else {
+			console.warn("Invalid data format for updateScorekeeper");
+		}
+	}
+
+	/**
+	 * @function displayBust
+	 * @description Notifies the player that the hand was bust.
+	 */
+	displayBust() {
+		console.log("Bust! You have exceeded the maximum score for this hand.");
+	}
+
+	/**
+	 * @function displayMoney
+	 * @description Displays the money won by the player, both base value and some
+	 * 				bonuses if any won.
+	 * @param {number} base - The base amount won by the current blind.
+	 * @param {[string, number][]} extras - An array of pairs of 'reason, value'
+	 * 										representing any extra money won and
+	 * 										the reasons why.
+	 */
+	displayMoney(base, extras) {
+		if (typeof base !== 'number' || !Array.isArray(extras)) {
+			console.warn("Invalid parameters for displayMoney.");
+			return;
+		}
+
+		// Format as dollars.
+		// Ex: 4 -> '$$$$'
+		let moneyDisplay = '$'.repeat(base);
+		console.log('Blind Reward: ' + moneyDisplay);
+
+		if (extras.length > 0) {
+			console.log("Bonuses:");
+			extras.forEach(([reason, value]) => {
+				let bonusDisplay = '$'.repeat(value);
+				console.log(`\t${reason}: ${bonusDisplay}`);
+			});
+		}
+	}
+
+
+	/**
+	 * @function disallowPlay
+	 * @description Disallow the user from pressing buttons that interact with
+	 * 			    the gameplay, backend is still processing.
+	 */
+	disallowPlay() {
+		// This does nothing as the console UI doesn't have buttons, and waits
+		// until it is done processing before allowing further input.
+	}
+
+	/**
+	 * @function allowPlay
+	 * @description Allow the user to press buttons again now that the backend
+	 *              has finished processing.
+	 */
+	allowPlay() {
+		// This also does nothing, for the same reasons as disallowPlay.
 	}
 }

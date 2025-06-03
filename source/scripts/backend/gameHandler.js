@@ -87,7 +87,9 @@ export class gameHandler {
 			discardCount: 4,
 
 			// Blind requirements
+			// TODO: Determine the algorithm and update these values accordingly per ante
 			blindRequirements: [40, 60, 80],
+			blindRewards: [4, 6, 8],
 
 			// Tracking
 			roundScore: 0,
@@ -104,6 +106,10 @@ export class gameHandler {
 			}
 		}
 		this.state.deck = new Deck(this.defaultCards);
+
+		this.uiInterface.newGame(false);
+
+		this.dealCards();
 	}
 
 	/**
@@ -123,8 +129,6 @@ export class gameHandler {
 			}
 			cards.push(card);
 		}
-
-		// TODO_UI: Call back to UI to create card UI elements, move_multiple them to the main hand
 
 		cards.forEach(card => {
 			this.uiInterface.createUIel(card);
@@ -175,13 +179,21 @@ export class gameHandler {
 			console.log(`Discarded card: ${card.type} of ${card.suit}`);
 		});
 
-		// TODO_UI: Call move_multiple to move said cards from main to discard pile, remove UI element for each card
 		this.uiInterface.moveMultiple(selectedCards, "hand_main", "discard_pile", 0);
 		selectedCards.forEach(card => {
 			this.uiInterface.removeUIel(card);
 		});
 
 		this.state.discardsUsed++;
+
+		this.dealCards();
+
+		// If the main hand is empty after discarding, no more cards can be played
+		if (this.state.hands.main.cards.length === 0) {
+			console.log("Main hand is empty after discarding. Cannot play cards.");
+			// TODO_UI: Call back to UI to display loss
+			return;
+		}
 	}
 
 	/**
@@ -204,13 +216,11 @@ export class gameHandler {
 			console.log(`Played card: ${card.type} of ${card.suit}`);
 		});
 
-		// TODO_UI: Call move_multiple to move said cards from main to played
 		this.uiInterface.moveMultiple(selectedCards, "hand_main", "hand_played", 0);
 
 		this.scoreHand();
 
 		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
-			// TODO_UI: Call back to UI to move_multiple the main hand cards back to the deck
 			this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
 
 			this.state.hands.main.cards = [];
@@ -233,6 +243,8 @@ export class gameHandler {
 				// TODO_UI: Call back to UI to exit the game
 				console.log("Game over.");
 			}
+		} else {
+			this.dealCards();
 		}
 	}
 
@@ -255,17 +267,18 @@ export class gameHandler {
 			
 			let cardValue = card.getValue();
 
-			// TODO_UI: Call back to UI to play scoring animation
-
-			// TODO: Check for attributes on the card
+			// TODO: Check for attributes on the card, update base chip value accordingly
 
 			// TODO: Check for applicable jokers to this card
 			// ->UI: Call back to UI to play joker animation (likely also score animation)
 
 			this.state.handScore += cardValue;
-			console.log(`Card ${card.type} of ${card.suit} scored: ${cardValue}`);
+			this.uiInterface.updateScorekeeper({
+				handScore: this.state.handScore
+			});
 
-			// TODO_UI: Call back to UI to update the scorekeeper
+			console.log(`Card ${card.type} of ${card.suit} scored: ${cardValue}`);
+			this.uiInterface.scoreCard(card, [`+${cardValue} Chips`], ["#00FF00"]);
 
 			// TODO: Conditions for other increments
 			i += 1;
@@ -281,13 +294,37 @@ export class gameHandler {
 			this.state.handMult = 1;
 			
 			// TODO_UI: Call back to UI to display bust, update scorekeeper
+			this.uiInterface.updateScorekeeper({
+				handScore: 0,
+				handMult: 1
+			});
+			this.uiInterface.displayBust();
 		} else {
 			this.state.roundScore += this.state.handScore * this.state.handMult;
 			this.state.handScore = 0;
 			this.state.handMult = 1;
+			
+			this.uiInterface.updateScorekeeper({
+				roundScore: this.state.roundScore,
+				handScore: 0,
+				handMult: 1
+			});
 
-			// TODO_UI: Call back to UI to display won money, update scorekeeper,
-			//          move_multiple the played cards offscreen and remove their UI elements
+			this.uiInterface.moveMultiple(this.state.hands.played.cards, "hand_played", "offscreen", 0);
+			for (const card of this.state.hands.played.cards) {
+				this.uiInterface.removeUIel(card);
+			}
+
+			// TODO: Calculate more extras
+			const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
+
+			const extras = [];
+			// Add a unit for each hand remaining
+			if (this.state.totalHands - this.state.handsPlayed > 0) {
+				extras.push(["Remaining Hands", this.state.totalHands - this.state.handsPlayed]);
+			}
+
+			this.uiInterface.displayMoney(baseMoney, extras);
 		}
 
 		this.state.handsPlayed++;

@@ -104,11 +104,21 @@ export class UIInterface {
 		throw new Error("scoreCard must be overridden in extending class!");
 	}
 
+
+	/**
+	 * @typedef {Object} ScorekeeperData
+	 * @property {string} name - The name of the scorekeeper entry.
+	 * @property {number} value - The value of the scorekeeper entry.
+	 */
+
 	/**
 	 * @function updateScorekeeper
 	 * @description Tells the UI that the scorekeeper changed and it should update.
+	 * 
+	 * @param {ScorekeeperData[]} data - An array of objects containing the name and value
+	 * 									of the scorekeeper entries to update.
 	 */
-	updateScorekeeper() {
+	updateScorekeeper(data) {
 		throw new Error("updateScorekeeper must be overridden in extending class!");
 	}
 
