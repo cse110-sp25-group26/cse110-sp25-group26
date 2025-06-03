@@ -47,7 +47,6 @@ export class DeckElement {
 	/**
 	 * @function addCards
 	 * @description Adds some cards on top of the deck.
-	 * @param {Card[]} cards - The backend cards to create elements for.
 	 */
 	addCards(cards) {
 		let zindex = 0;
