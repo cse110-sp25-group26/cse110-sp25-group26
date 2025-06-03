@@ -393,6 +393,9 @@ export class CardElement extends HTMLElement {
 			const pos = positions[i];
 			let x = Number(pos && pos.x);
 			let y = Number(pos && pos.y);
+			if (!Number.isFinite(x) || !Number.isFinite(y)) {
+				throw new Error("Invalid position for moveMultiple");
+			}
 			const delay = 400 * i;
 			promises.push(new Promise(r => {
 				setTimeout(() => {
