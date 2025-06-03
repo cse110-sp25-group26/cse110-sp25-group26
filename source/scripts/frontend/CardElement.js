@@ -343,8 +343,6 @@ export class CardElement extends HTMLElement {
 	 * @returns {Promise<void>} A promise that resolves when the move is complete.
 	 */
 	async moveTo(x, y, duration = 600, callback) {
-		x = Number(x);
-		y = Number(y);
 		if (!this.style.position || this.style.position === 'static') {
 			this.style.position = 'absolute';
 		}
@@ -391,11 +389,16 @@ export class CardElement extends HTMLElement {
 		let promises = [];
 		cards.forEach((card, i) => {
 			const pos = positions[i];
-			let x = Number(pos && pos.x);
-			let y = Number(pos && pos.y);
-			if (!Number.isFinite(x) || !Number.isFinite(y)) {
-				throw new Error("Invalid position for moveMultiple");
+			if (!pos || typeof pos !== 'object') {
+				throw new Error(`Invalid position object at index ${i}`);
 			}
+
+			let x = Number(pos.x);
+			let y = Number(pos.y);
+			if (!Number.isFinite(x) || !Number.isFinite(y)) {
+				throw new Error(`Invalid coordinates at index ${i}: x=${pos.x}, y=${pos.y}`);
+			}
+
 			const delay = 400 * i;
 			promises.push(new Promise(r => {
 				setTimeout(() => {
