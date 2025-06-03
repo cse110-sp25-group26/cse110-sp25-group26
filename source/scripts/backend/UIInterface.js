@@ -144,6 +144,25 @@ export class UIInterface {
 	}
 
 	/**
+	 * @function displayWin
+	 * @description Display a win message when the player wins the game.
+	 *              The UI should allow for either return to menu or new game,
+	 *              or prompt for endless mode.
+	 */
+	displayWin() {
+		throw new Error("displayWin must be overridden in extending class!");
+	}
+
+	/**
+	 * @function promptEndlessMode
+	 * @description Prompts the player if they want to enter endless mode after winning.
+	 * @returns {boolean} - True if the player wants to enter endless mode, false otherwise.
+	 */
+	promptEndlessMode() {
+		throw new Error("promptEndlessMode must be overridden in extending class!");
+	}
+
+	/**
 	 * @function disallowPlay
 	 * @description Disallow the user from pressing buttons that interact with
 	 *              the gameplay, backend is still processing.

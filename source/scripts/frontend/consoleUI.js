@@ -100,6 +100,7 @@ class ConsoleDeckElement extends ConsoleCardContainerElement {
  * @property {number} discardsRemaining - The number of discards remaining in the current blind.
  * @property {number} ante - The current Ante.
  * @property {number} round - The current round within the blind.
+ * @property {number} money - The current money the player has.
  */
 class ConsoleScorekeeperElement {
 	/**
@@ -118,6 +119,7 @@ class ConsoleScorekeeperElement {
 		this.discardsRemaining = 0;
 		this.ante = 0;
 		this.round = 0;
+		this.money = 0;
 	}
 
 	/**
@@ -131,7 +133,6 @@ class ConsoleScorekeeperElement {
 			default:
 				if (this.hasOwnProperty(key)) {
 					this[key] = value;
-					console.log(`Scorekeeper updated: ${key} = ${value}`);
 				}
 				else {
 					console.warn(`Scorekeeper property "${key}" does not exist.`);
@@ -157,6 +158,7 @@ export class ConsoleUI extends UIInterface {
 	 */
 	constructor() {
 		super();
+		this.canPlay = false;
 	}
 
 	/**
@@ -229,8 +231,8 @@ export class ConsoleUI extends UIInterface {
 	displayLoss(message) {
 		console.log('"' + message + '"');
 		console.log("You have lost the game. Exiting...");
-
-		throw new Error("reset after loss not implemented yet TODO");
+		this.disallowPlay();
+		throw new Error("Game Over. Reset by calling game.newGame() or exit REPL (Ctrl+D).");
 	}
 
 	/**
@@ -238,9 +240,8 @@ export class ConsoleUI extends UIInterface {
 	 * @description Exit the game to the main menu.
 	 */
 	exitGame() {
-		console.log("Exiting game...");
-
-		throw new Error("exitGame not implemented yet TODO");
+		this.disallowPlay();
+		throw new Error("Game exited. Reset by calling game.newGame() or exit REPL (Ctrl+D).");
 	}
 
 	/**
@@ -263,7 +264,10 @@ export class ConsoleUI extends UIInterface {
 
 		if (reset) {
 			this.gameHandler.resetGame();
+		} else {
+			this.allowPlay();
 		}
+
 
 		console.log("New game initialized.");
 	}
@@ -291,6 +295,10 @@ export class ConsoleUI extends UIInterface {
 		console.log("Console UI Help:\n");
 		console.log("\t`game.newGame()` - Start a new game");
 		console.log("\t`game.showHand()` - Show the current hand");
+		console.log("\t`game.selectCard(index)` - Select a card at the given index in the hand");
+		console.log("\t`game.selectCards([index1, index2, ...])` - Select multiple cards by their indices");
+		console.log("\t`game.discard()` - Discard the selected cards from the hand");
+		console.log("\t`game.play()` - Play the selected cards from the hand");
 
 		console.log("\tPress `Ctrl+D` at the prompt to exit node.");
 
@@ -322,6 +330,10 @@ export class ConsoleUI extends UIInterface {
 	 * @param {number} index - The index of the card to select/deselect.
 	 */
 	selectCard(index) {
+		if (!this.canPlay) {
+			console.warn("Cannot select card now. Game is processing or has ended.");
+			return;
+		}
 		if (index < 0 || index >= this.hand_main.contents.length) {
 			console.warn("Invalid card index:", index);
 			return;
@@ -339,6 +351,10 @@ export class ConsoleUI extends UIInterface {
 	 * @param {number[]} indices - An array of indices of the cards to select.
 	 */
 	selectCards(indices) {
+		if (!this.canPlay) {
+			console.warn("Cannot select cards now. Game is processing or has ended.");
+			return;
+		}
 		if (!Array.isArray(indices)) {
 			console.warn("Indices must be an array.");
 			return;
@@ -354,6 +370,10 @@ export class ConsoleUI extends UIInterface {
 	 * @description Discards the selected cards from the hand.
 	 */
 	discard() {
+		if (!this.canPlay) {
+			console.warn("Cannot discard now. Game is processing or has ended.");
+			return;
+		}
 		this.gameHandler.discardCards();
 	}
 
@@ -362,6 +382,10 @@ export class ConsoleUI extends UIInterface {
 	 * @description Plays the selected cards from the hand.
 	 */
 	play() {
+		if (!this.canPlay) {
+			console.warn("Cannot play cards now. Game is processing or has ended.");
+			return;
+		}
 		this.gameHandler.playCards();
 	}
 
@@ -429,6 +453,41 @@ export class ConsoleUI extends UIInterface {
 		}
 	}
 
+	/**
+	 * @function displayWin
+	 * @description Display a win message when the player wins the game.
+	 */
+	displayWin() {
+		console.log("\n--------------------------------------");
+		console.log(" CONGRATULATIONS! YOU WON THE GAME!");
+		console.log("--------------------------------------");
+		if (this.gameHandler && this.gameHandler.state) {
+			console.log(`Final Ante Reached: ${this.gameHandler.state.currAnte}`);
+			console.log(`Final Money: $${this.gameHandler.state.money}`);
+		}
+	}
+
+	/**
+	 * @function promptEndlessMode
+	 * @description Prompts the player if they want to enter endless mode after winning.
+	 * @returns {boolean} - True if the player wants to enter endless mode, false otherwise.
+	 */
+	promptEndlessMode() {
+		console.log("\nWould you like to enter Endless Mode?");
+		console.log("Type 'yes' to enter Endless Mode, or anything else to exit.");
+
+		// We're a bit lenient on what is considered a 'yes' input, since otherwise
+		// the game entirely exits.
+		const input = prompt("Your choice: ").trim().toLowerCase();
+
+		if (input === 'yes' || input === 'y' || input === 'ye') {
+			console.log("Entering Endless Mode...");
+			return true;
+		} else {
+			console.log("Exiting to main menu.");
+			return false;
+		}
+	}
 
 	/**
 	 * @function disallowPlay
@@ -436,8 +495,7 @@ export class ConsoleUI extends UIInterface {
 	 * 			    the gameplay, backend is still processing.
 	 */
 	disallowPlay() {
-		// This does nothing as the console UI doesn't have buttons, and waits
-		// until it is done processing before allowing further input.
+		this.canPlay = false;
 	}
 
 	/**
@@ -446,6 +504,26 @@ export class ConsoleUI extends UIInterface {
 	 *              has finished processing.
 	 */
 	allowPlay() {
-		// This also does nothing, for the same reasons as disallowPlay.
+		this.canPlay = true;
+	}
+
+	/**
+	 * @function printScorekeeper
+	 * @description Prints the current scorekeeper state to the console.
+	 */
+	printScorekeeper() {
+		console.log("Scorekeeper:");
+		console.log(`\tBlind Name: ${this.scorekeeper.blindName}`);
+		console.log(`\t\t"${this.scorekeeper.blindDescription}"`);
+		console.log(`\tMinimum Score: ${this.scorekeeper.minScore}`);
+		console.log(`\tBase Reward: ${this.scorekeeper.baseReward}`);
+		console.log(`\tRound Score: ${this.scorekeeper.roundScore}`);
+		console.log(`\tHand Score: ${this.scorekeeper.handScore}`);
+		console.log(`\tHand Multiplier: ${this.scorekeeper.handMult}`);
+		console.log(`\tHands Remaining: ${this.scorekeeper.handsRemaining}`);
+		console.log(`\tDiscards Remaining: ${this.scorekeeper.discardsRemaining}`);
+		console.log(`\tAnte: ${this.scorekeeper.ante}`);
+		console.log(`\tRound: ${this.scorekeeper.round}`);
+		console.log(`\tMoney: $${this.scorekeeper.money}`);
 	}
 }
