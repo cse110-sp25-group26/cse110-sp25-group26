@@ -243,7 +243,7 @@ test('selectCard handles invalid index correctly', () => {
     console.error = originalError;
 });
 
-test('discardCards handles no cards selected correctly', () => {
+test('discardCards handles no cardx selected correctly', () => {
     // Temporarily disable console logs and errors
     const originalLog = console.log;
     const originalError = console.error;
