@@ -389,7 +389,7 @@ export class CardElement extends HTMLElement {
 		let promises = [];
 		cards.forEach((card, i) => {
 			// codacy-disable-next-line object-injection
-			const pos = positions[i];
+			const pos = CardElement.safeGetPosition(positions, i);
 			const { x, y } = pos;
 
 
@@ -402,6 +402,14 @@ export class CardElement extends HTMLElement {
 			}));
 		});
 		await Promise.all(promises);
+	}
+
+	static safeGetPosition(positions, i) {
+		const pos = positions[i];
+		if (!pos || typeof pos !== 'object') {
+			throw new Error(`Invalid position at index ${i}`);
+		}
+		return pos;
 	}
 }
 
