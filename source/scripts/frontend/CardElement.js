@@ -39,6 +39,19 @@ export class CardElement extends HTMLElement {
 		this._card = card;
 		this._draggable = draggable;
 
+		this._createDOM();
+		this._setupDragState();
+		this._setupEventListeners();
+
+	}
+
+	/**
+	 * @function _createDOM
+	 * @description Creates the DOM structure for the card, including its front and back faces, tooltip, and event listeners.
+	 * @private
+	 * @returns {void}
+	 * */
+	_createDOM() {
 		// Card container
 		this._container = document.createElement('div');
 		this._container.classList.add('card');
@@ -87,19 +100,32 @@ export class CardElement extends HTMLElement {
 		styleLink.setAttribute('rel', 'stylesheet');
 		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
 		this.shadowRoot.appendChild(styleLink);
+	}
 
-		// Drag state
+	/**
+	 * @function _setupEventListeners
+	 * @description Sets up event listeners for drag and tooltip interactions.
+	 * @private
+	 * @returns {void}
+	 * */
+	_setupDragState() {
+		// Initialize drag state
 		this._dragging = false;
 		this._offset = { x: 0, y: 0 };
 		this._wasDragged = false;
 		this._dragStartX = 0;
 		this._dragStartY = 0;
 		this._DRAG_THRESHOLD = 5; // Pixels
-
-		// Tilt properties
 		this._lastClientX = 0;
 		this._tiltFactor = 0.5; // Degrees of tilt per pixel of X movement
-
+	}
+	/**
+	 * @function _setupEventListeners
+	 * @description Sets up event listeners for drag and tooltip interactions.
+	 * @private
+	 * @returns {void}
+	 * */
+	_setupEventListeners() {
 		// Bind methods
 		this._onDragStart = this._onDragStart.bind(this);
 		this._onDragMove = this._onDragMove.bind(this);
@@ -317,6 +343,8 @@ export class CardElement extends HTMLElement {
 	 * @returns {Promise<void>} A promise that resolves when the move is complete.
 	 */
 	async moveTo(x, y, duration = 600, callback) {
+		x = Number(x);
+		y = Number(y);
 		if (!this.style.position || this.style.position === 'static') {
 			this.style.position = 'absolute';
 		}
