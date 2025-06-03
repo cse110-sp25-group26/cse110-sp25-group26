@@ -389,9 +389,8 @@ export class CardElement extends HTMLElement {
 		let promises = [];
 		cards.forEach((card, i) => {
 			// codacy-disable-next-line object-injection
-			const pos = CardElement.safeGetPosition(positions, i);
+			const pos = positions.at(i);
 			const { x, y } = pos;
-
 
 			const delay = 400 * i;
 			promises.push(new Promise(r => {
@@ -402,22 +401,6 @@ export class CardElement extends HTMLElement {
 			}));
 		});
 		await Promise.all(promises);
-	}
-
-	/**
-	 * @function safeGetPosition
-	 * @description Safely retrieves a position object from an array, ensuring it is valid.
-	 * @param {Array<{x: number, y: number}>} positions - The array of position objects.
-	 * @param {number} i - The index of the position to retrieve.
-	 * @returns {{x: number, y: number}} The position object at the specified index.
-	 * @throws {Error} If the position at the specified index is invalid.
-	 */
-	static safeGetPosition(positions, i) {
-		const pos = positions.at(i);
-		if (!pos || typeof pos !== 'object') {
-			throw new Error(`Invalid position at index ${i}`);
-		}
-		return pos;
 	}
 }
 
