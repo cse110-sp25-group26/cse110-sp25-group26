@@ -3,51 +3,65 @@ import { Deck } from './Deck.js';
 import { Hand } from './Hand.js';
 
 /**
+ * @class GameStorage
  * @classdesc Manages game data persistence using LocalStorage.
  * 
- * structtures
- {
-  "saves": [],
-  "lifetimeStats": {
-    "gamesStarted": 0,
-    "gamesCompleted": 0,
-    "highestAnteReached": 0,
-    "highestRoundScore": 0,
-    "totalHandsPlayed": 0,
-    "totalJokersUsed": 0,
-    "uniqueJokersFound": 0,
-    "firstGameDate": null
-  },
-  "unlockedJokers": [],
-  "uniqueJokersDiscovered": [],
-  "lastSaved": "2025-06-02T22:30:00.000Z",
-  "version": "1.0.0"
-}
+ * Data structure:
+ * {
+ *   saves: Array<Object>,
+ *   lifetimeStats: {
+ *     gamesStarted: number,
+ *     gamesCompleted: number,
+ *     highestAnteReached: number,
+ *     highestRoundScore: number,
+ *     totalHandsPlayed: number,
+ *     totalJokersUsed: number,
+ *     uniqueJokersFound: number,
+ *     firstGameDate: string | null
+ *   },
+ *   unlockedJokers: string[],
+ *   uniqueJokersDiscovered: string[],
+ *   lastSaved: string (ISO timestamp),
+ *   version: string
+ * }
  */
 export class GameStorage {
 	/**
-	 * @class GameStorage
-	 * @description Initializes the storage system and ensures data structure exists.
+	 * Initializes the GameStorage system and ensures the storage format is correct.
 	 */
 	constructor() {
+		/** @private */
 		this.storageKey = 'gameData';
+
+		/** @private */
 		this.currentVersion = '1.0.0';
+
+		/** @private */
 		this.defaultStats = {
-			gamesStarted: 0,              // Total games ever started
-			gamesCompleted: 0,            // Total games completed (reached ante 8)
-			highestAnteReached: 0,        // Furthest ante ever reached (1-8)
-			highestRoundScore: 0,         // Best roundScore ever achieved
-			totalHandsPlayed: 0,          // Total hands played across all games
-			totalJokersUsed: 0,           // Total joker cards activated
-			uniqueJokersFound: 0,         // Different types of jokers discovered
-			firstGameDate: null           // When they first played
+			gamesStarted: 0,
+			gamesCompleted: 0,
+			highestAnteReached: 0,
+			highestRoundScore: 0,
+			totalHandsPlayed: 0,
+			totalJokersUsed: 0,
+			uniqueJokersFound: 0,
+			firstGameDate: null
 		};
+
 		this.initializeStorage();
 	}
 
 	/**
-	 * @function initializeStorage
-	 * @description Creates default storage structure if it doesn't exist.
+	 * Checks if localStorage already contains game data.
+	 * @returns {boolean} True if storage exists, false otherwise.
+	 */
+	storageExists() {
+		const data = localStorage.getItem(this.storageKey);
+		return data !== null;
+	}
+
+	/**
+	 * Initializes the default game storage if no existing save is found.
 	 */
 	initializeStorage() {
 		if (!this.storageExists()) {
@@ -63,6 +77,97 @@ export class GameStorage {
 		}
 	}
 
+	/**
+	 * Reads and parses the game data from localStorage.
+	 * @returns {Object|null} Parsed data object, or null on error.
+	 */
+	readFromStorage() {
+		const data = localStorage.getItem(this.storageKey);
+		try {
+			return data ? JSON.parse(data) : null;
+		} catch (err) {
+			console.error("Failed to parse gameData", err);
+			return null;
+		}
+	}
 
-	
+	/**
+	 * Saves the game data to localStorage.
+	 * @param {Object} data - The full data object to write.
+	 */
+	writeToStorage(data) {
+		try {
+			localStorage.setItem(this.storageKey, JSON.stringify(data));
+			console.log("Game data saved.");
+		} catch (err) {
+			console.error("Failed to write gameData", err);
+		}
+	}
+
+	/**
+	 * Adds a new game save to the saves list.
+	 * @param {Object} saveData - The game save to add.
+	 */
+	addSave(saveData) {
+		const data = this.readFromStorage();
+		data.saves.push(saveData);
+		data.lastSaved = new Date().toISOString();
+		this.writeToStorage(data);
+	}
+
+	/**
+	 * Replaces an existing save at the specified index.
+	 * @param {number} index - Index to replace.
+	 * @param {Object} saveData - The new save data.
+	 * @returns {boolean} True if successful.
+	 */
+	overwriteSave(index, saveData) {
+		const data = this.readFromStorage();
+		if (index < 0 || index >= data.saves.length) return false;
+		data.saves[index] = saveData;
+		data.lastSaved = new Date().toISOString();
+		this.writeToStorage(data);
+		return true;
+	}
+
+	/**
+	 * Deletes a save from the specified index.
+	 * @param {number} index - Index of the save to remove.
+	 * @returns {boolean} True if deletion succeeded.
+	 */
+	deleteSave(index) {
+		const data = this.readFromStorage();
+		if (index < 0 || index >= data.saves.length) return false;
+		data.saves.splice(index, 1);
+		this.writeToStorage(data);
+		return true;
+	}
+
+	/**
+	 * Gets all saved games.
+	 * @returns {Object[]} Array of saved games.
+	 */
+	getAllSaves() {
+		return this.readFromStorage()?.saves || [];
+	}
+
+	/**
+	 * Gets lifetime statistics.
+	 * @returns {Object} The stats object.
+	 */
+	getStats() {
+		return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
+	}
+
+	/**
+	 * Increments a stat by a given amount (default 1).
+	 * @param {string} statKey - Name of the stat to update.
+	 * @param {number} [delta=1] - Amount to add.
+	 */
+	updateStat(statKey, delta = 1) {
+		const data = this.readFromStorage();
+		if (!(statKey in data.lifetimeStats)) data.lifetimeStats[statKey] = 0;
+		data.lifetimeStats[statKey] += delta;
+		this.writeToStorage(data);
+	}
 }
