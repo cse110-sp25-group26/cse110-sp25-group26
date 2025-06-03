@@ -189,6 +189,26 @@ export class ConsoleUI extends UIInterface {
 		let originContainer = this.orig_dests.get(origin);
 		let destContainer = this.orig_dests.get(dest);
 
+		console.log(`DEBUG: Moving ${cards.length} cards from ${origin} to ${dest}.`);
+		console.log(`Origin (${origin}):`);
+		originContainer.contents.forEach((uiel, index) => {
+			console.log(`\t[${index}] ${uiel.display}`);
+		});
+		if (originContainer.contents.length === 0) {
+			console.log("\t(No cards in origin)");
+		}
+		console.log(`Destination (${dest}):`);
+		if (destContainer) {
+			destContainer.contents.forEach((uiel, index) => {
+				console.log(`\t[${index}] ${uiel.display}`);
+			});
+			if (destContainer.contents.length === 0) {
+				console.log("\t(No cards in destination)");
+			}
+		} else {
+			console.log("\t(No destination container found)");
+		}
+
 		for (let i = 0; i < cards.length; i++) {
 			let uiel = cards[i].UIel;
 
@@ -203,6 +223,27 @@ export class ConsoleUI extends UIInterface {
 			}
 			destContainer.addCard(uiel);
 		}
+
+		console.log(`DEBUG: New state of ${origin} -> ${dest}:`);
+		console.log(`Origin (${origin}):`);
+		originContainer.contents.forEach((uiel, index) => {
+			console.log(`\t[${index}] ${uiel.display}`);
+		});
+		if (originContainer.contents.length === 0) {
+			console.log("\t(No cards in origin)");
+		}
+		console.log(`Destination (${dest}):`);
+		if (destContainer) {
+			destContainer.contents.forEach((uiel, index) => {
+				console.log(`\t[${index}] ${uiel.display}`);
+			});
+			if (destContainer.contents.length === 0) {
+				console.log("\t(No cards in destination)");
+			}
+		} else {
+			console.log("\t(No destination container found)");
+		}
+		console.log("End of state.");
 	}
 
 	/**
