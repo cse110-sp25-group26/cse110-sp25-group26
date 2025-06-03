@@ -213,7 +213,6 @@ export class ConsoleUI extends UIInterface {
 	 */
 	removeUIel(card) {
 		if (card.UIel) {
-			console.log(`Removing UIel for card: ${card.UIel.display}`);
 			delete card.UIel;
 		} else {
 			console.warn("No UIel found for card:", card);

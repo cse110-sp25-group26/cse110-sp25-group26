@@ -248,7 +248,6 @@ export class gameHandler {
 
 		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
 			this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
-
 			this.state.hands.main.cards = [];
 			
 			if (this.state.roundScore < this.state.blindRequirements[this.state.currBlind - 1]) {
@@ -341,25 +340,6 @@ export class gameHandler {
 			for (const card of this.state.hands.played.cards) {
 				this.uiInterface.removeUIel(card);
 			}
-
-			// TODO: Calculate more extras
-			const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
-
-			const extras = [];
-			// Add a unit for each hand remaining
-			if (this.state.totalHands - this.state.handsPlayed > 0) {
-				extras.push(["Remaining Hands", this.state.totalHands - this.state.handsPlayed]);
-			}
-
-			this.state.money += baseMoney;
-			for (const [reason, value] of extras) {
-				this.state.money += value;
-			}
-
-			this.uiInterface.displayMoney(baseMoney, extras);
-			this.uiInterface.updateScorekeeper({
-				money: this.state.money
-			});
 		}
 
 		this.state.handsPlayed++;
@@ -377,6 +357,25 @@ export class gameHandler {
 	 */
 	nextBlind() {
 		this.uiInterface.disallowPlay(); // Disallow play during blind transition/setup
+
+		const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
+
+		// TODO: Calculate more extras
+		const extras = [];
+		// Add a unit for each hand remaining
+		if (this.state.totalHands - this.state.handsPlayed > 0) {
+			extras.push(["Remaining Hands", this.state.totalHands - this.state.handsPlayed]);
+		}
+
+		this.state.money += baseMoney;
+		for (const [reason, value] of extras) {
+			this.state.money += value;
+		}
+
+		this.uiInterface.displayMoney(baseMoney, extras);
+		this.uiInterface.updateScorekeeper({
+			money: this.state.money
+		});
 
 		// Stubbed, should use the UI return value to determine whether to skip
 		// a blind or not
@@ -418,6 +417,13 @@ export class gameHandler {
 		this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
 		this.state.hands.main.cards = [];
 		// TODO/UI: Animate the cards returning from discard to the deck
+		
+		// UI hand should be empty after this
+		if (this.uiInterface.hand_main.contents.length !== 0) {
+			// console.error("UI hand is not empty after scoring.");
+			// use TUI codes for red
+			console.error("\x1b[31mUI hand is not empty after scoring.\x1b[0m");
+		}
 
 		this.state.deck.resetDeck();
 
