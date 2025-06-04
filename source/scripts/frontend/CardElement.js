@@ -175,7 +175,7 @@ export class CardElement extends HTMLElement {
 		backImg.style.width = '100%';
 		backImg.style.height = '100%';
 		this._cardBack.appendChild(backImg);
-	}
+	};
 
 	/**
 	 * @description Flips the card to show the opposite side.
