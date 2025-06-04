@@ -112,8 +112,10 @@ describe('GameStorage', () => {
 		expect(stats.gamesStarted).toBe(2);
 	});
 
-	test('updateStat throws for undefined stat keys', () => {
+	test('updateStat initializes undefined stat keys', () => {
 		const storage = new GameStorage();
-		expect(() => storage.updateStat('newCustomStat')).toThrow('Invalid stat key');
+		storage.updateStat('newCustomStat');
+		const stats = storage.getStats();
+		expect(stats.newCustomStat).toBe(1);
 	});
 });
