@@ -169,34 +169,11 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-		/**
-		 * @private
-		 * Increments a specific stat in the lifetimeStats object.
-		 * @param {object} obj - The stats object to modify.
-		 * @param {string} key - The stat key to increment.
-		 * @param {number} delta - The amount to increment by.
-		 * @returns {boolean} True if the key was found and incremented, false otherwise.
-		 */
-		function inc(obj, key, delta) {
-			switch (key) {
-				case "gamesStarted": obj.gamesStarted += delta; break;
-				case "gamesCompleted": obj.gamesCompleted += delta; break;
-				case "highestAnteReached": obj.highestAnteReached += delta; break;
-				case "highestRoundScore": obj.highestRoundScore += delta; break;
-				case "totalHandsPlayed": obj.totalHandsPlayed += delta; break;
-				case "totalJokersUsed": obj.totalJokersUsed += delta; break;
-				case "uniqueJokersFound": obj.uniqueJokersFound += delta; break;
-				default: return false;
-			}
-			return true;
-		}
-		if (inc(data.lifetimeStats, statKey, delta)) {
-			// ok
-		} else if (statKey === "firstGameDate") {
-			data.lifetimeStats.firstGameDate = delta;
-		} else {
-			throw new Error("Invalid stat key");
-		}
+		if (!(statKey in data.lifetimeStats)) data.lifetimeStats[String(statKey)] = 0;
+
+		data.lifetimeStats[String(statKey)] += delta;
+
 		this.writeToStorage(data);
 	}
 }
+
