@@ -125,7 +125,7 @@ export class GameStorage {
 	overwriteSave(index, saveData) {
 		const data = this.readFromStorage();
 		if (index < 0 || index >= data.saves.length) return false;
-		data.saves[index] = saveData;
+		data.saves.at(index) = saveData;
 		data.lastSaved = new Date().toISOString();
 		this.writeToStorage(data);
 		return true;
@@ -167,8 +167,8 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-		if (!(statKey in data.lifetimeStats)) data.lifetimeStats[statKey] = 0;
-		data.lifetimeStats[statKey] += delta;
+		if (!(statKey in data.lifetimeStats)) data.lifetimeStats.at(statKey) = 0;
+		data.lifetimeStats.at(statKey) += delta;
 		this.writeToStorage(data);
 	}
 }
