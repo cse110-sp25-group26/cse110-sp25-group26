@@ -193,7 +193,6 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @description Updates the card's front and back faces based on its attributes.
 	 */
-
 	_updateCardFace() {
 		const suitAttr = this.getAttribute('suit');
 		let type = this.getAttribute('type');
@@ -238,7 +237,7 @@ export class CardElement extends HTMLElement {
 		backImg.style.width = '100%';
 		backImg.style.height = '100%';
 		this._cardBack.appendChild(backImg);
-	};
+	}
 
 	/**
 	 * @description Flips the card to show the opposite side.
