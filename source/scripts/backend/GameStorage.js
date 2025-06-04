@@ -168,18 +168,23 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-		const numericStats = [
-			"gamesStarted",
-			"gamesCompleted",
-			"highestAnteReached",
-			"highestRoundScore",
-			"totalHandsPlayed",
-			"totalJokersUsed",
-			"uniqueJokersFound"
-		];
 
-		if (numericStats.includes(statKey)) {
-			data.lifetimeStats[statKey] += delta;
+		function inc(obj, key, delta) {
+			switch (key) {
+				case "gamesStarted": obj.gamesStarted += delta; break;
+				case "gamesCompleted": obj.gamesCompleted += delta; break;
+				case "highestAnteReached": obj.highestAnteReached += delta; break;
+				case "highestRoundScore": obj.highestRoundScore += delta; break;
+				case "totalHandsPlayed": obj.totalHandsPlayed += delta; break;
+				case "totalJokersUsed": obj.totalJokersUsed += delta; break;
+				case "uniqueJokersFound": obj.uniqueJokersFound += delta; break;
+				default: return false;
+			}
+			return true;
+		}
+
+		if (inc(data.lifetimeStats, statKey, delta)) {
+			// ok
 		} else if (statKey === "firstGameDate") {
 			data.lifetimeStats.firstGameDate = delta;
 		} else {
