@@ -124,7 +124,7 @@ test('Discarding cards modifies internal values as expected', () => {
     handler.discardCards();
     // Make sure the main hand is empty
     expect(handler.state.hands.main.cards.length).toBe(0);
-    
+
     // Discard one more
     handler.dealCards();
     handler.selectCard(handler.state.hands.main, 0);
@@ -243,7 +243,7 @@ test('selectCard handles invalid index correctly', () => {
     console.error = originalError;
 });
 
-test('discardCards handles no cardx selected correctly', () => {
+test('discardCards handles no cards selected correctly', () => {
     // Temporarily disable console logs and errors
     const originalLog = console.log;
     const originalError = console.error;

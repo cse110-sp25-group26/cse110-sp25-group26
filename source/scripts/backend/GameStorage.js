@@ -5,7 +5,7 @@
  */
 /**
  * @class GameStorage
- * @desc Manages game data persistence using LocalStorage.
+ * @description Manages game data persistence using LocalStorage.
  * 
  * Data structure:
  * {
