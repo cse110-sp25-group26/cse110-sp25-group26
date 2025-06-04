@@ -9,9 +9,9 @@ export default defineConfig([
       "source/scripts/backend/*.{js,mjs,cjs}",
       "source/scripts/frontend/*.{js,mjs,cjs}",
     ],
-    plugins: { 
+    plugins: {
       js,
-      jsdoc 
+      jsdoc
     },
     extends: [
       "js/recommended",

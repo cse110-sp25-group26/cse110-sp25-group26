@@ -126,6 +126,8 @@ export class GameStorage {
 		const data = this.readFromStorage();
 		index = Number(index);
 		if (!Number.isInteger(index) || index < 0 || index >= data.saves.length) return false;
+		// codacy-disable-next-line security/object-injection
+		data.saves[index] = saveData;
 		data.saves[index] = saveData;
 		data.lastSaved = new Date().toISOString();
 		this.writeToStorage(data);
@@ -161,6 +163,7 @@ export class GameStorage {
 		return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
 	}
 
+
 	/**
 	 * Increments a stat by a given amount (default 1).
 	 * @param {string} statKey - Name of the stat to update.
@@ -168,7 +171,14 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-
+		/**
+		 * @private
+		 * Increments a specific stat in the lifetimeStats object.
+		 * @param {object} obj - The stats object to modify.
+		 * @param {string} key - The stat key to increment.
+		 * @param {number} delta - The amount to increment by.
+		 * @returns {boolean} True if the key was found and incremented, false otherwise.
+		 */
 		function inc(obj, key, delta) {
 			switch (key) {
 				case "gamesStarted": obj.gamesStarted += delta; break;
@@ -182,7 +192,6 @@ export class GameStorage {
 			}
 			return true;
 		}
-
 		if (inc(data.lifetimeStats, statKey, delta)) {
 			// ok
 		} else if (statKey === "firstGameDate") {
