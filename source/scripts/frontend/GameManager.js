@@ -92,6 +92,9 @@ export default class GameManager {
         }
     }
 
+	/**
+	 * @description Updates the displayed deck count based on the current deck length.
+	 */
     _updateDeckCount() {
         if (this.deckCardCountDisplay) {
             this.deckCardCountDisplay.textContent = `${this.deck.length}/52`; // Assuming 52 total for now

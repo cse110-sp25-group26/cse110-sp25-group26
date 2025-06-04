@@ -323,16 +323,16 @@ export class CardElement extends HTMLElement {
 			}));
 
 			// Reset visual drag state. If the card is not adopted by a new hand or area,
-            // its original hand's _updateLayout should correctly reposition it.
-            // Clearing these helps _updateLayout work from a cleaner slate.
+			// its original hand's _updateLayout should correctly reposition it.
+			// Clearing these helps _updateLayout work from a cleaner slate.
 			this.style.zIndex = this._preDragZIndex || '';
-            this.style.transform = this._preDragTransform || ''; // Restore original transform or clear
-            // Position is tricky. If we clear left/top, and _updateLayout doesn't run or fails,
-            // it might snap to 0,0. However, _updateLayout *will* set left/top.
-            // Let's clear them to avoid interference with _updateLayout's calculations.
-            this.style.left = '';
-            this.style.top = '';
-            // this.style.position is managed by _updateLayout which sets it to 'absolute'
+			this.style.transform = this._preDragTransform || ''; // Restore original transform or clear
+			// Position is tricky. If we clear left/top, and _updateLayout doesn't run or fails,
+			// it might snap to 0,0. However, _updateLayout *will* set left/top.
+			// Let's clear them to avoid interference with _updateLayout's calculations.
+			this.style.left = '';
+			this.style.top = '';
+			// this.style.position is managed by _updateLayout which sets it to 'absolute'
 
 		} else {
 			// This was a click, not a drag. Restore any click-related styles if necessary.

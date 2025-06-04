@@ -238,6 +238,11 @@ export class HandElement extends HTMLElement {
 		cardElement._wasDragged = false;
 	}
 
+	/**
+	 * @description Called when the custom element is disconnected from the document's DOM.
+	 * Currently, this method is empty as ResizeObserver cleanup was removed.
+	 * It can be used for other cleanup tasks if needed in the future.
+	 */
 	disconnectedCallback() {
 		// ResizeObserver related code removed
 	}
