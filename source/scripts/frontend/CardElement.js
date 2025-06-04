@@ -173,7 +173,7 @@ export class CardElement extends HTMLElement {
 	 * @description Called when the element is added to the DOM.
 	 */
 	connectedCallback() {
-		this.updateCardFace();
+		this._updateCardFace();
 	}
 
 	/**
