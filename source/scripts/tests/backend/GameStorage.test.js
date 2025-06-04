@@ -9,19 +9,19 @@ import { Deck } from '../../backend/Deck.js';
 import { jest } from '@jest/globals';
 
 global.localStorage = {
-  store: {},
-  getItem(key) {
-    return this.store[key] || null;
-  },
-  setItem(key, value) {
-    this.store[key] = String(value);
-  },
-  removeItem(key) {
-    delete this.store[key];
-  },
-  clear() {
-    this.store = {};
-  }
+	store: {},
+	getItem(key) {
+		return this.store[key] || null;
+	},
+	setItem(key, value) {
+		this.store[key] = String(value);
+	},
+	removeItem(key) {
+		delete this.store[key];
+	},
+	clear() {
+		this.store = {};
+	}
 };
 
 // Reset localStorage before each test
@@ -112,10 +112,8 @@ describe('GameStorage', () => {
 		expect(stats.gamesStarted).toBe(2);
 	});
 
-	test('updateStat initializes undefined stat keys', () => {
+	test('updateStat throws for undefined stat keys', () => {
 		const storage = new GameStorage();
-		storage.updateStat('newCustomStat');
-		const stats = storage.getStats();
-		expect(stats.newCustomStat).toBe(1);
+		expect(() => storage.updateStat('newCustomStat')).toThrow('Invalid stat key');
 	});
 });

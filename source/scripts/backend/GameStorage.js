@@ -168,36 +168,22 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-		switch (statKey) {
-			case "gamesStarted":
-				data.lifetimeStats.gamesStarted += delta;
-				break;
-			case "gamesCompleted":
-				data.lifetimeStats.gamesCompleted += delta;
-				break;
-			case "highestAnteReached":
-				data.lifetimeStats.highestAnteReached += delta;
-				break;
-			case "highestRoundScore":
-				data.lifetimeStats.highestRoundScore += delta;
-				break;
-			case "totalHandsPlayed":
-				data.lifetimeStats.totalHandsPlayed += delta;
-				break;
-			case "totalJokersUsed":
-				data.lifetimeStats.totalJokersUsed += delta;
-				break;
-			case "uniqueJokersFound":
-				data.lifetimeStats.uniqueJokersFound += delta;
-				break;
-			case "firstGameDate":
-				// Only set if not already set, and delta is a string (date)
-				if (!data.lifetimeStats.firstGameDate && typeof delta === "string") {
-					data.lifetimeStats.firstGameDate = delta;
-				}
-				break;
-			default:
-				throw new Error("Invalid stat key");
+		const numericStats = [
+			"gamesStarted",
+			"gamesCompleted",
+			"highestAnteReached",
+			"highestRoundScore",
+			"totalHandsPlayed",
+			"totalJokersUsed",
+			"uniqueJokersFound"
+		];
+
+		if (numericStats.includes(statKey)) {
+			data.lifetimeStats[statKey] += delta;
+		} else if (statKey === "firstGameDate") {
+			data.lifetimeStats.firstGameDate = delta;
+		} else {
+			throw new Error("Invalid stat key");
 		}
 		this.writeToStorage(data);
 	}
