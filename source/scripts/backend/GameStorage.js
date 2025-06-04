@@ -126,7 +126,7 @@ export class GameStorage {
 		const data = this.readFromStorage();
 		index = Number(index);
 		if (!Number.isInteger(index) || index < 0 || index >= data.saves.length) return false;
-		data.saves[parseInt(index)] = saveData;
+		data.saves[parseInt(index, 10)] = saveData;
 		data.lastSaved = new Date().toISOString();
 		this.writeToStorage(data);
 		return true;
