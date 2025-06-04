@@ -1,4 +1,3 @@
-//import { Card } from '../backend/Card.js';
 /**
  * @typedef {import("../backend/Card.js").Card} Card
  */
@@ -103,8 +102,8 @@ export class CardElement extends HTMLElement {
 	}
 
 	/**
-	 * @function _setupEventListeners
-	 * @description Sets up event listeners for drag and tooltip interactions.
+	 * @function _setupDragState
+	 * @description Initializes the drag state variables for the card.
 	 * @private
 	 * @returns {void}
 	 */
@@ -166,14 +165,13 @@ export class CardElement extends HTMLElement {
 	 * @description Called when the element is added to the DOM.
 	 */
 	connectedCallback() {
-		// TODO: Is this even called? One could just call updateCardFace directly.
 		this.updateCardFace();
 	}
 
 	/**
 	 * @description Called when the element is removed from the DOM.
 	 */
-	disconnectedCallback() {
+	cleanupCard() {
 		// Clear all event listeners
 		this._container.removeEventListener('mousedown', this._onDragStart);
 		document.removeEventListener('mousemove', this._onDragMove);

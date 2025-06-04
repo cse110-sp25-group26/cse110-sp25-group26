@@ -2,7 +2,6 @@ import { CardElement } from "./CardElement.js";
 /**
  * @typedef {import("../backend/Card.js").Card} Card
  */
-//import { Card } from "../backend/Card.js";
 
 /**
  * @classdesc UI component representing the Deck.
@@ -56,7 +55,7 @@ export class DeckElement {
 		let zindex = 0;
 		let cardElements = [];
 		cards.forEach(card => {
-			const cardElement = new CardElement(card, false);
+			const cardElement = new CardElement(card, true);
 			cardElement.style.position = "absolute";
 			cardElement.style.zIndex = zindex++;
 			cardElement.style.left = "0px";
