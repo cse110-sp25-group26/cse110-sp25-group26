@@ -204,7 +204,7 @@ body {
 
 /* Hand strip footer */
 #hand-strip {
-  flex: 1;
+     flex: 1;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -311,4 +311,12 @@ body {
     width: 50px;
     height: 70px;
   }
+}
+
+/* Add min-height to hand areas */
+#jokers-area,
+#consumables-area,
+#played-cards-display,
+#player-hand-cards {
+  min-height: 120px;
 }

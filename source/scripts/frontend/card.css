@@ -1,11 +1,11 @@
 .card {
     width: 80px;
     height: 120px;
-    perspective: 1000px;
     position: relative;
     cursor: grab;
     user-select: none;
-    transition: transform 0.3s, left 0.3s;
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
 }
 
 .card.selected {
@@ -13,47 +13,47 @@
 }
 
 .card-inner {
+    position: relative;
     width: 100%;
     height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
+    text-align: center;
     transition: transform 0.6s;
+    transform-style: preserve-3d;
 }
 
 .card.flipped .card-inner {
     transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.card-front,
+.card-back {
+    position: absolute;
     width: 100%;
     height: 100%;
-    position: absolute;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     border-radius: 8px;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2em;
-    font-weight: bold;
-    overflow: hidden;
+    border: 1px solid #333;
 }
 
 .card-front {
     background: white;
-    color: #222;
-    border: 1px solid #333;
+    transform: rotateY(0deg);
+}
+
+.card-front img,
+.card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card-back {
     background: #222;
-    color: #eee;
-    border: 1px solid #333;
     transform: rotateY(180deg);
 }
 
-.card .tooltip {
+.tooltip {
     display: none;
     position: absolute;
     top: -32px;
