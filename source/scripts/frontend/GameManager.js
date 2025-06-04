@@ -146,80 +146,144 @@ export default class GameManager {
 	}
 
 	/**
+	 * Validates the core details from a card drop event.
+	 * @param {object} eventDetail - The detail object from the card-dropped event.
+	 * @returns {object|null} An object with { droppedCard, dropTarget, sourceHand } or null if validation fails.
+	 * @private
+	 */
+	_validateCardDropDetails(eventDetail) {
+		const { card: droppedCard, target: dropTarget, originalHand: sourceHand } = eventDetail;
+
+		if (!droppedCard) {
+			console.warn("Card drop event missing card details.");
+			return null;
+		}
+		if (!dropTarget && sourceHand) {
+			console.log("Card dropped on an unidentifiable target. Returning to source hand.");
+			sourceHand._updateLayout(); // Or sourceHand.addCard(droppedCard) if remove was already done
+			return null;
+		}
+		if (!dropTarget) {
+			console.warn("Card drop event missing target and no source hand to return to.");
+			return null;
+		}
+		return { droppedCard, dropTarget, sourceHand };
+	}
+
+	/**
+	 * Processes a card drop onto a specific HandElement.
+	 * Handles reordering within the same hand or moving to a different hand.
+	 * @param {CardElement} droppedCard - The card that was dropped.
+	 * @param {HandElement|null} sourceHand - The hand the card originated from.
+	 * @param {HandElement} targetHandElement - The hand element the card was dropped on.
+	 * @returns {boolean} True if the drop was processed, false otherwise.
+	 * @private
+	 */
+	_processDropOnSpecificHand(droppedCard, sourceHand, targetHandElement) {
+		if (sourceHand && sourceHand === targetHandElement) {
+			// Card dropped on the *same* hand for reordering.
+			console.log(`Card reorder attempted within ${sourceHand.id}. Should be handled by other listeners.`);
+			return true;
+		}
+
+		// Card dropped on a *different* valid HandElement
+		console.log(`Card ${droppedCard.getAttribute('type')} of ${droppedCard.getAttribute('suit')} moving to hand: ${targetHandElement.id}`);
+		if (sourceHand && sourceHand instanceof HandElement) {
+			sourceHand.removeCard(droppedCard);
+		}
+		targetHandElement.addCard(droppedCard);
+		return true; // Drop processed by moving the card.
+	}
+
+	/**
+	 * Checks if the drop target is the designated played cards area or a child of it.
+	 * @param {EventTarget} dropTarget - The target element where the card was dropped.
+	 * @returns {boolean} True if the target is the played cards area, false otherwise.
+	 * @private
+	 */
+	_isDropTargetPlayedArea(dropTarget) {
+		if (!this.playedCardsArea) {
+			return false;
+		}
+		return dropTarget === this.playedCardsArea || this.playedCardsArea.contains(dropTarget);
+	}
+
+	/**
+	 * Processes a card drop onto the played cards area.
+	 * @param {CardElement} droppedCard - The card that was dropped.
+	 * @param {HandElement|null} sourceHand - The hand the card originated from.
+	 * @returns {boolean} True if the drop was processed, false otherwise.
+	 * @private
+	 */
+	_processDropOnPlayedArea(droppedCard, sourceHand) {
+		if (sourceHand && sourceHand === this.playerHand) { // Only allow playing from player hand
+			console.log(`Card ${droppedCard.getAttribute('type')} of ${droppedCard.getAttribute('suit')} playing to Played Cards area.`);
+			sourceHand.removeCard(droppedCard);
+			if (this.playedCardsArea instanceof HandElement) {
+				this.playedCardsArea.addCard(droppedCard);
+			} else {
+				this.playedCardsArea.appendChild(droppedCard);
+				droppedCard.style.position = 'relative';
+				droppedCard.style.left = 'auto';
+				droppedCard.style.top = 'auto';
+			}
+			return true; // Card played successfully.
+		} else if (sourceHand && sourceHand !== this.playerHand) {
+			console.log("Card dropped on played area but not from player hand. Returning to source.");
+			if (sourceHand instanceof HandElement) {
+				sourceHand._updateLayout();
+			}
+			return true; // Event processed (card returned or attempt made).
+		} else if (!sourceHand) {
+			console.warn("Card dropped on played area from unknown source. Action not taken.");
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Handles an invalid card drop attempt, usually by returning the card to its source hand.
+	 * @param {HandElement|null} sourceHand - The hand the card originated from.
+	 * @private
+	 */
+	_handleInvalidDropAttempt(sourceHand) {
+		console.log("Card dropped in invalid location (not a valid hand/area or not handled by specific rules).");
+		if (sourceHand && sourceHand instanceof HandElement) {
+			console.log(`Returning card to source hand: ${sourceHand.id}`);
+			sourceHand._updateLayout(); // Tell original hand to reclaim/re-layout.
+		} else {
+			// This case implies a card was dropped from an unknown source to an invalid location.
+			console.warn("Card dropped in invalid location, and no valid sourceHand to return it to.");
+		}
+		// No explicit return true/false needed as this is the final fallback.
+	}
+
+	/**
 	 * Handles the global card-dropped event to manage moves between hands/areas.
 	 * @param {CustomEvent} event - The card-dropped event.
 	 */
 	_handleCardDrop(event) {
-		const droppedCard = event.detail.card; 
-		const dropTarget = event.detail.target; 
-		const sourceHand = event.detail.originalHand; // Use originalHand from event
-
-		if (!droppedCard) { // Target can sometimes be null if dropped on non-interactive background
-			console.warn("Card drop event missing card details.");
-			return;
+		const validatedDetails = this._validateCardDropDetails(event.detail);
+		if (!validatedDetails) {
+			return; // Validation failed, messages already logged by the helper.
 		}
-		if (!dropTarget && sourceHand) {
-			console.log("Card dropped on an unidentifiable target (e.g. background). Returning to source hand.");
-			sourceHand._updateLayout();
-			return;
-		}
-		if (!dropTarget) {
-			 console.warn("Card drop event missing target and no source hand to return to.");
-			return;
-		}
-
-		// console.log('Source hand from event:', sourceHand ? sourceHand.id : 'none');
+		const { droppedCard, dropTarget, sourceHand } = validatedDetails;
 
 		const targetHandElement = dropTarget.closest('hand-element');
-		// console.log('Target hand element:', targetHandElement ? targetHandElement.id : 'none');
-
 		if (targetHandElement && targetHandElement instanceof HandElement) {
-			if (sourceHand && sourceHand === targetHandElement) {
-				// Card dropped on the *same* hand.
-				// Reordering logic is (or should be) handled by CardMove.js and HandElement's own _updateLayout after card-dropped.
-				console.log(`Card reorder attempted within ${sourceHand.id}. CardMove.js should handle.`);
-				// HandElement listens to 'card-dropped' and calls _updateLayout. CardMove also listens.
-				// No direct action needed here by GameManager for same-hand reorder.
-				return; // Explicitly stop further processing for same-hand drops.
-			}
-			
-			// Card dropped on a *different* valid HandElement
-			console.log(`Card ${droppedCard.getAttribute('type')} moving to hand: ${targetHandElement.id}`);
-			if (sourceHand && sourceHand instanceof HandElement) {
-				sourceHand.removeCard(droppedCard); 
-			}
-			targetHandElement.addCard(droppedCard); 
-
-		} else if (this.playedCardsArea && (dropTarget === this.playedCardsArea || this.playedCardsArea.contains(dropTarget))) {
-			// Dropped on played cards area (which is also a HandElement now)
-			if (sourceHand && sourceHand === this.playerHand) { // Only allow playing from player hand for now
-				console.log(`Card ${droppedCard.getAttribute('type')} playing to Played Cards area.`);
-				sourceHand.removeCard(droppedCard);
-				if (this.playedCardsArea instanceof HandElement) {
-					this.playedCardsArea.addCard(droppedCard);
-				} else {
-					// This else block should ideally not be reached if playedCardsArea is always a HandElement
-					this.playedCardsArea.appendChild(droppedCard);
-					droppedCard.style.position = 'relative'; 
-					droppedCard.style.left = 'auto';
-					droppedCard.style.top = 'auto';
-				}
-			} else if (sourceHand && sourceHand !== this.playerHand) {
-				console.log("Card dropped on played area but not from player hand. Returning to source.");
-				if (sourceHand instanceof HandElement) {
-					sourceHand._updateLayout(); // Tell original hand to reclaim/re-layout
-				}
-			}
-		} else {
-			// Dropped in an invalid location (not a known HandElement, not the played cards area)
-			console.log("Card dropped in invalid location (not a valid hand/area).");
-			if (sourceHand && sourceHand instanceof HandElement) {
-				console.log(`Returning card to source hand: ${sourceHand.id}`);
-				sourceHand._updateLayout(); 
-			} else {
-				console.warn("Card dropped, but no valid sourceHand to return it to.");
+			if (this._processDropOnSpecificHand(droppedCard, sourceHand, targetHandElement)) {
+				return; // Drop was handled.
 			}
 		}
+        
+		if (this._isDropTargetPlayedArea(dropTarget)) {
+			if (this._processDropOnPlayedArea(droppedCard, sourceHand)) {
+				return; // Drop was handled.
+			}
+		}
+
+		// If none of the above specific handlers processed the drop, it's an invalid attempt.
+		this._handleInvalidDropAttempt(sourceHand);
 	}
 
 	/**
@@ -273,4 +337,5 @@ export default class GameManager {
 // For example:
 // import GameManager from './scripts/frontend/GameManager.js';
 // const gm = new GameManager();
+// And then attach event listeners from gm to buttons, or call gm methods. 
 // And then attach event listeners from gm to buttons, or call gm methods. 
