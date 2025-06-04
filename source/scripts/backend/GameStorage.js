@@ -126,9 +126,7 @@ export class GameStorage {
 		const data = this.readFromStorage();
 		index = Number(index);
 		if (!Number.isInteger(index) || index < 0 || index >= data.saves.length) return false;
-		// codacy-disable-next-line security/object-injection
-		data.saves[index] = saveData;
-		data.saves[index] = saveData;
+		data.saves[parseInt(index)] = saveData;
 		data.lastSaved = new Date().toISOString();
 		this.writeToStorage(data);
 		return true;
