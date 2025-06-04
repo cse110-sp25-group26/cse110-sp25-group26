@@ -1,10 +1,11 @@
-import { Card } from './Card.js';
-import { Deck } from './Deck.js';
-import { Hand } from './Hand.js';
-
+/**
+ * @typedef {import('./Card.js').Card} Card
+ * @typedef {import('./Deck.js').Deck} Deck
+ * @typedef {import('./Hand.js').Hand} Hand
+ */
 /**
  * @class GameStorage
- * @classdesc Manages game data persistence using LocalStorage.
+ * @desc Manages game data persistence using LocalStorage.
  * 
  * Data structure:
  * {
@@ -79,7 +80,7 @@ export class GameStorage {
 
 	/**
 	 * Reads and parses the game data from localStorage.
-	 * @returns {Object|null} Parsed data object, or null on error.
+	 * @returns {object|null} Parsed data object, or null on error.
 	 */
 	readFromStorage() {
 		const data = localStorage.getItem(this.storageKey);
@@ -93,7 +94,7 @@ export class GameStorage {
 
 	/**
 	 * Saves the game data to localStorage.
-	 * @param {Object} data - The full data object to write.
+	 * @param {object} data - The full data object to write.
 	 */
 	writeToStorage(data) {
 		try {
@@ -106,7 +107,7 @@ export class GameStorage {
 
 	/**
 	 * Adds a new game save to the saves list.
-	 * @param {Object} saveData - The game save to add.
+	 * @param {object} saveData - The game save to add.
 	 */
 	addSave(saveData) {
 		const data = this.readFromStorage();
@@ -118,7 +119,7 @@ export class GameStorage {
 	/**
 	 * Replaces an existing save at the specified index.
 	 * @param {number} index - Index to replace.
-	 * @param {Object} saveData - The new save data.
+	 * @param {object} saveData - The new save data.
 	 * @returns {boolean} True if successful.
 	 */
 	overwriteSave(index, saveData) {
@@ -145,7 +146,7 @@ export class GameStorage {
 
 	/**
 	 * Gets all saved games.
-	 * @returns {Object[]} Array of saved games.
+	 * @returns {object[]} Array of saved games.
 	 */
 	getAllSaves() {
 		return this.readFromStorage()?.saves || [];
@@ -153,7 +154,7 @@ export class GameStorage {
 
 	/**
 	 * Gets lifetime statistics.
-	 * @returns {Object} The stats object.
+	 * @returns {object} The stats object.
 	 */
 	getStats() {
 		return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
