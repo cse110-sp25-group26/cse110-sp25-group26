@@ -38,6 +38,10 @@ export class HandElement extends HTMLElement {
 		});
 	}
 
+	/**
+	 * @description Called when the custom element is first connected to the document's DOM.
+	 * It initializes card width and vertical alignment from attributes and triggers the initial layout.
+	 */
 	connectedCallback() {
 		if (this.hasAttribute('data-card-width')) {
 			const newWidth = parseInt(this.getAttribute('data-card-width'), 10);
