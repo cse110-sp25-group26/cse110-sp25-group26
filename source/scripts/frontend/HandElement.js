@@ -36,12 +36,6 @@ export class HandElement extends HTMLElement {
 		this._container.addEventListener('card-dropped', () => {
 			requestAnimationFrame(() => this._updateLayout());
 		});
-
-		// Add resize observer to handle container size changes
-		this._resizeObserver = new ResizeObserver(() => {
-			requestAnimationFrame(() => this._updateLayout());
-		});
-		this._resizeObserver.observe(this._container);
 	}
 
 	connectedCallback() {
@@ -57,7 +51,7 @@ export class HandElement extends HTMLElement {
 				this.verticalAlign = vAlign;
 			}
 		}
-		// Initial layout update if cards are added before connection, or just to apply config
+		// Initial layout update
 		requestAnimationFrame(() => this._updateLayout());
 	}
 
@@ -245,9 +239,7 @@ export class HandElement extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		if (this._resizeObserver) {
-			this._resizeObserver.disconnect();
-		}
+		// ResizeObserver related code removed
 	}
 }
 
