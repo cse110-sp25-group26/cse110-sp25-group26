@@ -1,67 +1,76 @@
+/* Body styling: sets the background texture and color, font, and prevents scrolling */
 body {
-  background: url('https://www.transparenttextures.com/patterns/asfalt-light.png'), #033a1f;
-  font-family: 'Cardo', serif;
-  overflow: hidden;
+  background: url('https://www.transparenttextures.com/patterns/asfalt-light.png'), #033a1f; /* Dark green background with texture */
+  font-family: 'Cardo', serif; /* Custom font for elegant typography */
+  overflow: hidden; /* Prevent scrolling */
 }
 
+/* Styling for floating card decorations */
 .card-decor {
-  position: absolute;
-  width: 80px;
-  height: auto;
-  opacity: 0.7;
-  animation: float 4s ease-in-out infinite;
-  z-index: 0;
+  position: absolute; /* Positioned absolutely within the body */
+  width: 80px; /* Fixed width for cards */
+  height: auto; /* Maintain aspect ratio */
+  opacity: 0.7; /* Slight transparency */
+  animation: float 4s ease-in-out infinite; /* Floating animation */
+  z-index: 0; /* Ensure cards are behind other elements */
 }
 
+/* Individual card positions and rotation */
 .card-decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(-15deg); animation-delay: 0s; }
 .card-decor:nth-child(2) { top: 30%; right: 10%; transform: rotate(10deg); animation-delay: 1s; }
 .card-decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(-10deg); animation-delay: 2s; }
 .card-decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(5deg); animation-delay: 3s; }
 
-/* New card positions and delays */
+/* Additional card positions and delays for decoration */
 .card-decor:nth-child(5) { top: 50%; left: 10%; transform: rotate(12deg); animation-delay: 1.5s; }
 .card-decor:nth-child(6) { top: 70%; right: 25%; transform: rotate(-8deg); animation-delay: 2.5s; }
 .card-decor:nth-child(7) { bottom: 25%; left: 35%; transform: rotate(7deg); animation-delay: 3.5s; }
 .card-decor:nth-child(8) { bottom: 40%; right: 5%; transform: rotate(-12deg); animation-delay: 0.7s; }
 
+/* Keyframes for floating animation */
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(var(--rotate)); }
-  50% { transform: translateY(-10px) rotate(var(--rotate)); }
+  0%, 100% { transform: translateY(0) rotate(var(--rotate)); } /* Start and end positions */
+  50% { transform: translateY(-10px) rotate(var(--rotate)); } /* Midpoint float upward */
 }
 
+/* Styling for the main menu content container */
 .menu-content {
-  position: relative;
-  z-index: 10;
+  position: relative; /* Positioned relative to allow child elements to be positioned */
+  z-index: 10; /* Ensure menu content is above decorations */
 }
 
+/* Styling for fancy buttons */
 .fancy-btn {
-  background: linear-gradient(145deg, #d4af37, #b8860b);
-  color: white;
-  font-weight: bold;
-  padding: 1.5rem 2.5rem;
-  font-size: 1.25rem;
-  border-radius: 0.75rem;
-  text-shadow: 1px 1px 2px #000;
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 20rem;
-  text-align: center;
-  border: 3px solid rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #d4af37, #b8860b); /* Gold gradient background */
+  color: white; /* White text color */
+  font-weight: bold; /* Bold text */
+  padding: 1.5rem 2.5rem; /* Button padding */
+  font-size: 1.25rem; /* Font size */
+  border-radius: 0.75rem; /* Rounded corners */
+  text-shadow: 1px 1px 2px #000; /* Subtle text shadow */
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.7); /* Glow effect */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+  width: 20rem; /* Fixed width */
+  text-align: center; /* Center text */
+  border: 3px solid rgba(0, 0, 0, 0.5); /* Border with transparency */
 }
 
+/* Hover effect for fancy buttons */
 .fancy-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 1);
+  transform: scale(1.05); /* Slightly enlarge button */
+  box-shadow: 0 0 20px rgba(212, 175, 55, 1); /* Stronger glow effect */
 }
 
+/* Styling for joker card decorations */
 .joker-card {
-  width: 60px;
-  height: auto;
-  position: absolute;
-  top: 0;
-  animation: float 3s ease-in-out infinite;
-  z-index: 1;
+  width: 60px; /* Fixed width for joker cards */
+  height: auto; /* Maintain aspect ratio */
+  position: absolute; /* Positioned absolutely */
+  top: 0; /* Align to top */
+  animation: float 3s ease-in-out infinite; /* Floating animation */
+  z-index: 1; /* Ensure joker cards are above other decorations */
 }
 
-.joker-left { left: -80px; transform: rotate(-10deg); }
-.joker-right { right: -80px; transform: rotate(10deg); }
+/* Individual positions for joker cards */
+.joker-left { left: -80px; transform: rotate(-10deg); } /* Left joker card */
+.joker-right { right: -80px; transform: rotate(10deg); } /* Right joker card */
