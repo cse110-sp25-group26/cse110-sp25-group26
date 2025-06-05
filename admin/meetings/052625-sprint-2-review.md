@@ -16,7 +16,7 @@ The majority of the time, Cards are in Hands. This means that having a nice-feel
 ## 3. Review Checklist (Long)
 The [PR Checklist](../../doc/REVIEWING.md) is thorough, but that makes it long. I don't believe anyone likes reading through a wall of text. Long made a checklist module which simplifies the process, and allows anyone conducting a review to keep track of all the pieces in a much nicer way!
 
-(TODO: Fetch screenshot of checklist)
+![Checklist Demo](resources/Checklist-Demo-spr3rev.png)
 
 ## 4. Merge Wrangling (Min)
 Behind these changes Min has been managing all of the merges so far, making sure that the code works properly with other simultaneous changes and keeping the code uniform. To most of us it doesn't even look like there are merge conflicts, which is amazing work especially given the increase in code volume throughout this sprint.
