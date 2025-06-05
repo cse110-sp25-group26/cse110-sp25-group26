@@ -24,7 +24,7 @@ body {
 /* Additional card positions and delays for decoration */
 .card-decor:nth-child(5) { top: 50%; left: 10%; transform: rotate(12deg); animation-delay: 1.5s; }
 .card-decor:nth-child(6) { top: 70%; right: 25%; transform: rotate(-8deg); animation-delay: 2.5s; }
-.card-decor:nth-child(7) { bottom: 25%; left: 35%; transform: rotate(7deg); animation-delay: 3.5s; }
+.card-decor:nth-child(7) { bottom: 30%; left: 30%; transform: rotate(7deg); animation-delay: 3.5s; }
 .card-decor:nth-child(8) { bottom: 40%; right: 5%; transform: rotate(-12deg); animation-delay: 0.7s; }
 
 /* Keyframes for floating animation */
