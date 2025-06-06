@@ -2,12 +2,12 @@
 # Configuration for the Jekyll "Just the Docs" theme (optional)
 parent: Decisions
 nav_order: 108
-title: Use Fisher-Yates Shuffle for Deck
+title: Add Joker Images
 status: proposed
-date: 2025-05-17
+date: 2025-06-06
 ---
 
-# Use Fisher-Yates Algorithm for Deck Shuffling
+# Joker Images and Descriptions
 
 ## Context and Problem Statement
 
