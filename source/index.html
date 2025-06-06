@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Game</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      #game-status {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+      #game-controls {
+        margin-bottom: 20px;
+      }
+      #hand-display {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .card {
+        width: 80px;
+        height: 120px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+      .card.selected {
+        background-color: #e0e0ff;
+      }
+      .hearts,
+      .diamonds {
+        color: red;
+      }
+      .clubs,
+      .spades {
+        color: black;
+      }
+      button {
+        padding: 8px 16px;
+        margin-right: 10px;
+      }
+      #console-output {
+        height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f5f5f5;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Card Game - Game Loop Test</h1>
+
+    <div id="game-status">
+      <h2>Game Status</h2>
+      <div id="status-display">
+        <p>Ante: <span id="ante-display">1/8</span></p>
+        <p>Blind: <span id="blind-display">1/3</span></p>
+        <p>Hands Played: <span id="hands-played-display">0/4</span></p>
+        <p>Discards Used: <span id="discards-used-display">0/4</span></p>
+        <p>Round Score: <span id="round-score-display">0/40</span></p>
+        <p>Money: <span id="money-display">24</span></p>
+      </div>
+    </div>
+
+    <div id="game-controls">
+      <h2>Controls</h2>
+      <button id="start-game">Start Game</button>
+      <button id="discard-cards" disabled>Discard Selected</button>
+      <button id="play-cards" disabled>Play Selected</button>
+    </div>
+
+    <h2>Your Hand</h2>
+    <div id="hand-display"></div>
+
+    <h2>Console Output</h2>
+    <div id="console-output"></div>
+
+    <script type="module">
+      import { GameLoop } from "./scripts/backend/gameLoop.js";
+
+      // Override console.log to display in the console-output div
+      const originalConsoleLog = console.log;
+      console.log = function (...args) {
+        originalConsoleLog.apply(console, args);
+        const output = document.getElementById("console-output");
+        output.innerHTML += args.join(" ") + "<br>";
+        output.scrollTop = output.scrollHeight;
+      };
+
+      // Game state
+      let gameLoop;
+      let selectedCards = [];
+
+      // DOM elements
+      const startGameBtn = document.getElementById("start-game");
+      const discardCardsBtn = document.getElementById("discard-cards");
+      const playCardsBtn = document.getElementById("play-cards");
+      const handDisplay = document.getElementById("hand-display");
+
+      // Start game button
+      startGameBtn.addEventListener("click", () => {
+        console.log("Starting game...");
+        gameLoop = new GameLoop();
+        gameLoop.start();
+        updateUI();
+
+        startGameBtn.disabled = true;
+        discardCardsBtn.disabled = false;
+        playCardsBtn.disabled = false;
+      });
+
+      // Discard selected cards
+      discardCardsBtn.addEventListener("click", () => {
+        if (selectedCards.length === 0) {
+          console.log("No cards selected for discard.");
+          return;
+        }
+
+        console.log(`Discarding cards at indices: ${selectedCards.join(", ")}`);
+        gameLoop.executeHandCycle(selectedCards, []);
+        selectedCards = [];
+        updateUI();
+      });
+
+      // Play selected cards
+      playCardsBtn.addEventListener("click", () => {
+        if (selectedCards.length === 0) {
+          console.log("No cards selected to play.");
+          return;
+        }
+
+        console.log(`Playing cards at indices: ${selectedCards.join(", ")}`);
+        gameLoop.executeHandCycle([], selectedCards);
+        selectedCards = [];
+        updateUI();
+
+        // Check if blind cycle is complete
+        const blindComplete = gameLoop.executeBlindCycle();
+        if (blindComplete) {
+          console.log("Blind cycle complete!");
+        }
+      });
+
+      // Update UI with current game state
+      function updateUI() {
+        if (!gameLoop) return;
+
+        const gameHandler = gameLoop.gameHandler;
+        const state = gameHandler.state;
+
+        // Update status display
+        document.getElementById(
+          "ante-display"
+        ).textContent = `${state.currAnte}/${state.totalAntes}`;
+        document.getElementById(
+          "blind-display"
+        ).textContent = `${state.currBlind}/${state.blindsPerAnte}`;
+        document.getElementById(
+          "hands-played-display"
+        ).textContent = `${state.handsPlayed}/${state.totalHands}`;
+        document.getElementById(
+          "discards-used-display"
+        ).textContent = `${state.discardsUsed}/${state.discardCount}`;
+        document.getElementById("round-score-display").textContent = `${
+          state.roundScore
+        }/${state.blindRequirements[state.currBlind - 1]}`;
+        document.getElementById("money-display").textContent = state.money;
+
+        // Update hand display
+        handDisplay.innerHTML = "";
+        state.hands.main.cards.forEach((card, index) => {
+          const cardElement = document.createElement("div");
+          cardElement.className = `card ${card.suit}`;
+          if (card.isSelected) {
+            cardElement.classList.add("selected");
+          }
+
+          const valueElement = document.createElement("div");
+          valueElement.className = "card-value";
+          valueElement.textContent = card.type;
+
+          const suitElement = document.createElement("div");
+          suitElement.className = "card-suit";
+          suitElement.textContent = card.suit;
+
+          cardElement.appendChild(valueElement);
+          cardElement.appendChild(suitElement);
+
+          // Add click handler to select/deselect card
+          cardElement.addEventListener("click", () => {
+            const cardIdx = index;
+            const selectedIndex = selectedCards.indexOf(cardIdx);
+
+            if (selectedIndex === -1) {
+              selectedCards.push(cardIdx);
+              cardElement.classList.add("selected");
+            } else {
+              selectedCards.splice(selectedIndex, 1);
+              cardElement.classList.remove("selected");
+            }
+
+            console.log(`Selected cards: ${selectedCards.join(", ")}`);
+          });
+
+          handDisplay.appendChild(cardElement);
+        });
+      }
+    </script>
+  </body>
+</html>
