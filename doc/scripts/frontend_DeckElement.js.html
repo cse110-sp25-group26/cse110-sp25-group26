@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: backend/utils.js</title>
+    <title>JSDoc: Source: frontend/DeckElement.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: backend/utils.js</h1>
+    <h1 class="page-title">Source: frontend/DeckElement.js</h1>
 
     
 
@@ -26,76 +26,76 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Card } from './Card.js';
+            <pre class="prettyprint source linenums"><code>import { CardElement } from "./CardElement.js";
+/**
+ * @typedef {import("../backend/Card.js").Card} Card
+ */
 
 /**
- * @function calculateBlackjackScore
- * @description Calculates the Blackjack score from an array of cards.
- * @param {Card[]} cards - An array of Card objects.
+ * @classdesc UI component representing the Deck.
  * 
- * @example
- * const cards = [
- *   new Card('hearts', 'A'),
- *   new Card('spades', 'K'),
- *   new Card('diamonds', '5')
- *  ];
- * const score = calculateBlackjackScore(cards);
- * console.log(score); // Outputs 16
- * 
- * @returns {number} The calculated score.
+ * @param {HTMLElement} deckContainer - The DOM element for the Deck.
+ * @param {CardElement[]} cards - The array of CardElement objects currently created.
  */
-export function calculateBlackjackScore(cards) {
-	let score = 0;
-	let aces = 0;
+export class DeckElement {
+	/**
+	 * @class DeckElement
+	 * @param {string} back - The card back to use for the Deck.
+	 * @param {HTMLElement} deckContainer - The DOM element for the Deck.
+	 */
+	constructor(back, deckContainer) {
+		// Verify deckContainer is a valid HTMLElement
+		if (!(deckContainer instanceof HTMLElement)) {
+			console.error("Invalid deck container provided.");
+			return null;
+		}
+		this.deckContainer = deckContainer;
 
-	// First pass: Sum all cards, counting Aces as 11
-	for (const card of cards) {
-		if (card.suit === 'joker' || card.suit === 'consumable') {
-			// Skip jokers and consumables
-			continue;
+		// Verify back is a valid string
+		if (typeof back !== "string" || back.trim() === "") {
+			console.error("Invalid card back provided.");
+			return null;
 		}
 
-		if (card.type === 'A') {
-			aces++;
-			score += 11; // Count Ace as 11 initially
-		} else if (['K', 'Q', 'J'].includes(card.type)) {
-			score += 10; // Face cards are worth 10
-		} else {
-			score += parseInt(card.type, 10); // Number cards are worth their value
-		}
+		// Set up the deck background image
+		this.deckImage = document.createElement("img");
+		this.deckImage.src = "/source/res/img/" + back + ".png";
+		this.deckImage.alt = "Deck";
+		this.deckImage.style.width = "80px";
+		this.deckImage.style.height = "120px";
+
+		// Set up the deck container
+		this.deckContainer.style.display = "flex";
+		this.deckContainer.style.justifyContent = "center";
+		this.deckContainer.style.alignItems = "center";
+		this.deckContainer.appendChild(this.deckImage);
+
+		// Initialize the cards array
+		this.cards = [];
 	}
 
-	// Second pass: Adjust for Aces if score exceeds 21
-	while (score > 21 &amp;&amp; aces > 0) {
-		score -= 10; // Count Ace as 1 instead of 11
-		aces--;
+	/**
+	 * @function addCards
+	 * @description Adds some cards on top of the deck.
+	 * @param {Card[]} cards - The backend cards to create elements for.
+	 */
+	addCards(cards) {
+		let zindex = 0;
+		let cardElements = [];
+		cards.forEach(card => {
+			const cardElement = new CardElement(card, true);
+			cardElement.style.position = "absolute";
+			cardElement.style.zIndex = zindex++;
+			cardElement.style.left = "0px";
+			cardElement.style.top = "0px";
+
+			cardElements.push(cardElement);
+
+			card.UIel = cardElement;
+		});
+		this.deckContainer.append(...cardElements);
+		this.cards.push(...cardElements);
 	}
-
-	return score;
-}
-
-/**
- * @function staggered
- * @description Executes a function on array items with staggered timing.
- * @param {Array} array - The array of items to process.
- * @param {Function} fn - The function to execute on each item.
- * @param {number} [delay=0] - The delay in milliseconds between each function call.
- * @returns {Promise} A promise that resolves when all items have been processed.
- */
-export function staggered(array, fn, delay = 0) {
-	return new Promise((resolve) => {
-		let index = 0;
-
-		const interval = setInterval(() => {
-			if (index &lt; array.length) {
-				fn(array[index]);
-				index++;
-			} else {
-				clearInterval(interval);
-				resolve();
-			}
-		}, delay);
-	});
 }</code></pre>
         </article>
     </section>
