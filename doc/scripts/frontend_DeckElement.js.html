@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ConsoleCardElement</title>
+    <title>JSDoc: Source: frontend/DeckElement.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,392 +17,88 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ConsoleCardElement</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleCardElement<span class="signature">(card)</span><span class="type-signature"></span></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    
-    <h4 class="name" id="ConsoleCardElement"><span class="type-signature"></span>new ConsoleCardElement<span class="signature">(card)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Constructs a ConsoleUI card for the Card passed.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>card</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Card.html">Card</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The card to construct the element on.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleCardElement<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">A class representing a Card in the ConsoleUI.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="ConsoleCardElement"><span class="type-signature"></span>new ConsoleCardElement<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>card</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Card.html">Card</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The associated Card with this ConsoleUI Card.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>display</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The display name for this Card.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">Source: frontend/DeckElement.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { CardElement } from "./CardElement.js";
+/**
+ * @typedef {import("../backend/Card.js").Card} Card
+ */
+
+/**
+ * @classdesc UI component representing the Deck.
+ * 
+ * @param {HTMLElement} deckContainer - The DOM element for the Deck.
+ * @param {CardElement[]} cards - The array of CardElement objects currently created.
+ */
+export class DeckElement {
+	/**
+	 * @class DeckElement
+	 * @param {string} back - The card back to use for the Deck.
+	 * @param {HTMLElement} deckContainer - The DOM element for the Deck.
+	 */
+	constructor(back, deckContainer) {
+		// Verify deckContainer is a valid HTMLElement
+		if (!(deckContainer instanceof HTMLElement)) {
+			console.error("Invalid deck container provided.");
+			return null;
+		}
+		this.deckContainer = deckContainer;
+
+		// Verify back is a valid string
+		if (typeof back !== "string" || back.trim() === "") {
+			console.error("Invalid card back provided.");
+			return null;
+		}
+
+		// Set up the deck background image
+		this.deckImage = document.createElement("img");
+		this.deckImage.src = "/source/res/img/" + back + ".png";
+		this.deckImage.alt = "Deck";
+		this.deckImage.style.width = "80px";
+		this.deckImage.style.height = "120px";
+
+		// Set up the deck container
+		this.deckContainer.style.display = "flex";
+		this.deckContainer.style.justifyContent = "center";
+		this.deckContainer.style.alignItems = "center";
+		this.deckContainer.appendChild(this.deckImage);
+
+		// Initialize the cards array
+		this.cards = [];
+	}
+
+	/**
+	 * @function addCards
+	 * @description Adds some cards on top of the deck.
+	 * @param {Card[]} cards - The backend cards to create elements for.
+	 */
+	addCards(cards) {
+		let zindex = 0;
+		let cardElements = [];
+		cards.forEach(card => {
+			const cardElement = new CardElement(card, true);
+			cardElement.style.position = "absolute";
+			cardElement.style.zIndex = zindex++;
+			cardElement.style.left = "0px";
+			cardElement.style.top = "0px";
+
+			cardElements.push(cardElement);
+
+			card.UIel = cardElement;
+		});
+		this.deckContainer.append(...cardElements);
+		this.cards.push(...cardElements);
+	}
+}</code></pre>
+        </article>
+    </section>
 
 
 
