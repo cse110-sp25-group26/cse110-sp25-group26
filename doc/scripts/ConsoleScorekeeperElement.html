@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Deck</title>
+    <title>JSDoc: Class: ConsoleScorekeeperElement</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Deck</h1>
+    <h1 class="page-title">Class: ConsoleScorekeeperElement</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Deck<span class="signature">(cards)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleScorekeeperElement<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">(cards)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ConsoleScorekeeperElement"><span class="type-signature"></span>new ConsoleScorekeeperElement<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Creates a new deck of cards.
+    Constructs a ConsoleUI scorekeeper.
 </div>
 
 
@@ -58,55 +58,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The cards to be included in the deck.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -142,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line11">line 11</a>
+        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line106">line 106</a>
     </li></ul></dd>
     
 
@@ -180,13 +131,6 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
-            <dd></dd>
-        </dl>
-    
 
     
 
@@ -215,10 +159,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="Deck.html">Deck</a></span>Deck<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleScorekeeperElement<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents a deck of cards in the game.</div>
+            <div class="class-description">A class representing the scorekeeper in the ConsoleUI.</div>
         
     
 </header>
@@ -233,7 +176,7 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ConsoleScorekeeperElement"><span class="type-signature"></span>new ConsoleScorekeeperElement<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -278,13 +221,13 @@
 
         <tr>
             
-                <td class="name"><code>availableCards</code></td>
+                <td class="name"><code>blindName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">string</span>
 
 
             
@@ -294,20 +237,20 @@
 
             
 
-            <td class="description last">The cards available in the deck.</td>
+            <td class="description last">The name of the current blind.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>usedCards</code></td>
+                <td class="name"><code>blindDescription</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">string</span>
 
 
             
@@ -317,20 +260,20 @@
 
             
 
-            <td class="description last">The cards that have been used from the deck.</td>
+            <td class="description last">The description of the current blind.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>allCards</code></td>
+                <td class="name"><code>minScore</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">minScore</span>
 
 
             
@@ -340,7 +283,214 @@
 
             
 
-            <td class="description last">All cards in the deck, including available and used cards.</td>
+            <td class="description last">The minimum score required for the current blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>baseReward</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">baseReward</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The base reward for the current blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roundScore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The round score for the current blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handScore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The score for the current hand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handMult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The multiplier for the current hand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handsRemaining</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number of hands remaining in the current blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discardsRemaining</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number of discards remaining in the current blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ante</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current Ante.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>round</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current round within the blind.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>money</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current money the player has.</td>
         </tr>
 
     
@@ -379,7 +529,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line10">line 10</a>
+        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -416,13 +566,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
-            <dd></dd>
-        </dl>
     
 
     

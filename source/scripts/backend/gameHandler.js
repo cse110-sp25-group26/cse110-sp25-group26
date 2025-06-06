@@ -151,7 +151,7 @@ export class gameHandler {
 		cards.forEach(card => {
 			this.uiInterface.createUIel(card);
 		});
-		this.uiInterface.moveMultiple(cards, "deck", "hand_main", 0);
+		this.uiInterface.moveMultiple(cards, "deck", "handMain", 0);
 	}
 
 	/**
@@ -199,7 +199,7 @@ export class gameHandler {
 			console.log(`Discarded card: ${card.type} of ${card.suit}`);
 		});
 
-		this.uiInterface.moveMultiple(selectedCards, "hand_main", "discard_pile", 0);
+		this.uiInterface.moveMultiple(selectedCards, "handMain", "discard_pile", 0);
 		selectedCards.forEach(card => {
 			this.uiInterface.removeUIel(card);
 		});
@@ -242,12 +242,12 @@ export class gameHandler {
 			console.log(`Played card: ${card.type} of ${card.suit}`);
 		});
 
-		this.uiInterface.moveMultiple(selectedCards, "hand_main", "hand_played", 0);
+		this.uiInterface.moveMultiple(selectedCards, "handMain", "handPlayed", 0);
 
 		this.scoreHand();
 
 		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
-			this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
+			this.uiInterface.moveMultiple(this.state.hands.main.cards, "handMain", "deck", 0);
 			this.state.hands.main.cards = [];
 			
 			if (this.state.roundScore < this.state.blindRequirements[this.state.currBlind - 1]) {
@@ -336,7 +336,7 @@ export class gameHandler {
 				handMult: 1
 			});
 
-			this.uiInterface.moveMultiple(this.state.hands.played.cards, "hand_played", "offscreen", 0);
+			this.uiInterface.moveMultiple(this.state.hands.played.cards, "handPlayed", "offscreen", 0);
 			for (const card of this.state.hands.played.cards) {
 				this.uiInterface.removeUIel(card);
 			}
@@ -368,7 +368,7 @@ export class gameHandler {
 		}
 
 		this.state.money += baseMoney;
-		for (const [reason, value] of extras) {
+		for (const [, value] of extras) {
 			this.state.money += value;
 		}
 
@@ -414,12 +414,12 @@ export class gameHandler {
 		this.state.handsPlayed = 0;
 		this.state.discardsUsed = 0;
 
-		this.uiInterface.moveMultiple(this.state.hands.main.cards, "hand_main", "deck", 0);
+		this.uiInterface.moveMultiple(this.state.hands.main.cards, "handMain", "deck", 0);
 		this.state.hands.main.cards = [];
 		// TODO/UI: Animate the cards returning from discard to the deck
 		
 		// UI hand should be empty after this
-		if (this.uiInterface.hand_main.contents.length !== 0) {
+		if (this.uiInterface.handMain.contents.length !== 0) {
 			// console.error("UI hand is not empty after scoring.");
 			// use TUI codes for red
 			console.error("\x1b[31mUI hand is not empty after scoring.\x1b[0m");

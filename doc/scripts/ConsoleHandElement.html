@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Deck</title>
+    <title>JSDoc: Class: ConsoleHandElement</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Deck</h1>
+    <h1 class="page-title">Class: ConsoleHandElement</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Deck<span class="signature">(cards)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleHandElement<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">(cards)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ConsoleHandElement"><span class="type-signature"></span>new ConsoleHandElement<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +49,7 @@
 
 
 <div class="description">
-    Creates a new deck of cards.
+    Constructs a ConsoleUI hand.
 </div>
 
 
@@ -58,55 +58,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The cards to be included in the deck.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -142,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line11">line 11</a>
+        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -180,13 +131,6 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
-            <dd></dd>
-        </dl>
-    
 
     
 
@@ -215,10 +159,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="Deck.html">Deck</a></span>Deck<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ConsoleHandElement<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Represents a deck of cards in the game.</div>
+            <div class="class-description">A class representing a Hand in the ConsoleUI.</div>
         
     
 </header>
@@ -233,7 +176,7 @@
     
 
     
-    <h4 class="name" id="Deck"><span class="type-signature"></span>new Deck<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ConsoleHandElement"><span class="type-signature"></span>new ConsoleHandElement<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -278,7 +221,7 @@
 
         <tr>
             
-                <td class="name"><code>availableCards</code></td>
+                <td class="name"><code>contents</code></td>
             
 
             <td class="type">
@@ -294,53 +237,7 @@
 
             
 
-            <td class="description last">The cards available in the deck.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>usedCards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The cards that have been used from the deck.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>allCards</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">All cards in the deck, including available and used cards.</td>
+            <td class="description last">The cards in this Hand</td>
         </tr>
 
     
@@ -379,7 +276,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line10">line 10</a>
+        <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -416,13 +313,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Deck.html">Deck</a></dt>
-            <dd></dd>
-        </dl>
     
 
     

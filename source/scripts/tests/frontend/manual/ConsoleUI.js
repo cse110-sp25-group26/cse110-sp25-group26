@@ -1,5 +1,5 @@
 /**
- * @fileoverview
+ * @file
  * Console-based UI for manual testing of the game loop.
  * 
  * To run this test, run `node <path_here>/ConsoleUI.js` in the terminal.
