@@ -34,12 +34,37 @@
 
 
   <script>
+    let gameStorage;
+
+    function InitializeGameStorage() {
+      if (typeof GameStorage !== 'undefined') {
+        gameStorage = new GameStorage();
+      }
+    }
+
     /**
      * Sets the inner HTML content of the app container.
      * @param {string} html - The HTML content to display.
      */
     function setContent(html) {
       document.getElementById('app').innerHTML = html;
+    }
+
+    function getCurrentStats() {
+      if (!gameStorage) return getDefaultStats();
+      return gameStorage.getStats();
+    }
+    
+    // Default stats if storage isn't available
+    function getDefaultStats() {
+      return {
+        gamesStarted: 0,
+        gamesCompleted: 0,
+        highestAnteReached: 0,
+        highestRoundScore: 0,
+        totalHandsPlayed: 0,
+        totalJokersUsed: 0
+      };
     }
 
     /**
@@ -68,6 +93,7 @@
      * Displays the statistics screen.
      */
      function showStats() {
+      const stats = getCurrentStats();
       setContent(`
         <div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
           <div class="stats-container">

@@ -6,12 +6,12 @@ import jsdoc from "eslint-plugin-jsdoc";
 export default defineConfig([
   {
     files: [
-      "source/scripts/backend/*.{js,mjs,cjs}",
-      "source/scripts/frontend/*.{js,mjs,cjs}",
+      "source/scripts/**/*.{js,mjs,cjs}",
+	  "source/scripts/tests/**/*.{js,mjs,cjs}"
     ],
-    plugins: {
+    plugins: { 
       js,
-      jsdoc
+      jsdoc 
     },
     extends: [
       "js/recommended",

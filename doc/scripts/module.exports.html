@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: backend/utils.js</title>
+    <title>JSDoc: Class: exports</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,88 +17,141 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: backend/utils.js</h1>
+    <h1 class="page-title">Class: exports</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import { Card } from './Card.js';
+        <h2><span class="attribs"><span class="type-signature"></span></span>exports<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Represents a scorekeeper UI element that displays various game scores and stats.</div>
+        
+    
+</header>
 
-/**
- * @function calculateBlackjackScore
- * @description Calculates the Blackjack score from an array of cards.
- * @param {Card[]} cards - An array of Card objects.
- * 
- * @example
- * const cards = [
- *   new Card('hearts', 'A'),
- *   new Card('spades', 'K'),
- *   new Card('diamonds', '5')
- *  ];
- * const score = calculateBlackjackScore(cards);
- * console.log(score); // Outputs 16
- * 
- * @returns {number} The calculated score.
- */
-export function calculateBlackjackScore(cards) {
-	let score = 0;
-	let aces = 0;
+<article>
+    <div class="container-overview">
+    
+        
 
-	// First pass: Sum all cards, counting Aces as 11
-	for (const card of cards) {
-		if (card.suit === 'joker' || card.suit === 'consumable') {
-			// Skip jokers and consumables
-			continue;
-		}
+    
+    <h2>Constructor</h2>
+    
 
-		if (card.type === 'A') {
-			aces++;
-			score += 11; // Count Ace as 11 initially
-		} else if (['K', 'Q', 'J'].includes(card.type)) {
-			score += 10; // Face cards are worth 10
-		} else {
-			score += parseInt(card.type, 10); // Number cards are worth their value
-		}
-	}
+    
+    <h4 class="name" id="exports"><span class="type-signature"></span>new exports<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-	// Second pass: Adjust for Aces if score exceeds 21
-	while (score > 21 &amp;&amp; aces > 0) {
-		score -= 10; // Count Ace as 1 instead of 11
-		aces--;
-	}
+    
 
-	return score;
-}
 
-/**
- * @function staggered
- * @description Executes a function on array items with staggered timing.
- * @param {Array} array - The array of items to process.
- * @param {Function} fn - The function to execute on each item.
- * @param {number} [delay=0] - The delay in milliseconds between each function call.
- * @returns {Promise} A promise that resolves when all items have been processed.
- */
-export function staggered(array, fn, delay = 0) {
-	return new Promise((resolve) => {
-		let index = 0;
 
-		const interval = setInterval(() => {
-			if (index &lt; array.length) {
-				fn(array[index]);
-				index++;
-			} else {
-				clearInterval(interval);
-				resolve();
-			}
-		}, delay);
-	});
-}</code></pre>
-        </article>
-    </section>
+<div class="description">
+    Creates an instance of ScoreKeeper.Initializes references to the DOM elements that display game scores and stats.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_UI_ScoreKeeper.js.html">frontend/UI_ScoreKeeper.js</a>, <a href="frontend_UI_ScoreKeeper.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
