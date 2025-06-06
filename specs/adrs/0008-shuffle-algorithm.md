@@ -1,7 +1,7 @@
 ---
 # Configuration for the Jekyll "Just the Docs" theme (optional)
 parent: Decisions
-nav_order: 104
+nav_order: 107
 title: Use Fisher-Yates Shuffle for Deck
 status: proposed
 date: 2025-05-17
