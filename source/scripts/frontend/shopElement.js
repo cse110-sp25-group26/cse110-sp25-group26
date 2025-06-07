@@ -1,4 +1,5 @@
 import { HandElement } from './HandElement.js';
+import { gameHandler } from '../backend/gameHandler.js';
 
 /**
  * @classdesc UI component representing the Shop interface.
@@ -8,19 +9,22 @@ import { HandElement } from './HandElement.js';
  * @property {HTMLElement} overlay - The full-screen overlay background
  * @property {HTMLElement} shopBox - The main shop interface box
  * @property {HTMLElement} cardRow - The container for purchasable joker cards
+ * @property {gameHandler} gameHandler - Reference to the game handler for managing game state
  */
 export class ShopElement {
     /**
      * @class ShopElement
      * @param {HTMLElement} shopContainer - The DOM element that will contain the shop interface
+     * @param {gameHandler} gameHandler - The game handler instance for managing game state
      * @throws {Error} If shopContainer is not a valid HTMLElement
      */
-    constructor(shopContainer) {
+    constructor(shopContainer, gameHandler) {
         if (!(shopContainer instanceof HTMLElement)) {
             console.error("Invalid shop container provided.");
             return null;
         }
         this.shopContainer = shopContainer;
+        this.gameHandler = gameHandler;
         
 
         // load css file
@@ -64,7 +68,7 @@ export class ShopElement {
         this.cardRow = document.createElement("div");
         this.cardRow.className = "shop-card-row";
 
-        // 초기 Joker 카드 생성
+        // initial joker card constructor
         this.createJokerCards();
 
         // Bottom row: packs
@@ -137,15 +141,25 @@ export class ShopElement {
      * @private
      */
     purchaseJoker(cardBox) {
-        // Get the joker type from the card box
+        const price = parseInt(cardBox.dataset.price);
+        
+        // Check remaining money
+        if (this.gameHandler.state.money < price) {
+            console.log("Not enough money to purchase this joker");
+            // TODO: UI for not enough money
+            return;
+        }
+
+        // money decrease
+        this.gameHandler.state.money -= price;
+        console.log(`Money remaining: $${this.gameHandler.state.money}`);
+
         const jokerType = cardBox.dataset.jokerType;
         
-        // Create a new card element for the joker
         const jokerCard = document.createElement('card-element');
         jokerCard.setAttribute('suit', 'joker');
         jokerCard.setAttribute('type', jokerType);
         
-        // Add the joker image
         const cardImg = document.createElement('img');
         cardImg.src = `/source/res/img/${jokerType}.png`;
         cardImg.alt = jokerType;
@@ -153,15 +167,11 @@ export class ShopElement {
         cardImg.style.height = '100%';
         jokerCard.appendChild(cardImg);
         
-        // Get the jokers area and add the card
         const jokersArea = document.getElementById('jokers-area');
         if (jokersArea && jokersArea instanceof HandElement) {
             jokersArea.addCard(jokerCard);
-            
-            // Remove the card from the shop
             cardBox.remove();
-            
-            console.log(`Purchased joker: ${jokerType}`);
+            console.log(`Purchased joker: ${jokerType} for $${price}`);
         } else {
             console.error('Jokers area not found or not a HandElement');
         }
@@ -173,7 +183,6 @@ export class ShopElement {
      * @private
      */
     createJokerCards() {
-        // 기존 카드 제거
         this.cardRow.innerHTML = '';
 
         // Get all joker images
@@ -229,15 +238,16 @@ export class ShopElement {
         // Select 3 random jokers
         const selectedJokers = this.getRandomJokers(jokerImages, 3);
 
-        // Create card boxes for selected jokers
         selectedJokers.forEach((jokerName, index) => {
             const cardBox = document.createElement("div");
             cardBox.className = "shop-card-box";
             cardBox.dataset.jokerType = jokerName;
+            if(index === 0) {cardBox.dataset.price = "2"}
+            if(index === 1) {cardBox.dataset.price = "4"}
+            if(index === 2) {cardBox.dataset.price = "6"}
 
-            // Price label
             const price = document.createElement("div");
-            price.textContent = index === 0 ? "$2" : "$6";
+            price.textContent = `$${cardBox.dataset.price}`;
             price.className = "shop-card-price";
             cardBox.appendChild(price);
 
@@ -269,6 +279,19 @@ export class ShopElement {
      * @public
      */
     rerollJokers() {
+        const rerollCost = 5;
+        
+        // Check if we have enough money
+        if (this.gameHandler.state.money < rerollCost) {
+            console.log("Not enough money to reroll");
+            // UI for not enough money
+            return;
+        }
+
+        // decrease money
+        this.gameHandler.state.money -= rerollCost;
+        console.log(`Money remaining: $${this.gameHandler.state.money}`);
+
         console.log("Rerolling jokers...");
         this.createJokerCards();
     }

@@ -84,9 +84,11 @@
         import { CardElement } from './scripts/frontend/CardElement.js';
         import { enableReordering } from './scripts/frontend/CardMove.js';
         import { ShopElement } from './scripts/frontend/ShopElement.js';
+        import { gameHandler } from './scripts/backend/gameHandler.js';
 
         window.ui = new Scorekeeper();
         window.gameManager = new GameManager();
+        window.gameHandler = new gameHandler();
 
         customElements.whenDefined('hand-element').then(() => {
             if (window.gameManager) {
@@ -113,7 +115,7 @@
 
         const shopContainer = document.createElement('div');
         document.body.appendChild(shopContainer);
-        const shop = new ShopElement(shopContainer);
+        const shop = new ShopElement(shopContainer, window.gameHandler);
 
         const shopOpenBtn = document.getElementById('shop-open');
         shopOpenBtn.addEventListener('click', () => {
