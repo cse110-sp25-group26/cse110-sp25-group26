@@ -5,6 +5,7 @@ import { Card } from "./Card.js";
  * @description Calculates the Blackjack score from an array of cards.
  * @param {Card[]} cards - An array of Card objects.
  *
+ *
  * @example
  * const cards = [
  *   new Card('hearts', 'A'),
@@ -13,6 +14,7 @@ import { Card } from "./Card.js";
  *  ];
  * const score = calculateBlackjackScore(cards);
  * console.log(score); // Outputs 16
+ *
  *
  * @returns {number} The calculated score.
  */
@@ -69,3 +71,38 @@ export function staggered(array, fn, delay = 0) {
 		}, delay);
 	});
 }
+
+/**
+ * @function getHandType
+ * @description Determines the poker hand type for a given set of cards.
+ * @param {Card[]} cards - An array of Card objects.
+ * @returns {string} The name of the hand type.
+ */
+export function getHandType(cards) {
+	if (!cards || cards.length === 0) return "No Cards";
+
+	// Count card types and suits
+	const typeCounts = {};
+	const suitCounts = {};
+
+	cards.forEach((card) => {
+		if (card.suit === "joker" || card.suit === "consumable") return;
+
+		typeCounts[card.type] = (typeCounts[card.type] || 0) + 1;
+		suitCounts[card.suit] = (suitCounts[card.suit] || 0) + 1;
+	});
+
+	const counts = Object.values(typeCounts).sort((a, b) => b - a);
+	const maxOfSameSuit = Math.max(...Object.values(suitCounts));
+
+	// Check for pairs, trips, etc.
+	if (counts[0] >= 4) return "Four of a Kind";
+	if (counts[0] === 3 && counts[1] === 2) return "Full House";
+	if (maxOfSameSuit >= 5) return "Flush";
+	if (counts[0] === 3) return "Three of a Kind";
+	if (counts[0] === 2 && counts[1] === 2) return "Two Pair";
+	if (counts[0] === 2) return "Pair";
+
+	return "High Card";
+}
+

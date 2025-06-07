@@ -21,7 +21,10 @@ export class HandElement extends HTMLElement {
 		// Attach external CSS
 		const styleLink = document.createElement("link");
 		styleLink.setAttribute("rel", "stylesheet");
-		styleLink.setAttribute("href", "/source/scripts/frontend/hand.css");
+		styleLink.setAttribute(
+			"href",
+			`/source/styles/hand.css?v=${Date.now()}`
+		);
 		this.shadowRoot.appendChild(styleLink);
 
 		// Internal state
@@ -83,28 +86,66 @@ export class HandElement extends HTMLElement {
 	}
 
 	/**
+	 * @function clearCards
+	 * @description Removes all cards from the hand.
+	 */
+	clearCards() {
+		this.cards.forEach((card) => {
+			if (card.isConnected) {
+				this._container.removeChild(card);
+			}
+		});
+		this.cards = [];
+		this._updateLayout();
+	}
+
+	/**
 	 * @function _updateLayout
 	 * @description Updates the layout of cards in the hand, scaling them to fit.
 	 */
 	_updateLayout() {
-		const handWidth = this._container.offsetWidth || 1; // Avoid division by zero
-		const cardWidth = 80; // Default card width
-		const totalWidth = this.cards.length * cardWidth;
+		if (this.cards.length === 0) return;
 
-		let overlap = 0;
-		if (totalWidth > handWidth && this.cards.length > 1) {
-			overlap = (totalWidth - handWidth) / (this.cards.length - 1);
-		}
+		// Ensure container has proper styling
+		this._container.style.position = "relative";
+		this._container.style.display = "block"; // Override flex to work with absolute positioning
+		this._container.style.width = "100%";
+		this._container.style.height = "120px";
 
-		this.cards.forEach((card, index) => {
-			card.style.position = "absolute";
-			card.style.left = `${index * (cardWidth - overlap)}px`;
-			card.style.transform = card.classList.contains("selected")
-				? "translateY(-20px)"
-				: "translateY(0)";
-			card.style.zIndex = index.toString(); // Set zIndex for stacking
-			card.style.width = `${cardWidth}px`; // Ensure consistent width
-		});
+		// Wait for container to have dimensions
+		setTimeout(() => {
+			const handWidth = this._container.offsetWidth || 400;
+			const cardWidth = 80;
+			let cardSpacing = cardWidth;
+
+			// Calculate spacing to fit all cards
+			if (this.cards.length > 1) {
+				const totalNeededWidth = this.cards.length * cardWidth;
+				if (totalNeededWidth > handWidth) {
+					// Cards need to overlap
+					cardSpacing = Math.max(
+						20,
+						(handWidth - cardWidth) / (this.cards.length - 1)
+					);
+				}
+			}
+
+			console.log(
+				`Layout: handWidth=${handWidth}, cardWidth=${cardWidth}, cardSpacing=${cardSpacing}, cards=${this.cards.length}`
+			);
+
+			this.cards.forEach((card, index) => {
+				card.style.position = "absolute";
+				card.style.left = `${index * cardSpacing}px`;
+				card.style.top = "0px";
+				card.style.transform = card.classList.contains("selected")
+					? "translateY(-20px)"
+					: "translateY(0)";
+				card.style.zIndex = index.toString();
+				card.style.width = `${cardWidth}px`;
+				card.style.height = "120px";
+			});
+		}, 10);
 	}
 
 	/**

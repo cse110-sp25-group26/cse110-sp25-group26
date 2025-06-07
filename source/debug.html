@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Debug - Card Display Test</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				padding: 20px;
+				background: #1a1a1a;
+				color: white;
+			}
+
+			#test-hand {
+				background: #333;
+				border: 2px solid #555;
+				padding: 20px;
+				margin: 20px 0;
+				min-height: 150px;
+			}
+
+			.status {
+				padding: 10px;
+				margin: 10px 0;
+				border-radius: 5px;
+				background: #2a2a2a;
+			}
+
+			.error {
+				background: #4a1a1a;
+				color: #ff6666;
+			}
+
+			.success {
+				background: #1a4a1a;
+				color: #66ff66;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Card Display Debug Test</h1>
+
+		<div id="status" class="status">Initializing...</div>
+
+		<h2>Test Hand Container:</h2>
+		<hand-element id="test-hand" aria-label="Test hand" data-card-width="80"></hand-element>
+
+		<button id="add-card-btn">Add Test Card</button>
+		<button id="clear-cards-btn">Clear Cards</button>
+
+		<h2>Console Output:</h2>
+		<div id="console-output" style="background: #111; padding: 10px; font-family: monospace; max-height: 200px; overflow-y: auto"></div>
+
+		<script type="module">
+			import { HandElement } from "./scripts/frontend/HandElement.js";
+			import { CardElement } from "./scripts/frontend/CardElement.js";
+			import { Card } from "./scripts/backend/Card.js";
+
+			const statusEl = document.getElementById("status");
+			const consoleOutput = document.getElementById("console-output");
+
+			// Capture console.log for display
+			const originalLog = console.log;
+			console.log = function (...args) {
+				originalLog.apply(console, args);
+				consoleOutput.innerHTML += args.join(" ") + "<br>";
+				consoleOutput.scrollTop = consoleOutput.scrollHeight;
+			};
+
+			// Capture console.error for display
+			const originalError = console.error;
+			console.error = function (...args) {
+				originalError.apply(console, args);
+				consoleOutput.innerHTML += '<span style="color: red;">ERROR: ' + args.join(" ") + "</span><br>";
+				consoleOutput.scrollTop = consoleOutput.scrollHeight;
+			};
+
+			async function initTest() {
+				try {
+					statusEl.textContent = "Waiting for custom elements...";
+
+					// Wait for custom elements to be defined
+					await customElements.whenDefined("hand-element");
+					await customElements.whenDefined("card-element");
+
+					statusEl.textContent = "Custom elements loaded successfully!";
+					statusEl.className = "status success";
+
+					const testHand = document.getElementById("test-hand");
+					const addCardBtn = document.getElementById("add-card-btn");
+					const clearCardsBtn = document.getElementById("clear-cards-btn");
+
+					console.log("Test hand element:", testHand);
+					console.log("Add card button:", addCardBtn);
+
+					// Test card creation
+					addCardBtn.addEventListener("click", () => {
+						try {
+							// Create a test card
+							const suits = ["hearts", "diamonds", "clubs", "spades"];
+							const types = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"];
+
+							const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+							const randomType = types[Math.floor(Math.random() * types.length)];
+
+							console.log(`Creating card: ${randomType} of ${randomSuit}`);
+
+							const card = new Card(randomSuit, randomType);
+							const cardElement = new CardElement(card, true);
+
+							console.log("Card created:", card);
+							console.log("CardElement created:", cardElement);
+
+							testHand.addCard(cardElement);
+							console.log("Card added to hand. Total cards:", testHand.cards.length);
+						} catch (error) {
+							console.error("Error creating card:", error);
+						}
+					});
+
+					clearCardsBtn.addEventListener("click", () => {
+						testHand.clearCards();
+						console.log("Cards cleared");
+					});
+
+					// Add a test card automatically
+					console.log("Adding initial test card...");
+					const testCard = new Card("hearts", "A");
+					const testCardElement = new CardElement(testCard, true);
+					testHand.addCard(testCardElement);
+					console.log("Initial card added");
+				} catch (error) {
+					console.error("Initialization error:", error);
+					statusEl.textContent = "Error: " + error.message;
+					statusEl.className = "status error";
+				}
+			}
+
+			// Start the test
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", initTest);
+			} else {
+				initTest();
+			}
+		</script>
+	</body>
+</html>
