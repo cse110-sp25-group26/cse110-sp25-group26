@@ -4,17 +4,29 @@
 export default class ScoreKeeper {
 	/**
 	 * Creates an instance of ScoreKeeper.
-	 * Initializes references to the DOM elements that display game scores and stats.
 	 */
 	constructor() {
+		this.goal = null;
+		this.round = null;
+		this.chips = null;
+		this.mult = null;
+		this.bank = null;
+		this.discards = null;
+
+		// initialize some variables like this.scoreElement, this.chipsElement, etc.
+	}
+
+	/**
+	 * Initializes references to the DOM elements that display game scores and stats.
+	 * Called after DOM is loaded.
+	 */
+	init() {
 		this.goal = document.getElementById("goal-score");
 		this.round = document.getElementById("round-score");
 		this.chips = document.getElementById("chip-val");
 		this.mult = document.getElementById("mult-val");
 		this.bank = document.getElementById("bank-amount");
 		this.discards = document.getElementById("discards");
-
-		// initialize some variables like this.scoreElement, this.chipsElement, etc.
 	}
 
 	/**
