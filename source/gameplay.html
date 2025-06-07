@@ -25,9 +25,9 @@
 				</section>
 				<section class="card card-chips">
 					<div class="chip-row">
-						<div class="chip green"><span id="chip-val">1</span></div>
+						<div class="chip red"><span id="chip-val">1</span></div>
 						<span class="times">×</span>
-						<div class="chip pink"><span id="mult-val">1</span></div>
+						<div class="chip blue"><span id="mult-val">1</span></div>
 					</div>
 					<p class="chip-label">Chips / Mult</p>
 				</section>
@@ -50,7 +50,9 @@
 					<hand-element id="consumables-area" class="card-placeholder-area" aria-label="Consumables area" data-card-width="60"> </hand-element>
 				</section>
 
-				<hand-element id="played-cards-display" aria-label="Played cards area" data-card-width="70"> </hand-element>
+				<div id="played-cards-container">
+					<hand-element id="played-cards-display" aria-label="Played cards area" data-card-width="70"> </hand-element>
+				</div>
 
 				<footer id="hand-strip">
 					<nav class="player-hand-actions">
