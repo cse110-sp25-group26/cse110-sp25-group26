@@ -1,3 +1,5 @@
+import { HandElement } from './HandElement.js'; // Import HandElement
+
 /**
  * @typedef {import("../backend/Card.js").Card} Card
  */
@@ -97,7 +99,7 @@ export class CardElement extends HTMLElement {
 		// Attach external CSS
 		const styleLink = document.createElement('link');
 		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		styleLink.setAttribute('href', './scripts/frontend/card.css');
 		this.shadowRoot.appendChild(styleLink);
 	}
 
@@ -117,6 +119,11 @@ export class CardElement extends HTMLElement {
 		this._DRAG_THRESHOLD = 5; // Pixels
 		this._lastClientX = 0;
 		this._tiltFactor = 0.5; // Degrees of tilt per pixel of X movement
+
+
+		this._originalHandElement = null; // Store original hand
+
+
 	}
 	/**
 	 * @function _setupEventListeners
@@ -125,6 +132,7 @@ export class CardElement extends HTMLElement {
 	 * @returns {void}
 	 */
 	_setupEventListeners() {
+
 		// Bind methods
 		this._onDragStart = this._onDragStart.bind(this);
 		this._onDragMove = this._onDragMove.bind(this);
@@ -165,7 +173,7 @@ export class CardElement extends HTMLElement {
 	 * @description Called when the element is added to the DOM.
 	 */
 	connectedCallback() {
-		this.updateCardFace();
+		this._updateCardFace();
 	}
 
 	/**
@@ -185,11 +193,50 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @description Updates the card's front and back faces based on its attributes.
 	 */
-	updateCardFace() {
-		// Update existing front image
-		const filename = `card_${this._card.type.toLowerCase()}_${this._card.suit.toLowerCase()}.png`;
-		this._frontImg.src = `/source/res/img/${filename}`;
-		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+	_updateCardFace() {
+		const suitAttr = this.getAttribute('suit');
+		let type = this.getAttribute('type');
+		this._cardFront.innerHTML = '';
+		this._cardFront.style.backgroundColor = 'white'; // Explicitly set background
+
+		if (suitAttr && type) {
+			const typeMap = {
+				'A': 'ace', 'K': 'king', 'Q': 'queen', 'J': 'jack',
+				'10': '10', '9': '9', '8': '8', '7': '7', '6': '6',
+				'5': '5', '4': '4', '3': '3', '2': '2'
+			};
+			const fileType = typeMap[type.toUpperCase()] || type.toLowerCase();
+
+			let fileSuit = suitAttr.toLowerCase();
+			if (fileSuit.endsWith('s')) {
+				fileSuit = fileSuit.substring(0, fileSuit.length - 1);
+			}
+
+			const img = document.createElement('img');
+			const filename = `card_${fileType}_${fileSuit}.png`;
+
+			// Path relative to gameplay.html
+			img.src = `res/img/${filename}`;
+
+			img.alt = `${type} of ${suitAttr}`;
+			img.style.width = '100%';
+			img.style.height = '100%';
+			this._cardFront.appendChild(img);
+		} else {
+			this._cardFront.textContent = type || '';
+		}
+
+		this._cardBack.innerHTML = '';
+		this._cardBack.style.backgroundColor = '#222'; // Ensure back also has a solid bg
+		const backImg = document.createElement('img');
+
+		// Path relative to gameplay.html
+		backImg.src = 'res/img/back.png';
+
+		backImg.alt = 'Card back';
+		backImg.style.width = '100%';
+		backImg.style.height = '100%';
+		this._cardBack.appendChild(backImg);
 	}
 
 	/**
@@ -222,9 +269,22 @@ export class CardElement extends HTMLElement {
 		e.preventDefault();
 		e.stopPropagation();
 		this._dragging = true;
-		this._wasDragged = false; // Reset until movement is detected
+		this._wasDragged = false;
 		this._dragStartX = e.clientX;
 		this._dragStartY = e.clientY;
+
+		// Determine and store the original hand element
+		const rootNode = this.getRootNode();
+		const hostElement = rootNode?.host;
+
+		if (hostElement && hostElement instanceof HandElement) {
+			this._originalHandElement = hostElement;
+		} else {
+			// Fallback if not in a shadow DOM or host is not a HandElement instance
+			// This might happen if card is temporarily elsewhere or if element structures change
+			this._originalHandElement = this.closest('hand-element');
+		}
+		console.log('[CardElement._onDragStart] Started dragging card. Original hand:', this._originalHandElement ? this._originalHandElement.id : 'UNKNOWN/NONE', this);
 
 		// Store initial state for when drag actually starts
 		this._dragPreparationState = {
@@ -305,29 +365,50 @@ export class CardElement extends HTMLElement {
 		if (!this._dragging) return;
 		this._dragging = false;
 
+		console.log('[CardElement._onDragEnd] Ending drag. Original hand was:', this._originalHandElement ? this._originalHandElement.id : 'UNKNOWN/NONE', 'Card:', this);
+
+		// Determine the actual element under the cursor at drop time
+		// Temporarily hide the dragged card to accurately get the element below
+		const originalPointerEvents = this.style.pointerEvents;
+		this.style.pointerEvents = 'none';
+		const elementUnderMouse = this.shadowRoot.elementFromPoint(e.clientX, e.clientY) || document.elementFromPoint(e.clientX, e.clientY);
+		this.style.pointerEvents = originalPointerEvents;
+
 		if (this._wasDragged) {
-			// Reset styles only if the card was actually dragged and styles were changed
-			this.style.position = '';
-			this.style.zIndex = '';
-			this.style.left = '';
-			this.style.top = '';
-			this.style.width = '';
-			this.style.height = '';
-			this.style.transformOrigin = '';
-
-			if (this._preDragTransform !== undefined) {
-				this.style.transform = this._preDragTransform;
-				this._preDragTransform = undefined;
-			}
-
 			this.dispatchEvent(new CustomEvent('card-dropped', {
 				bubbles: true,
 				composed: true,
-				detail: { card: this, clientX: e.clientX, clientY: e.clientY }
+				detail: {
+					card: this,
+					doriginalEvent: e, // The original mouse event
+					target: elementUnderMouse,
+					originalHand: this._originalHandElement 
+				}
 			}));
+
+			// Reset visual drag state. If the card is not adopted by a new hand or area,
+			// its original hand's _updateLayout should correctly reposition it.
+			// Clearing these helps _updateLayout work from a cleaner slate.
+			this.style.zIndex = this._preDragZIndex || '';
+			this.style.transform = this._preDragTransform || ''; // Restore original transform or clear
+			// Position is tricky. If we clear left/top, and _updateLayout doesn't run or fails,
+			// it might snap to 0,0. However, _updateLayout *will* set left/top.
+			// Let's clear them to avoid interference with _updateLayout's calculations.
+			this.style.left = '';
+			this.style.top = '';
+			// this.style.position is managed by _updateLayout which sets it to 'absolute'
+
+		} else {
+			// This was a click, not a drag. Restore any click-related styles if necessary.
+			// Handled by HandElement's _onCardSelect
 		}
 
-		this._dragPreparationState = null; // Clean up
+		// Reset internal drag state variables
+		this._wasDragged = false;
+		this._dragStartX = 0;
+		this._dragStartY = 0;
+		this._lastClientX = 0;
+		this._originalHandElement = null; // Clear after drag end
 	}
 
 	/**

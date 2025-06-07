@@ -3,6 +3,7 @@ import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
 import { calculateBlackjackScore } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
+import { GameStorage } from "./GameStorage.js";
 
 /**
  * @typedef {object} HandHolder
@@ -18,7 +19,7 @@ import { UIInterface } from "./UIInterface.js";
  * @property {HandHolder}     hands            – the player's hands
  * @property {number}         currAnte         – current ante value
  * @property {number}         currBlind        – current blind value
- * @property {number}         totalHands   	   – how many hands may be played this blind
+ * @property {number}         handsRemaining   – how many hands are left this round
  * @property {number}         handsPerBlind    – (config) hands per blind
  * @property {number}         blindsPerAnte    – (fixed) blinds per ante
  * @property {number}         totalAntes       – (fixed) total antes in the game
@@ -26,13 +27,9 @@ import { UIInterface } from "./UIInterface.js";
  * @property {number}         discardCount     – how many cards can be discarded
  * @property {number[]}       blindRequirements – thresholds for each blind
  * @property {number}         roundScore       – score for the current round
+ * @property {number}         roundMult        – score multiplier for the round
  * @property {number}         handsPlayed      – total hands played so far
  * @property {number}         discardsUsed     – how many discards have been used
- * @property {number}         handScore	  	   – score for the current hand
- * @property {number}         handMult 	  	   – multiplier for the current hand
- * @property {boolean}        endlessMode      – whether the game is in endless mode
- * @property {UIInterface}	  uiInterface      - interface provided by the UI to interact with the game
- * @property {string}         currentBlindName – name of the current blind level
  */
 
 /**
@@ -46,13 +43,11 @@ import { UIInterface } from "./UIInterface.js";
 export class gameHandler {
 	/**
 	 * @class gameHandler
-	 * @description Initializes the game handler with default values and resets the game state.
-	 * @param {UIInterface} uiInterface - The UI interface to interact with the game.
 	 */
 	constructor(uiInterface) {
 		this.uiInterface = uiInterface;
+		this.GameStorage = new GameStorage();
 		this.resetGame();
-		uiInterface.gameHandler = this;
 	}
 
 	/**
@@ -71,7 +66,7 @@ export class gameHandler {
 			// Core progression
 			currAnte: 1,
 			currBlind: 1,
-			totalHands: 4,
+			handsRemaining: 4,
 
 			// Hand sizes
 			handSize: 5,
@@ -88,16 +83,21 @@ export class gameHandler {
 			discardCount: 4,
 
 			// Blind requirements
-			// TODO: Determine the algorithm and update these values accordingly per ante
 			blindRequirements: [40, 60, 80],
-			blindRewards: [4, 6, 8],
 
 			// Tracking
 			roundScore: 0,
+			roundMult: 1,
 			handsPlayed: 0,
 			discardsUsed: 0,
 			endlessMode: false,
-			currentBlindName: "Small Blind"
+			currentBlindName: "Small Blind",
+
+			// optional
+			gameStartTime: Date.now(),
+			maxAnteThisGame: 1,
+			maxRoundScoreThisGame: 0,
+			jokersUsedThisGame: 0
 		};
 
 		this.suits = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -109,25 +109,6 @@ export class gameHandler {
 			}
 		}
 		this.state.deck = new Deck(this.defaultCards);
-
-		this.uiInterface.newGame(false); // UI sets up, might call allowPlay if !reset
-
-		this.uiInterface.updateScorekeeper({
-			ante: 1,
-			round: 1,
-			handsRemaining: this.state.totalHands,
-			discardsRemaining: this.state.discardCount,
-			minScore: this.state.blindRequirements[this.state.currBlind - 1],
-			baseReward: this.state.blindRewards[this.state.currBlind - 1],
-			blindName: "Small Blind",
-			roundScore: 0,
-			handScore: 0,
-			handMult: 1,
-			money: this.state.money
-		});
-
-		this.dealCards();
-		this.uiInterface.allowPlay(); // Explicitly allow play after setup
 	}
 
 	/**
@@ -135,8 +116,6 @@ export class gameHandler {
 	 * @description Deals cards to the main hand until the hand is full or no cards are left in the deck.
 	 */
 	dealCards() {
-		let cards = [];
-
 		while (this.state.hands.main.cards.length < this.state.handSize && this.state.deck.availableCards.length > 0) {
 			const card = this.state.deck.drawCard();
 			if (card) {
@@ -145,13 +124,9 @@ export class gameHandler {
 				console.log("No more cards to deal.");
 				break;
 			}
-			cards.push(card);
-		}
 
-		cards.forEach(card => {
-			this.uiInterface.createUIel(card);
-		});
-		this.uiInterface.moveMultiple(cards, "deck", "handMain", 0);
+			// TODO_UI: Call back to UI to create card UI elements, move_multiple them to the main hand
+		}
 	}
 
 	/**
@@ -188,8 +163,6 @@ export class gameHandler {
 			console.error("No cards selected for discard.");
 			return;
 		}
-		
-		this.uiInterface.disallowPlay();
 
 		// Deselect cards after discarding
 		selectedCards.forEach(card => card.toggleSelect());
@@ -199,25 +172,9 @@ export class gameHandler {
 			console.log(`Discarded card: ${card.type} of ${card.suit}`);
 		});
 
-		this.uiInterface.moveMultiple(selectedCards, "handMain", "discard_pile", 0);
-		selectedCards.forEach(card => {
-			this.uiInterface.removeUIel(card);
-		});
+		// TODO_UI: Call move_multiple to move said cards from main to discard pile, remove UI element for each card
 
 		this.state.discardsUsed++;
-		this.uiInterface.updateScorekeeper({
-			discardsRemaining: this.state.discardCount - this.state.discardsUsed
-		});
-
-		this.dealCards();
-
-		// If the main hand is empty after discarding, no more cards can be played
-		if (this.state.hands.main.cards.length === 0) {
-			console.log("Main hand is empty after discarding. Cannot play cards.");
-			this.uiInterface.displayLoss("Main hand is empty after discarding. Game Over!");
-			return;
-		}
-		this.uiInterface.allowPlay();
 	}
 
 	/**
@@ -231,8 +188,6 @@ export class gameHandler {
 			return;
 		}
 
-		this.uiInterface.disallowPlay();
-
 		// Deselect cards after playing
 		selectedCards.forEach(card => card.toggleSelect());
 
@@ -242,214 +197,8 @@ export class gameHandler {
 			console.log(`Played card: ${card.type} of ${card.suit}`);
 		});
 
-		this.uiInterface.moveMultiple(selectedCards, "handMain", "handPlayed", 0);
+		// TODO_UI: Call move_multiple to move said cards from main to played
 
-		this.scoreHand();
-
-		if (this.state.handsPlayed >= this.state.totalHands || this.state.roundScore >= this.state.blindRequirements[this.state.currBlind - 1]) {
-			this.uiInterface.moveMultiple(this.state.hands.main.cards, "handMain", "deck", 0);
-			this.state.hands.main.cards = [];
-			
-			if (this.state.roundScore < this.state.blindRequirements[this.state.currBlind - 1]) {
-				console.log("Not enough score to advance to the next blind.");
-				this.uiInterface.displayLoss(`Failed to meet blind requirement of ${this.state.blindRequirements[this.state.currBlind - 1]}. Game Over!`);
-				return; // Game ends here due to failing the blind
-			}
-
-			// TODO_UI: Call back to the UI to display the shop
-			//          Requires Shop class to be implemented (not done yet)
-			console.log("Should run the shop now.");
-
-			// TODO: Should this go in the shop class?
-			if (this.nextBlind()) {
-				console.log("Next blind reached and game continues.");
-			} else {
-				// Game ended
-				console.log("Game has concluded.");
-			}
-		} else {
-			this.dealCards();
-			this.uiInterface.allowPlay();
-		}
-	}
-
-	/**
-	 * @function scoreHand
-	 * @description Scores the played hand, updates the round score, and sets up for the next round.
-	 */
-	scoreHand() {
-		// If the hand is empty, log and return
-		if (this.state.hands.played.cards.length === 0) {
-			console.log("No cards played. No score.");
-			return;
-		}
-
-		this.state.handScore = 0;
-		this.state.handMult = 1;
-
-		for (let i = 0; i < this.state.hands.played.cards.length;) {
-			const card = this.state.hands.played.cards[i];
-			
-			let cardValue = card.getValue();
-
-			// TODO: Check for attributes on the card, update base chip value accordingly
-
-			// TODO: Check for applicable jokers to this card
-			// ->UI: Call back to UI to play joker animation (likely also score animation)
-
-			this.state.handScore += cardValue;
-			this.uiInterface.updateScorekeeper({
-				handScore: this.state.handScore
-			});
-
-			console.log(`Card ${card.type} of ${card.suit} scored: ${cardValue}`);
-			this.uiInterface.scoreCard(card, [`+${cardValue} Chips`], ["#00FF00"]);
-
-			// TODO: Conditions for other increments
-			i += 1;
-		}
-		
-
-		// Verify that the played hand has a valid blackjack score
-		const score = calculateBlackjackScore(this.state.hands.played.cards);
-		if (score > 21) {
-			console.log("Score exceeds 21. Hand is bust.");
-
-			this.state.handScore = 0;
-			this.state.handMult = 1;
-			
-			// TODO_UI: Call back to UI to display bust, update scorekeeper
-			this.uiInterface.updateScorekeeper({
-				handScore: 0,
-				handMult: 1
-			});
-			this.uiInterface.displayBust();
-		} else {
-			this.state.roundScore += this.state.handScore * this.state.handMult;
-
-			this.state.handScore = 0;
-			this.state.handMult = 1;
-			
-			this.uiInterface.updateScorekeeper({
-				roundScore: this.state.roundScore,
-				handScore: 0,
-				handMult: 1
-			});
-
-			this.uiInterface.moveMultiple(this.state.hands.played.cards, "handPlayed", "offscreen", 0);
-			for (const card of this.state.hands.played.cards) {
-				this.uiInterface.removeUIel(card);
-			}
-		}
-
-		this.state.handsPlayed++;
-		this.uiInterface.updateScorekeeper({
-			handsRemaining: this.state.totalHands - this.state.handsPlayed
-		});
-		
-		this.state.hands.played.cards = [];
-	}
-
-	/**
-	 * @function nextBlind
-	 * @description Advances to the next blind level and resets the game state.
-	 * @returns {boolean} - True if the next blind was reached, false if the game is over.
-	 */
-	nextBlind() {
-		this.uiInterface.disallowPlay(); // Disallow play during blind transition/setup
-
-		const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
-
-		// TODO: Calculate more extras
-		const extras = [];
-		// Add a unit for each hand remaining
-		if (this.state.totalHands - this.state.handsPlayed > 0) {
-			extras.push(["Remaining Hands", this.state.totalHands - this.state.handsPlayed]);
-		}
-
-		this.state.money += baseMoney;
-		for (const [, value] of extras) {
-			this.state.money += value;
-		}
-
-		this.uiInterface.displayMoney(baseMoney, extras);
-		this.uiInterface.updateScorekeeper({
-			money: this.state.money
-		});
-
-		// Stubbed, should use the UI return value to determine whether to skip
-		// a blind or not
-		// TODO_UI: Call back to UI to display blind selection screen
-		let nextBlind = this.state.currBlind + 1;
-
-		if (nextBlind > this.state.blindsPerAnte) {
-			this.state.currBlind = 1;
-			this.state.currAnte++;
-			this.state.handsPlayed = 0;
-			this.state.discardsUsed = 0;
-
-			// TODO: Add a proper formula for calculating the next blind requirements and rewards.
-			// This temporary one just multiplies by 1.5
-			this.state.blindRequirements = this.state.blindRequirements.map(req => Math.ceil(req * 1.5));
-			this.state.blindRewards = this.state.blindRewards.map(reward => Math.ceil(reward * 1.5));
-
-			if (this.state.currAnte > this.state.totalAntes && !this.state.endlessMode) {
-				this.uiInterface.displayWin();
-				let enterEndlessMode = this.uiInterface.promptEndlessMode();
-
-				if (enterEndlessMode) {
-					this.state.endlessMode = true;
-					console.log("Entering Endless Mode.");
-				} else {
-					this.uiInterface.exitGame();
-					console.log("Game finished. Player chose not to enter Endless Mode.");
-					return false;
-				}
-			}
-		} else {
-			this.state.currBlind = nextBlind;
-		}
-
-		this.state.roundScore = 0;
-		this.state.handsPlayed = 0;
-		this.state.discardsUsed = 0;
-
-		this.uiInterface.moveMultiple(this.state.hands.main.cards, "handMain", "deck", 0);
-		this.state.hands.main.cards = [];
-		// TODO/UI: Animate the cards returning from discard to the deck
-		
-		// UI hand should be empty after this
-		if (this.uiInterface.handMain.contents.length !== 0) {
-			// console.error("UI hand is not empty after scoring.");
-			// use TUI codes for red
-			console.error("\x1b[31mUI hand is not empty after scoring.\x1b[0m");
-		}
-
-		this.state.deck.resetDeck();
-
-		if (this.state.currBlind == 1) {
-			this.state.currentBlindName = "Small Blind";
-		} else if (this.state.currBlind == 2) {
-			this.state.currentBlindName = "Big Blind";
-		} else if (this.state.currBlind == 3) {
-			// TODO: Calculate boss blind and name
-			this.state.currentBlindName = "Random Blind";
-		}
-		
-		this.uiInterface.updateScorekeeper({
-			ante: this.state.currAnte,
-			round: this.state.currBlind,
-			handsRemaining: this.state.totalHands - this.state.handsPlayed,
-			discardsRemaining: this.state.discardCount - this.state.discardsUsed,
-			minScore: this.state.blindRequirements[this.state.currBlind - 1],
-			baseReward: this.state.blindRewards[this.state.currBlind - 1],
-			blindName: this.state.currentBlindName,
-			roundScore: this.state.roundScore
-		});
-
-		this.dealCards();
-		this.uiInterface.allowPlay();
-
-		return true;
+		// TODO: Implement scoring logic
 	}
 }

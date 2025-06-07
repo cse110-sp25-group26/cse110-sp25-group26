@@ -34,37 +34,12 @@
 
 
   <script>
-    let gameStorage;
-
-    function InitializeGameStorage() {
-      if (typeof GameStorage !== 'undefined') {
-        gameStorage = new GameStorage();
-      }
-    }
-
     /**
      * Sets the inner HTML content of the app container.
      * @param {string} html - The HTML content to display.
      */
     function setContent(html) {
       document.getElementById('app').innerHTML = html;
-    }
-
-    function getCurrentStats() {
-      if (!gameStorage) return getDefaultStats();
-      return gameStorage.getStats();
-    }
-    
-    // Default stats if storage isn't available
-    function getDefaultStats() {
-      return {
-        gamesStarted: 0,
-        gamesCompleted: 0,
-        highestAnteReached: 0,
-        highestRoundScore: 0,
-        totalHandsPlayed: 0,
-        totalJokersUsed: 0
-      };
     }
 
     /**
@@ -92,48 +67,13 @@
     /**
      * Displays the statistics screen.
      */
-     function showStats() {
-      const stats = getCurrentStats();
+    function showStats() {
       setContent(`
-        <div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <div class="stats-container">
-            <h1 class="stats-title">STATISTICS</h1>
-            
-            <div class="stats-grid">
-              <div class="stat-item">
-                <div class="stat-label">GAMES STARTED</div>
-                <div class="stat-value">127</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">GAMES COMPLETED</div>
-                <div class="stat-value">89</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">HIGHEST ANTE REACHED</div>
-                <div class="stat-value">8</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">HIGHEST ROUND SCORE</div>
-                <div class="stat-value">45,280</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">TOTAL HANDS PLAYED</div>
-                <div class="stat-value">2,847</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">TOTAL JOKERS USED</div>
-                <div class="stat-value">156</div>
-              </div>
-            </div>
-            
-            <div class="flex justify-center">
-              <button class="stats-back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
-            </div>
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
+            <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Statistics</h2>
+            <p class="mb-4 text-center">Statistics will be implemented in task #47.</p>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);

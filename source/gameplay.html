@@ -10,20 +10,20 @@
 
 <body>
     <div id="stage">
-        <!-- SCOREKEEPER SIDEBAR -->
         <aside id="scoreboard">
-            <button class="btn-pill" id="buy-in">Buy In</button>
-
             <section class="card card-goal">
+                <p id="current-blind-name">Big Blind</p>
                 <p>Score at least</p>
                 <h1 id="goal-score">—</h1>
             </section>
-
             <section class="card card-round">
                 <p>Current Round Score</p>
                 <h1 id="round-score">—</h1>
             </section>
-
+            <section class="card card-hand-type">
+                <p>Hand Type</p>
+                <h2 id="current-hand-type">—</h2>
+            </section>
             <section class="card card-chips">
                 <div class="chip-row">
                     <div class="chip green"><span id="chip-val">1</span></div>
@@ -32,53 +32,82 @@
                 </div>
                 <p class="chip-label">Chips / Mult</p>
             </section>
-
             <nav class="actions">
                 <button class="btn-pill" id="info">Info</button>
                 <button class="btn-pill" id="options">Options</button>
             </nav>
-
             <div class="bank-balance">
                 $<span id="bank-amount">—</span>
             </div>
-
             <ul class="stats-list">
-                <li>Discards: <strong id="discards">0</strong></li>
+                <li>Discards Left: <strong id="discards-left">0</strong></li>
+                <li>Hands Left: <strong id="hands-left">0</strong></li>
+                <li>Ante: <strong id="current-ante">1</strong></li>
             </ul>
         </aside>
 
-        <!-- MAIN GAME AREA -->
         <main id="board">
-            <section id="play-area" aria-label="Game play area">
-                <!-- game canvas / elements go here -->
+            <section id="top-info-bar">
+                <hand-element id="jokers-area" class="card-placeholder-area" aria-label="Jokers area" data-card-width="60">
+                </hand-element>
+                <div id="round-status-display" aria-label="Round status">
+                </div>
+                <hand-element id="consumables-area" class="card-placeholder-area" aria-label="Consumables area" data-card-width="60">
+                </hand-element>
             </section>
 
+            <hand-element id="played-cards-display" aria-label="Played cards area" data-card-width="70">
+            </hand-element>
+
             <footer id="hand-strip">
-                <p id="card-count">0/0</p>
-
-                <section id="hand-cards" aria-label="Player hand">
-                    <!-- cards injected by JS -->
-                </section>
-
-                <nav class="hand-actions">
-                    <button class="btn-pill" id="discard">Discard</button>
-                    <button class="btn-pill" id="draw">Draw</button>
+                <nav class="player-hand-actions">
+                    <button class="btn-pill" id="play-selected-cards">Play Selected</button>
+                    <button class="btn-pill" id="discard-selected-cards">Discard Selected</button>
                 </nav>
 
-                <div id="deck" aria-label="Deck"></div>
+                <hand-element id="player-hand-cards" aria-label="Player hand cards" data-card-width="80">
+                </hand-element>
+
+                <div id="deck-area">
+                    <div id="deck" aria-label="Deck"></div>
+                    <p id="deck-card-count">0/0</p>
+                </div>
             </footer>
         </main>
     </div>
 
     <script type="module">
         import Scorekeeper from './scripts/frontend/UI_scorekeeper.js';
-         window.ui = new Scorekeeper();
-        ui.setGoalScore(40);
-        ui.setRoundScore(12);
-        ui.updateChips(3);
-        ui.updateMultiplier(2);
-        ui.setBank(24);
-        ui.setDiscards(4);
+        import GameManager from './scripts/frontend/GameManager.js';
+        import { HandElement } from './scripts/frontend/HandElement.js';
+        import { CardElement } from './scripts/frontend/CardElement.js';
+        import { enableReordering } from './scripts/frontend/CardMove.js';
+
+        window.ui = new Scorekeeper();
+        window.gameManager = new GameManager();
+
+        customElements.whenDefined('hand-element').then(() => {
+            if (window.gameManager) {
+                window.gameManager.initDOMElements();
+
+                if (window.gameManager.playerHand instanceof HandElement) {
+                    enableReordering(window.gameManager.playerHand);
+                }
+                if (window.gameManager.jokersArea instanceof HandElement) {
+                    enableReordering(window.gameManager.jokersArea);
+                }
+                if (window.gameManager.consumablesArea instanceof HandElement) {
+                    enableReordering(window.gameManager.consumablesArea);
+                }
+                if (window.gameManager.playedCardsArea instanceof HandElement) {
+                    // enableReordering(window.gameManager.playedCardsArea);
+                }
+                // Original console log from user's code for this block
+                console.log("Attempting to deal initial cards after elements defined."); 
+                // Ensure actual test dealing calls remain commented out
+                // window.gameManager.dealCardToPlayerHand();
+            }
+        });
     </script>
 </body>
 
