@@ -21,7 +21,7 @@ export class HandElement extends HTMLElement {
 		// Attach external CSS
 		const styleLink = document.createElement('link');
 		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/hand.css');
+		styleLink.setAttribute('href', '/source/styles/hand.css');
 		this.shadowRoot.appendChild(styleLink);
 
 		// Internal state
