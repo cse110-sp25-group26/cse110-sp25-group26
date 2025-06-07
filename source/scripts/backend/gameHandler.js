@@ -3,6 +3,39 @@ import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
 import { calculateBlackjackScore } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
+
+/**
+ * @typedef {object} HandHolder
+ * @property {Hand} main - The main hand of the player.
+ * @property {Hand} played - The played hand of the player.
+ * @property {Hand} joker - The joker hand of the player.
+ * @property {Hand} consumable - The consumable hand of the player.
+ */
+
+/**
+ * @typedef {object} GameState
+ * @property {Deck}           deck             – the deck of cards
+ * @property {HandHolder}     hands            – the player's hands
+ * @property {number}         currAnte         – current ante value
+ * @property {number}         currBlind        – current blind value
+ * @property {number}         totalHands   	   – how many hands may be played this blind
+ * @property {number}         handsPerBlind    – (config) hands per blind
+ * @property {number}         blindsPerAnte    – (fixed) blinds per ante
+ * @property {number}         totalAntes       – (fixed) total antes in the game
+ * @property {number}         money            – player's available money
+ * @property {number}         discardCount     – how many cards can be discarded
+ * @property {number[]}       blindRequirements – thresholds for each blind
+ * @property {number}         roundScore       – score for the current round
+ * @property {number}         handsPlayed      – total hands played so far
+ * @property {number}         discardsUsed     – how many discards have been used
+ * @property {number}         handScore	  	   – score for the current hand
+ * @property {number}         handMult 	  	   – multiplier for the current hand
+ * @property {boolean}        endlessMode      – whether the game is in endless mode
+ * @property {UIInterface}	  uiInterface      - interface provided by the UI to interact with the game
+ * @property {string}         currentBlindName – name of the current blind level
+ */
+import { calculateBlackjackScore } from "./utils.js";
+import { UIInterface } from "./UIInterface.js";
 import { GameStorage } from "./GameStorage.js";
 
 /**
@@ -65,6 +98,7 @@ export class gameHandler {
 			discardCount: 4,
 
 			// Blind requirements
+			// TODO: Determine the algorithm and update these values accordingly per ante
 			blindRequirements: [40, 60, 80],
 			blindRewards: [4, 6, 8],
 
@@ -211,6 +245,8 @@ export class gameHandler {
 			console.error("No cards selected for play.");
 			return;
 		}
+
+		this.uiInterface.disallowPlay();
 
 		this.uiInterface.disallowPlay();
 

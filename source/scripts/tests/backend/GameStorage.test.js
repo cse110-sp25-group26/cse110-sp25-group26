@@ -2,11 +2,9 @@
  * @description Unit tests for the GameStorage class.
  */
 
+/* global global */
 import { GameStorage } from '../../backend/GameStorage.js';
-import { Card } from '../../backend/Card.js';
-import { Hand } from '../../backend/Hand.js';
-import { Deck } from '../../backend/Deck.js';
-import { jest } from '@jest/globals';
+import { beforeEach, expect, test, describe } from '@jest/globals';
 
 global.localStorage = {
 	store: {},
@@ -34,6 +32,7 @@ describe('GameStorage', () => {
 		expect(localStorage.getItem('gameData')).toBeNull();
 		const storage = new GameStorage();
 		expect(localStorage.getItem('gameData')).not.toBeNull();
+		expect(storage).toBeDefined();
 	});
 
 	test('readFromStorage returns parsed object', () => {
@@ -54,27 +53,32 @@ describe('GameStorage', () => {
 		const storage = new GameStorage();
 		expect(storage.getAllSaves()).toHaveLength(0);
 
-		const save = {
+		const gameState = {
 			hands: { main: [], played: [], joker: [], consumable: [] },
 			deck: {},
 			gameState: {}
 		};
 
-		storage.addSave(save);
+		storage.addSave(gameState);
 		const saves = storage.getAllSaves();
 		expect(saves).toHaveLength(1);
-		expect(saves[0]).toEqual(save);
+		expect(saves[0]).toHaveProperty('lastSaved');
+		expect(saves[0]).toHaveProperty('gameState');
+		expect(saves[0].gameState).toEqual(gameState);
 	});
 
 	test('overwriteSave replaces save at given index', () => {
 		const storage = new GameStorage();
-		const save1 = { hands: {}, deck: {}, gameState: { tag: 'original' } };
-		const save2 = { hands: {}, deck: {}, gameState: { tag: 'updated' } };
+		const gameState1 = { hands: {}, deck: {}, gameState: { tag: 'original' } };
+		const gameState2 = { hands: {}, deck: {}, gameState: { tag: 'updated' } };
 
-		storage.addSave(save1);
-		const result = storage.overwriteSave(0, save2);
+		storage.addSave(gameState1);
+		const result = storage.overwriteSave(0, gameState2);
 		expect(result).toBe(true);
-		expect(storage.getAllSaves()[0]).toEqual(save2);
+		
+		const saves = storage.getAllSaves();
+		expect(saves[0].gameState).toEqual(gameState2);
+		expect(saves[0]).toHaveProperty('lastSaved');
 	});
 
 	test('overwriteSave fails for invalid index', () => {
@@ -84,9 +88,9 @@ describe('GameStorage', () => {
 
 	test('deleteSave removes a save at given index', () => {
 		const storage = new GameStorage();
-		const save = { hands: {}, deck: {}, gameState: {} };
+		const gameState = { hands: {}, deck: {}, gameState: {} };
 
-		storage.addSave(save);
+		storage.addSave(gameState);
 		expect(storage.getAllSaves()).toHaveLength(1);
 		storage.deleteSave(0);
 		expect(storage.getAllSaves()).toHaveLength(0);
@@ -117,5 +121,17 @@ describe('GameStorage', () => {
 		storage.updateStat('newCustomStat');
 		const stats = storage.getStats();
 		expect(stats.newCustomStat).toBe(1);
+	});
+	
+	test('getSave returns save with lastSaved and gameState properties', () => {
+		const storage = new GameStorage();
+		const gameState = { hands: {}, deck: {}, test: 'data' };
+		
+		storage.addSave(gameState);
+		const save = storage.getSave(0);
+		
+		expect(save).toHaveProperty('lastSaved');
+		expect(save).toHaveProperty('gameState');
+		expect(save.gameState).toEqual(gameState);
 	});
 });
