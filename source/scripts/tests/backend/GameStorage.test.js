@@ -2,11 +2,9 @@
  * @description Unit tests for the GameStorage class.
  */
 
+/* global global */
 import { GameStorage } from '../../backend/GameStorage.js';
-import { Card } from '../../backend/Card.js';
-import { Hand } from '../../backend/Hand.js';
-import { Deck } from '../../backend/Deck.js';
-import { jest } from '@jest/globals';
+import { beforeEach, expect, test, describe } from '@jest/globals';
 
 global.localStorage = {
 	store: {},
@@ -34,6 +32,7 @@ describe('GameStorage', () => {
 		expect(localStorage.getItem('gameData')).toBeNull();
 		const storage = new GameStorage();
 		expect(localStorage.getItem('gameData')).not.toBeNull();
+		expect(storage).toBeDefined();
 	});
 
 	test('readFromStorage returns parsed object', () => {
