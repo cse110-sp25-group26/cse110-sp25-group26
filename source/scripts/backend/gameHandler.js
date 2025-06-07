@@ -291,12 +291,16 @@ export class gameHandler {
 			this.state.roundScore >=
 				this.state.blindRequirements[this.state.currBlind - 1]
 		) {
+			const cardsToReturnToDeck = [...this.state.hands.main.cards];
 			this.uiInterface.moveMultiple(
 				this.state.hands.main.cards,
 				"handMain",
 				"deck",
 				0
 			);
+			cardsToReturnToDeck.forEach((card) => {
+				this.uiInterface.removeUIel(card);
+			});
 			this.state.hands.main.cards = [];
 
 			if (
@@ -506,12 +510,16 @@ export class gameHandler {
 		this.state.handsPlayed = 0;
 		this.state.discardsUsed = 0;
 
+		const cardsToReturnToDeck = [...this.state.hands.main.cards];
 		this.uiInterface.moveMultiple(
 			this.state.hands.main.cards,
 			"handMain",
 			"deck",
 			0
 		);
+		cardsToReturnToDeck.forEach((card) => {
+			this.uiInterface.removeUIel(card);
+		});
 		this.state.hands.main.cards = [];
 		// TODO/UI: Animate the cards returning from discard to the deck
 
