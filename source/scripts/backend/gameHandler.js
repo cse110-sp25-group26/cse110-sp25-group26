@@ -1,7 +1,7 @@
 import { Deck } from "./Deck.js";
 import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
-import { calculateBlackjackScore } from "./utils.js";
+// import { calculateBlackjackScore } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
 
 /**

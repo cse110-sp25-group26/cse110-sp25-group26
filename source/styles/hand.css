@@ -2,22 +2,7 @@
     position: relative;
     width: 100%;
     height: 120px;
-<<<<<<< HEAD:source/scripts/frontend/hand.css
-    display: block;
-    overflow: visible;
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    padding: 20px 0;
-    box-sizing: border-box;
-}
-
-/* Ensure cards in hand are visible */
-.hand > * {
-    visibility: visible !important;
-    opacity: 1 !important;
-=======
     display: flex;
     align-items: center;
     justify-content: flex-start;
->>>>>>> origin/develop:source/styles/hand.css
 }
