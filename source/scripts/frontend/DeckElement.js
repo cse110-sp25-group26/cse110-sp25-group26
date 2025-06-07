@@ -5,7 +5,7 @@ import { CardElement } from "./CardElement.js";
 
 /**
  * @classdesc UI component representing the Deck.
- * 
+ *
  * @param {HTMLElement} deckContainer - The DOM element for the Deck.
  * @param {CardElement[]} cards - The array of CardElement objects currently created.
  */
@@ -31,7 +31,7 @@ export class DeckElement {
 
 		// Set up the deck background image
 		this.deckImage = document.createElement("img");
-		this.deckImage.src = "/source/res/img/" + back + ".png";
+		this.deckImage.src = `/source/res/img/${back}.png?v=${Date.now()}`;
 		this.deckImage.alt = "Deck";
 		this.deckImage.style.width = "80px";
 		this.deckImage.style.height = "120px";
@@ -54,7 +54,7 @@ export class DeckElement {
 	addCards(cards) {
 		let zindex = 0;
 		let cardElements = [];
-		cards.forEach(card => {
+		cards.forEach((card) => {
 			const cardElement = new CardElement(card, true);
 			cardElement.style.position = "absolute";
 			cardElement.style.zIndex = zindex++;
@@ -69,3 +69,4 @@ export class DeckElement {
 		this.cards.push(...cardElements);
 	}
 }
+
