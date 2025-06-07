@@ -515,13 +515,6 @@ export class gameHandler {
 		this.state.hands.main.cards = [];
 		// TODO/UI: Animate the cards returning from discard to the deck
 
-		// UI hand should be empty after this
-		if (this.uiInterface.handMain.contents.length !== 0) {
-			// console.error("UI hand is not empty after scoring.");
-			// use TUI codes for red
-			console.error("\x1b[31mUI hand is not empty after scoring.\x1b[0m");
-		}
-
 		this.state.deck.resetDeck();
 
 		if (this.state.currBlind == 1) {
