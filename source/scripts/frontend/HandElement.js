@@ -1,4 +1,5 @@
 import { CardElement } from "./CardElement.js";
+import { CardElement } from "./CardElement.js";
 
 /**
  * @class HandElement
@@ -12,8 +13,11 @@ export class HandElement extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({ mode: "open" });
+		this.attachShadow({ mode: "open" });
 
 		// Hand container
+		this._container = document.createElement("div");
+		this._container.classList.add("hand");
 		this._container = document.createElement("div");
 		this._container.classList.add("hand");
 		this.shadowRoot.appendChild(this._container);
@@ -33,6 +37,7 @@ export class HandElement extends HTMLElement {
 		// Listen for card-dropped events to re-run layout
 		// This ensures cards re-home correctly after being dragged and dropped.
 		this._container.addEventListener("card-dropped", () => {
+		this._container.addEventListener("card-dropped", () => {
 			this._updateLayout();
 		});
 	}
@@ -43,6 +48,9 @@ export class HandElement extends HTMLElement {
 	 * @param {CardElement} cardElement - The card element to add.
 	 */
 	addCard(cardElement) {
+		cardElement.addEventListener("click", () =>
+			this._onCardSelect(cardElement)
+		);
 		cardElement.addEventListener("click", () =>
 			this._onCardSelect(cardElement)
 		);
@@ -73,6 +81,7 @@ export class HandElement extends HTMLElement {
 	 */
 	removeSelectedCards() {
 		const selectedCards = this.getSelectedCards();
+		selectedCards.forEach((card) => this.removeCard(card));
 		selectedCards.forEach((card) => this.removeCard(card));
 	}
 
@@ -166,9 +175,20 @@ export class HandElement extends HTMLElement {
 				composed: true,
 			})
 		);
+		const isSelected = cardElement.classList.toggle("selected");
+		this.dispatchEvent(
+			new CustomEvent("card-selected", {
+				detail: { card: cardElement, selected: isSelected },
+				bubbles: true,
+				composed: true,
+			})
+		);
 		this._updateLayout();
 	}
 }
+
+customElements.define("hand-element", HandElement);
+
 
 customElements.define("hand-element", HandElement);
 
