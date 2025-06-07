@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/Deck.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/Deck.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Card } from './Card.js';
+
+/**
+ * @classdesc Represents a deck of cards in the game.
+ * 
+ * @property {Card[]} availableCards - The cards available in the deck.
+ * @property {Card[]} usedCards - The cards that have been used from the deck.
+ * @property {Card[]} allCards - All cards in the deck, including available and used cards.
+ */
+export class Deck {
+	/**
+	 * @class Deck
+	 * @description Creates a new deck of cards.
+	 * @param {Card[]} cards - The cards to be included in the deck.
+	 */
+	constructor(cards) {
+		this.availableCards = cards;
+		this.usedCards = [];
+		this.allCards = [...cards]; // duplicates the array
+		this.shuffle();
+	}
+
+	/**
+	 * @function shuffle
+	 * @description Shuffles the deck of cards using the Fisher-Yates algorithm.
+	 */
+	shuffle() {
+		for (let i = this.availableCards.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[this.availableCards[i], this.availableCards[j]] = [this.availableCards[j], this.availableCards[i]];
+		}
+	}
+
+	/**
+	 * @function drawCard
+	 * @description Draws a card from the deck.
+	 * @returns {Card|null} - The drawn card or null if no cards are available.
+	 */
+	drawCard() {
+		if (this.availableCards.length === 0) {
+			return null;
+		}
+		const card = this.availableCards.pop();
+		this.usedCards.push(card);
+		return card;
+	}
+
+	/**
+	 * @function returnCard
+	 * @description Returns a card to the deck.
+	 * @param {Card} card - The card to be returned.
+	 */
+	returnCard(card) {
+		const index = this.usedCards.indexOf(card);
+		if (index !== -1) {
+			this.usedCards.splice(index, 1);
+			this.availableCards.push(card);
+		}
+	}
+
+	/**
+	 * @function resetDeck
+	 * @description Resets the deck to its original state.
+	 */
+	resetDeck() {
+		this.availableCards = [...this.allCards];
+		this.usedCards = [];
+		this.shuffle();
+	}
+
+	/**
+	 * @function addCard
+	 * @description Adds a new card to the deck, and shuffles the deck.
+	 * @param {Card} card - The card to be added.
+	 * @returns {boolean} - Returns true if the card was added successfully, false if the card already exists in the deck.
+	 */
+	addCard(card) {
+		if (this.allCards.includes(card)) {
+			console.error("Deck::addCard - Card already exists in the deck.");
+			return false;
+		}
+		this.allCards.push(card);
+		this.availableCards.push(card);
+		this.shuffle();
+		return true;
+	}
+
+	/**
+	 * @function removeCard
+	 * @description Removes a card from the deck.
+	 * @param {Card} card - The card to be removed.
+	 * @returns {boolean} - Returns true if the card was removed successfully, false if the card does not exist in the deck.
+	 */
+	removeCard(card) {
+		const index = this.allCards.indexOf(card);
+		if (index === -1) {
+			console.error("Deck::removeCard - Card does not exist in the deck.");
+			return false;
+		}
+		this.allCards.splice(index, 1);
+		this.availableCards.splice(this.availableCards.indexOf(card), 1);
+		return true;
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

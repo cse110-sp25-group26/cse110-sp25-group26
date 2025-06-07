@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Code Review Checklist</title>
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<h1>Code Review Checklist</h1>
+	<p><em>Note: Items are categorized by priority.</em></p>
+
+	<section>
+		<h2>General</h2>
+		<ul>
+			<li>
+				<input type="checkbox" id="ciStatus" />
+				<label for="ciStatus"><span class="priority">[P1]</span>CI Status: All required automated checks are passing.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="commitHygiene" />
+				<label for="commitHygiene"><span class="priority">[P2]</span>Commit Hygiene: Messages follow convention; no WIP dumps; history is logical.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="prDescription" />
+				<label for="prDescription"><span class="priority">[P2]</span>PR Description: Clearly explains scope, approach, and any trade‑offs.</label>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>HTML</h2>
+		<ul>
+			<li>
+				<input type="checkbox" id="htmlSemantics" />
+				<label for="htmlSemantics"><span class="priority">[P1]</span>Semantics &amp; Structure: Use semantic tags; meaningful class/ID names.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="htmlWip" />
+				<label for="htmlWip"><span class="priority">[WIP]</span>More detailed requirements will be added as project structure evolves.</label>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>CSS</h2>
+		<ul>
+			<li>
+				<input type="checkbox" id="cssConsistency" />
+				<label for="cssConsistency"><span class="priority">[P1]</span>Consistency &amp; Organization: Clean, modular styles (no monolithic globals).</label>
+			</li>
+			<li>
+				<input type="checkbox" id="cssImportant" />
+				<label for="cssImportant"><span class="priority">[P1]</span>`!important` only if absolutely necessary.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="cssResponsive" />
+				<label for="cssResponsive"><span class="priority">[P2]</span>Responsive Design: Layout adapts at key breakpoints.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="cssPerformance" />
+				<label for="cssPerformance"><span class="priority">[P3]</span>Performance: No unused or redundant rules.</label>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>JavaScript</h2>
+		<ul>
+			<li>
+				<input type="checkbox" id="jsLanguageFeatures" />
+				<label for="jsLanguageFeatures"><span class="priority">[P1]</span>Language Features: Use `let`/`const`, avoid globals.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="jsRobustness" />
+				<label for="jsRobustness"><span class="priority">[P1]</span>Correctness &amp; Robustness: Handle edge cases; validate input; catch &amp; log errors.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="jsCodeStyle" />
+				<label for="jsCodeStyle"><span class="priority">[P1]</span>Code Style: Consistent indentation &amp; naming; no dead code.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="jsPerformance" />
+				<label for="jsPerformance"><span class="priority">[P2]</span>Performance: Batch DOM reads/writes; limit handler work.</label>
+			</li>
+			<li>
+				<input type="checkbox" id="jsDocs" />
+				<label for="jsDocs"><span class="priority">[P3]</span>Documentation &amp; Comments: JSDoc on functions/classes; explain workarounds.</label>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>When a PR is Ready to Merge</h2>
+		<ul>
+			<li>
+				<input type="checkbox" id="autoChecks" />
+				<label for="autoChecks"><strong>Automated Checks</strong></label>
+				<ul>
+					<li>
+						<input type="checkbox" id="linting" />
+						<label for="linting">Linting passes without error.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="formatting" />
+						<label for="formatting">Formatting applied.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="tests" />
+						<label for="tests">All unit/integration tests pass.</label>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<input type="checkbox" id="functionalVerification" />
+				<label for="functionalVerification"><strong>Functional Verification</strong></label>
+				<ul>
+					<li>
+						<input type="checkbox" id="manualQa" />
+						<label for="manualQa">Manual QA in ≥2 browsers.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="responsiveCheck" />
+						<label for="responsiveCheck">Responsive behavior verified.</label>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<input type="checkbox" id="performanceReview" />
+				<label for="performanceReview"><strong>Performance</strong></label>
+				<ul>
+					<li>
+						<input type="checkbox" id="consoleErrors" />
+						<label for="consoleErrors">No new console errors or warnings.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="bundleSize" />
+						<label for="bundleSize">Bundle increase justified.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="smoothInteractions" />
+						<label for="smoothInteractions">Animations &amp; interactions remain smooth.</label>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<input type="checkbox" id="documentationReview" />
+				<label for="documentationReview"><strong>Documentation</strong></label>
+				<ul>
+					<li>
+						<input type="checkbox" id="readmeUpdate" />
+						<label for="readmeUpdate">README/architecture/JSDoc updated.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="componentsDoc" />
+						<label for="componentsDoc">Components documented with examples.</label>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<input type="checkbox" id="signOff" />
+				<label for="signOff"><strong>Review Sign‑Off</strong></label>
+				<ul>
+					<li>
+						<input type="checkbox" id="peerApproval" />
+						<label for="peerApproval">Peer reviewer approved.</label>
+					</li>
+					<li>
+						<input type="checkbox" id="leadApproval" />
+						<label for="leadApproval">Team lead approval for main pushes.</label>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</section>
+
+	<script src="script.js"></script>
+</body>
+</html>

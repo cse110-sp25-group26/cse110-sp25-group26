@@ -1,0 +1,32 @@
+body {
+	font-family: sans-serif;
+	margin: 2rem;
+	line-height: 1.5;
+}
+
+h1,
+h2 {
+	margin-bottom: 0.5rem;
+}
+
+ul {
+	list-style: none;
+	padding-left: 1rem;
+}
+
+li {
+	margin: 0.3rem 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+.priority {
+	font-weight: bold;
+	margin-right: 0.3rem;
+}
+
+section {
+	margin-top: 1.5rem;
+}
