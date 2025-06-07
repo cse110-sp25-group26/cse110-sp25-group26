@@ -5,6 +5,9 @@ import { CardElement } from "./CardElement.js";
  * @classdesc Web UI implementation that connects HTML interface to game logic
  */
 export class WebUI extends UIInterface {
+	/**
+	 *
+	 */
 	constructor() {
 		super();
 		this.gameHandler = null;
@@ -198,9 +201,8 @@ export class WebUI extends UIInterface {
 	 * @param {Card[]} cards - Cards to move
 	 * @param {string} origin - Origin container name
 	 * @param {string} dest - Destination container name
-	 * @param {number} delay - Animation delay (unused for now)
 	 */
-	moveMultiple(cards, origin, dest, delay = 0) {
+	moveMultiple(cards, origin, dest) {
 		console.log(`Moving ${cards.length} cards from ${origin} to ${dest}`);
 		const originContainer = this.getContainer(origin);
 		const destContainer = this.getContainer(dest);
@@ -246,19 +248,19 @@ export class WebUI extends UIInterface {
 	 */
 	getContainer(containerName) {
 		switch (containerName) {
-			case "handMain":
-				return this.playerHandContainer;
-			case "handPlayed":
-				return this.playedCardsContainer;
-			case "deck":
-				return null; // Cards going to deck are removed from UI
-			case "discard_pile":
-				return null; // Cards going to discard are removed from UI
-			case "offscreen":
-				return null; // Cards going offscreen are removed from UI
-			default:
-				console.warn(`Unknown container: ${containerName}`);
-				return null;
+		case "handMain":
+			return this.playerHandContainer;
+		case "handPlayed":
+			return this.playedCardsContainer;
+		case "deck":
+			return null; // Cards going to deck are removed from UI
+		case "discard_pile":
+			return null; // Cards going to discard are removed from UI
+		case "offscreen":
+			return null; // Cards going offscreen are removed from UI
+		default:
+			console.warn(`Unknown container: ${containerName}`);
+			return null;
 		}
 	}
 
@@ -453,7 +455,7 @@ export class WebUI extends UIInterface {
 	 * @function displayMoney
 	 * @description Shows money earned
 	 * @param {number} base - Base money earned
-	 * @param {array} extras - Extra money bonuses
+	 * @param {Array} extras - Extra money bonuses
 	 */
 	displayMoney(base, extras) {
 		let message = `Earned $${base}`;
@@ -478,9 +480,8 @@ export class WebUI extends UIInterface {
 	/**
 	 * @function newGame
 	 * @description Initialize UI for new game
-	 * @param {boolean} reset - Whether this is a reset
 	 */
-	newGame(reset = true) {
+	newGame() {
 		// Clear all card elements
 		this.cardElements.clear();
 
@@ -527,4 +528,11 @@ export class WebUI extends UIInterface {
 		if (this.discardButton) this.discardButton.disabled = true;
 	}
 }
+
+/**
+ * @typedef {object} Card
+ * @property {string} type - The type of the card (e.g., "Ace", "King").
+ * @property {string} suit - The suit of the card (e.g., "Hearts", "Spades").
+ * @property {boolean} isSelected - Whether the card is selected.
+ */
 
