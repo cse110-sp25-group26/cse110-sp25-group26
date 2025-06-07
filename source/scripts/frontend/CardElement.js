@@ -213,7 +213,12 @@ export class CardElement extends HTMLElement {
 			}
 
 			const img = document.createElement('img');
-			const filename = `card_${fileType}_${fileSuit}.png`;
+
+			const filename = (type.startsWith('card_joker'))
+				? `${type}.png`
+				: `card_${fileType}_${fileSuit}.png`;
+				
+			console.log("filename: ", type);
 
 			// Path relative to gameplay.html
 			img.src = `res/img/${filename}`;
