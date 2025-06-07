@@ -3,6 +3,9 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
 		<title>Gameplay</title>
 		<link rel="stylesheet" href="styles/gameplay.css" />
 	</head>
@@ -74,21 +77,62 @@
 			import { HandElement } from "./scripts/frontend/HandElement.js";
 			import { DeckElement } from "./scripts/frontend/DeckElement.js";
 			import { CardElement } from "./scripts/frontend/CardElement.js";
-			import { Card } from "./scripts/backend/Card.js";
+			import { WebUI } from "./scripts/frontend/WebUI.js";
+			import { gameHandler } from "./scripts/backend/gameHandler.js";
 
-			// Get containers
-			const deckContainer = document.getElementById("deck");
+			// Wait for DOM to be fully loaded and start the actual game
+			async function initializeGame() {
+				console.log("Initializing BalatJack game...");
 
-			// Initialize the deck UI element
-			let deckElement = new DeckElement("back", deckContainer);
+				// Ensure custom elements are defined
+				await customElements.whenDefined("hand-element");
+				await customElements.whenDefined("card-element");
 
-			// Create cards
-			const aceOfHearts = new Card("A", "hearts");
-			const kingOfSpades = new Card("K", "spades");
-			const queenOfDiamonds = new Card("Q", "diamonds");
+				console.log("Custom elements defined");
 
-			// Update deck count
-			document.getElementById("deck-card-count").textContent = "1/52";
+				// Get essential containers to verify they exist
+				const deckContainer = document.getElementById("deck");
+				const playerHandContainer = document.getElementById("player-hand-cards");
+
+				if (!deckContainer || !playerHandContainer) {
+					console.error("Required containers not found");
+					return;
+				}
+
+				// Initialize the deck UI element (visual deck representation)
+				let deckElement = new DeckElement("back", deckContainer);
+
+				// Create the WebUI (connects HTML to game logic)
+				const webUI = new WebUI();
+
+				// Initialize the WebUI after DOM is ready
+				webUI.initialize();
+
+				// Create the game handler with our WebUI
+				const game = new gameHandler(webUI);
+
+				// The game handler automatically:
+				// 1. Creates a standard 52-card deck
+				// 2. Deals 5 cards to the player's hand
+				// 3. Sets up the initial game state
+				// 4. Updates the scorekeeper
+				// 5. Enables the play/discard buttons
+
+				console.log("Game initialized successfully!");
+				console.log("- Select cards by clicking them");
+				console.log("- Use 'Play Selected' to score your hand");
+				console.log("- Use 'Discard Selected' to replace unwanted cards");
+				console.log("- Goal: Reach", game.state.blindRequirements[0], "points to advance!");
+			}
+
+			// Initialize the game when DOM is ready
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", initializeGame);
+			} else {
+				// Add a small delay to ensure everything is ready
+				setTimeout(initializeGame, 10);
+			}
 		</script>
 	</body>
 </html>
+

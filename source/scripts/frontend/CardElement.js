@@ -4,7 +4,7 @@
 
 /**
  * @classdesc Custom web component representing a card.
- * 
+ *
  * @property {HTMLElement} _container - The main container for the card.
  * @property {HTMLElement} _cardInner - The inner container for the card's 3D flip effect.
  * @property {HTMLElement} _cardFront - The front face of the card.
@@ -27,7 +27,7 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @class
 	 * @description Initializes the CardElement and sets up its structure and event listeners.
-	 * 
+	 *
 	 * @param {Card} card - The backend Card object associated with this element.
 	 * @param {boolean} [draggable=true] - Whether the card is draggable. Defaults to true.
 	 */
@@ -41,7 +41,6 @@ export class CardElement extends HTMLElement {
 		this._createDOM();
 		this._setupDragState();
 		this._setupEventListeners();
-
 	}
 
 	/**
@@ -61,30 +60,30 @@ export class CardElement extends HTMLElement {
 		this._cardInner.classList.add("card-inner");
 
 		// Card front
-		this._cardFront = document.createElement('div');
-		this._cardFront.classList.add('card-front');
-		this._frontImg = document.createElement('img');
-		this._frontImg.style.width = '100%';
-		this._frontImg.style.height = '100%';
+		this._cardFront = document.createElement("div");
+		this._cardFront.classList.add("card-front");
+		this._frontImg = document.createElement("img");
+		this._frontImg.style.width = "100%";
+		this._frontImg.style.height = "100%";
 		this._cardFront.appendChild(this._frontImg);
 
 		// Card back
-		this._cardBack = document.createElement('div');
-		this._cardBack.classList.add('card-back');
+		this._cardBack = document.createElement("div");
+		this._cardBack.classList.add("card-back");
 
 		// Card back image
-		this._cardBack.innerHTML = '';
-		const backImg = document.createElement('img');
-		backImg.src = '/source/res/img/back.png';
-		backImg.alt = 'Card back';
-		backImg.style.width = '100%';
-		backImg.style.height = '100%';
+		this._cardBack.innerHTML = "";
+		const backImg = document.createElement("img");
+		backImg.src = `/source/res/img/back.png?v=${Date.now()}`;
+		backImg.alt = "Card back";
+		backImg.style.width = "100%";
+		backImg.style.height = "100%";
 		this._cardBack.appendChild(backImg);
 
 		// Tooltip
-		this._tooltip = document.createElement('div');
-		this._tooltip.classList.add('tooltip');
-		this._tooltip.style.display = 'none';
+		this._tooltip = document.createElement("div");
+		this._tooltip.classList.add("tooltip");
+		this._tooltip.style.display = "none";
 		this._tooltip.textContent = this.calculateTooltipText();
 
 		// Assemble elements
@@ -95,9 +94,12 @@ export class CardElement extends HTMLElement {
 		this.shadowRoot.appendChild(this._container);
 
 		// Attach external CSS
-		const styleLink = document.createElement('link');
-		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/styles/card.css');
+		const styleLink = document.createElement("link");
+		styleLink.setAttribute("rel", "stylesheet");
+		styleLink.setAttribute(
+			"href",
+			`/source/styles/card.css?v=${Date.now()}`
+		);
 		this.shadowRoot.appendChild(styleLink);
 	}
 
@@ -161,8 +163,9 @@ export class CardElement extends HTMLElement {
 	 * @returns {string} The tooltip text for the card.
 	 */
 	calculateTooltipText() {
-		if (!this._card) return '';
-		const suit = this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
+		if (!this._card) return "";
+		const suit =
+			this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
 		const type = this._card.type.toUpperCase();
 		return `${type} of ${suit}`;
 	}
@@ -198,10 +201,32 @@ export class CardElement extends HTMLElement {
 	 * @description Updates the card's front and back faces based on its attributes.
 	 */
 	updateCardFace() {
+		// Map backend suit names to image file names (plural to singular)
+		const suitMap = {
+			hearts: "heart",
+			diamonds: "diamond",
+			clubs: "club",
+			spades: "spade",
+		};
+
+		// Map backend type names to image file names
+		const typeMap = {
+			J: "jack",
+			Q: "queen",
+			K: "king",
+			A: "ace",
+		};
+
+		const suitName = suitMap[this._card.suit] || this._card.suit;
+		const typeName =
+			typeMap[this._card.type] || this._card.type.toLowerCase();
+
 		// Update existing front image
-		const filename = `card_${this._card.type.toLowerCase()}_${this._card.suit.toLowerCase()}.png`;
-		this._frontImg.src = `/source/res/img/${filename}`;
+		const filename = `card_${typeName}_${suitName}.png`;
+		this._frontImg.src = `/source/res/img/${filename}?v=${Date.now()}`;
 		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+
+		console.log(`Loading card image: ${filename}`);
 	}
 
 	/**
@@ -368,7 +393,7 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @function moveTo
 	 * @description Moves the card to a specified position with a smooth transition.
-	 * 
+	 *
 	 * @param {number} x - The x-coordinate to move the card to.
 	 * @param {number} y - The y-coordinate to move the card to.
 	 * @param {number} [duration=600] - The duration of the transition in milliseconds. Defaults to 600ms.
@@ -376,34 +401,40 @@ export class CardElement extends HTMLElement {
 	 * @returns {Promise<void>} A promise that resolves when the move is complete.
 	 */
 	async moveTo(x, y, duration = 600, callback) {
-		if (!this.style.position || this.style.position === 'static') {
-			this.style.position = 'absolute';
+		if (!this.style.position || this.style.position === "static") {
+			this.style.position = "absolute";
 		}
 		// Cancel previous animation listener if any
 		if (this._transitionEndHandler) {
-			this.removeEventListener('transitionend', this._transitionEndHandler);
+			this.removeEventListener(
+				"transitionend",
+				this._transitionEndHandler
+			);
 		}
-		this.style.transition = 'none';
+		this.style.transition = "none";
 		// Force fetch to apply the new styles immediately
 		void this.offsetWidth;
 
 		// Ensure the card is on top during transition
 		const originalZIndex = this.style.zIndex;
-		this.style.zIndex = '10000';
+		this.style.zIndex = "10000";
 
 		this.style.left = `${x}px`;
 		this.style.top = `${y}px`;
 
-		return new Promise(resolve => {
+		return new Promise((resolve) => {
 			this._transitionEndHandler = () => {
-				this.removeEventListener('transitionend', this._transitionEndHandler);
+				this.removeEventListener(
+					"transitionend",
+					this._transitionEndHandler
+				);
 				this.style.zIndex = originalZIndex; // Restore original z-index
 				if (callback) {
 					callback(this);
 				}
 				resolve();
 			};
-			this.addEventListener('transitionend', this._transitionEndHandler);
+			this.addEventListener("transitionend", this._transitionEndHandler);
 			this.style.transition = `left ${duration}ms ease-in, top ${duration}ms ease-in`;
 		});
 	}
@@ -411,7 +442,7 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @function moveMultiple
 	 * @description Moves multiple cards to specified positions with a staggered delay.
-	 * 
+	 *
 	 * @param {CardElement[]} cards - An array of CardElement instances to move.
 	 * @param {Array<{x: number, y: number}>} positions - An array of objects containing x and y coordinates for each card.
 	 * @param {number} [duration=600] - The duration of the transition for each card in milliseconds. Defaults to 600ms.
@@ -426,15 +457,18 @@ export class CardElement extends HTMLElement {
 			const { x, y } = pos;
 
 			const delay = 400 * i;
-			promises.push(new Promise(r => {
-				setTimeout(() => {
-					// Pass the callback to each individual moveTo call
-					card.moveTo(x, y, duration, callback).then(r);
-				}, delay);
-			}));
+			promises.push(
+				new Promise((r) => {
+					setTimeout(() => {
+						// Pass the callback to each individual moveTo call
+						card.moveTo(x, y, duration, callback).then(r);
+					}, delay);
+				})
+			);
 		});
 		await Promise.all(promises);
 	}
 }
 
-customElements.define('card-element', CardElement);
+customElements.define("card-element", CardElement);
+
