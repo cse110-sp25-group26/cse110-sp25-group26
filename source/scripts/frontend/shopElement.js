@@ -72,27 +72,9 @@ export class ShopElement {
         this.createJokerCards();
 
         // Bottom row: packs
-        const packRow = document.createElement("div");
-        packRow.className = "shop-pack-row";
+        const packRow = this.createPackCards(); // 
+        this.shopBox.appendChild(packRow);
 
-        for (let i = 0; i < 3; i++) {
-            const packBox = document.createElement("div");
-            packBox.className = "shop-pack-box";
-
-            // for test label price
-            const price = document.createElement("div");
-            price.textContent = i === 0 ? "$10" : (i === 1 ? "$4" : "$6");
-            price.className = "shop-pack-price";
-            packBox.appendChild(price);
-
-            // for test card text
-            const label = document.createElement("div");
-            label.textContent = i === 0 ? "VOUCHER" : (i === 1 ? "BUFFOON PACK" : "CELESTIAL PACK");
-            label.className = "shop-pack-label";
-            packBox.appendChild(label);
-
-            packRow.appendChild(packBox);
-        }
 
         // Combine all rows
         this.shopBox.appendChild(topRow);
@@ -295,4 +277,88 @@ export class ShopElement {
         console.log("Rerolling jokers...");
         this.createJokerCards();
     }
+
+    /**
+     * @function purchaseConsumable
+     * @description Handles the purchase of a consumable card.
+     * @param {HTMLElement} packBox - The pack box element that was clicked
+     * @private
+     */
+    purchaseConsumable(packBox) {
+        const price = parseInt(packBox.dataset.price);
+
+        if (this.gameHandler.state.money < price) {
+            console.log("Not enough money to purchase this pack.");
+            return;
+        }
+
+        this.gameHandler.state.money -= price;
+        console.log(`Money remaining: $${this.gameHandler.state.money}`);
+
+        const packType = packBox.dataset.packType;
+
+        // Create card element
+        const card = document.createElement('card-element');
+        card.setAttribute('suit', 'consumable');
+        card.setAttribute('type', packType);
+
+        const cardImg = document.createElement('img');
+        cardImg.src = `/source/res/img/${packType}.png`;
+        cardImg.alt = packType;
+        cardImg.style.width = '100%';
+        cardImg.style.height = '100%';
+        card.appendChild(cardImg);
+
+        // Add to consumables area
+        const consumablesArea = document.getElementById('consumables-area');
+        if (consumablesArea && consumablesArea instanceof HandElement) {
+            consumablesArea.addCard(card);
+            packBox.remove();
+            console.log(`Purchased pack: ${packType} for $${price}`);
+        } else {
+            console.error('Consumables area not found or not a HandElement');
+        }
+    }
+    createPackCards() {
+        const packRow = document.createElement("div"); // 
+        packRow.className = "shop-pack-row";
+    
+        const packTypes = ['voucher_pack', 'buffoon_pack', 'celestial_pack'];
+    
+        packTypes.forEach((packType, i) => {
+            const packBox = document.createElement("div");
+            packBox.className = "shop-pack-box";
+            packBox.dataset.packType = packType;
+            packBox.dataset.price = i === 0 ? "10" : (i === 1 ? "4" : "6");
+    
+            const price = document.createElement("div");
+            price.textContent = `$${packBox.dataset.price}`;
+            price.className = "shop-pack-price";
+            packBox.appendChild(price);
+    
+            const label = document.createElement("div");
+            label.textContent = packType.replace('_', ' ').toUpperCase();
+            label.className = "shop-pack-label";
+            packBox.appendChild(label);
+    
+            const cardElement = document.createElement('card-element');
+            cardElement.setAttribute('suit', 'consumable');
+            cardElement.setAttribute('type', packType);
+    
+            const cardImg = document.createElement('img');
+            cardImg.src = `/source/res/img/${packType}.png`;
+            cardImg.alt = packType;
+            cardImg.style.width = '100%';
+            cardImg.style.height = '100%';
+            cardElement.appendChild(cardImg);
+    
+            packBox.appendChild(cardElement);
+    
+            packBox.addEventListener('click', () => this.purchaseConsumable(packBox));
+            packRow.appendChild(packBox);
+        });
+    
+        return packRow; // 
+    }
+    
 }   
