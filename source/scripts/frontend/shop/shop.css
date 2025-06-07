@@ -1,0 +1,148 @@
+/* Shop Overlay */
+.shop-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.0); /* 투명하게 */
+  display: block;
+  z-index: 2000;
+}
+.shop-overlay.hide {
+  display: none;
+}
+
+/* Main Shop Box */
+.shop-box {
+  background: #232b32;
+  border-radius: 16px 16px 0 0;
+  padding: 32px 32px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 4px 32px #0008;
+  min-width: 600px;
+  min-height: 490px;
+  position: fixed;
+  left: 9%;
+  bottom: 0;
+  /* 애니메이션 효과 */
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(.33,1.02,.47,.98), opacity 0.3s;
+}
+.shop-overlay.show .shop-box {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.shop-close-btn {
+  position: absolute;
+  top: 1px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.shop-top-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.shop-btn {
+  flex: 1;
+  height: 48px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+}
+.shop-btn.next {
+  background: #e85c4a;
+  color: #fff;
+}
+.shop-btn.reroll {
+  background: #4ac97d;
+  color: #222;
+}
+
+.shop-card-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 8px;
+  border: 2px dotted #fff8;
+  border-radius: 10px;
+  padding: 12px 0 8px 0;
+}
+.shop-card-box {
+  width: 72px;
+  height: 104px;
+  background: #2e3a44;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  box-shadow: 0 2px 8px #0006;
+}
+.shop-card-price {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #ffd700;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.shop-card-label {
+  color: #fff;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.shop-pack-row {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 8px;
+  border: 2px dotted #fff8;
+  border-radius: 10px;
+  padding: 14px 0 10px 0;
+}
+.shop-pack-box {
+  width: 80px;
+  height: 120px;
+  background: #3a4250;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  box-shadow: 0 2px 8px #0006;
+}
+.shop-pack-price {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #ffd700;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.shop-pack-label {
+  color: #fff;
+  margin-bottom: 16px;
+  font-weight: bold;
+  text-align: center;
+} 

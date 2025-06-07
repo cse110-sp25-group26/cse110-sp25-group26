@@ -72,13 +72,36 @@
 
     <script type="module">
         import Scorekeeper from './scripts/frontend/UI_scorekeeper.js';
-         window.ui = new Scorekeeper();
+        import { ShopElement } from './scripts/frontend/shop/ShopElement.js';
+        
+        window.ui = new Scorekeeper();
         ui.setGoalScore(40);
         ui.setRoundScore(12);
         ui.updateChips(3);
         ui.updateMultiplier(2);
         ui.setBank(24);
         ui.setDiscards(4);
+
+        // Shop 테스트용 버튼
+        const shopContainer = document.createElement('div');
+        document.body.appendChild(shopContainer);
+        const shop = new ShopElement(shopContainer);
+
+        const openShopBtn = document.createElement('button');
+        openShopBtn.textContent = 'Shop open';
+        openShopBtn.style.position = 'fixed';
+        openShopBtn.style.top = '20px';
+        openShopBtn.style.right = '20px';
+        openShopBtn.style.zIndex = 3000;
+        openShopBtn.style.padding = '12px 24px';
+        openShopBtn.style.fontSize = '1.1rem';
+        openShopBtn.style.background = '#4ac97d';
+        openShopBtn.style.color = '#222';
+        openShopBtn.style.border = 'none';
+        openShopBtn.style.borderRadius = '8px';
+        openShopBtn.style.fontWeight = 'bold';
+        document.body.appendChild(openShopBtn);
+        openShopBtn.onclick = () => shop.show();
     </script>
 </body>
 
