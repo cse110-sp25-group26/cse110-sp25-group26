@@ -1,0 +1,208 @@
+/* Body styling: sets the background texture and color, font, and prevents scrolling */
+body {
+  background: url('https://www.transparenttextures.com/patterns/asfalt-light.png'), #033a1f; /* Dark green background with texture */
+  font-family: 'Cardo', serif; /* Custom font for elegant typography */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* Styling for floating card decorations */
+.card-decor {
+  position: absolute; /* Positioned absolutely within the body */
+  width: 80px; /* Fixed width for cards */
+  height: auto; /* Maintain aspect ratio */
+  opacity: 0.7; /* Slight transparency */
+  animation: float 4s ease-in-out infinite; /* Floating animation */
+  z-index: 0; /* Ensure cards are behind other elements */
+}
+
+/* Individual card positions and rotation */
+.card-decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(-15deg); animation-delay: 0s; }
+.card-decor:nth-child(2) { top: 30%; right: 10%; transform: rotate(10deg); animation-delay: 1s; }
+.card-decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(-10deg); animation-delay: 2s; }
+.card-decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(5deg); animation-delay: 3s; }
+
+/* Additional card positions and delays for decoration */
+.card-decor:nth-child(5) { top: 50%; left: 10%; transform: rotate(12deg); animation-delay: 1.5s; }
+.card-decor:nth-child(6) { top: 70%; right: 25%; transform: rotate(-8deg); animation-delay: 2.5s; }
+.card-decor:nth-child(7) { bottom: 30%; left: 30%; transform: rotate(7deg); animation-delay: 3.5s; }
+.card-decor:nth-child(8) { bottom: 40%; right: 5%; transform: rotate(-12deg); animation-delay: 0.7s; }
+
+/* Keyframes for floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--rotate)); } /* Start and end positions */
+  50% { transform: translateY(-10px) rotate(var(--rotate)); } /* Midpoint float upward */
+}
+
+/* Styling for the main menu content container */
+.menu-content {
+  position: relative; /* Positioned relative to allow child elements to be positioned */
+  z-index: 10; /* Ensure menu content is above decorations */
+}
+
+/* Styling for fancy buttons */
+.fancy-btn {
+  background: linear-gradient(145deg, #d4af37, #b8860b); /* Gold gradient background */
+  color: white; /* White text color */
+  font-weight: bold; /* Bold text */
+  padding: 1.5rem 2.5rem; /* Button padding */
+  font-size: 1.25rem; /* Font size */
+  border-radius: 0.75rem; /* Rounded corners */
+  text-shadow: 1px 1px 2px #000; /* Subtle text shadow */
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.7); /* Glow effect */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+  width: 20rem; /* Fixed width */
+  text-align: center; /* Center text */
+  border: 3px solid rgba(0, 0, 0, 0.5); /* Border with transparency */
+}
+
+/* Hover effect for fancy buttons */
+.fancy-btn:hover {
+  transform: scale(1.05); /* Slightly enlarge button */
+  box-shadow: 0 0 20px rgba(212, 175, 55, 1); /* Stronger glow effect */
+}
+
+/* Styling for joker card decorations */
+.joker-card {
+  width: 60px; /* Fixed width for joker cards */
+  height: auto; /* Maintain aspect ratio */
+  position: absolute; /* Positioned absolutely */
+  top: 0; /* Align to top */
+  animation: float 3s ease-in-out infinite; /* Floating animation */
+  z-index: 1; /* Ensure joker cards are above other decorations */
+}
+
+/* Individual positions for joker cards */
+.joker-left { left: -80px; transform: rotate(-10deg); } /* Left joker card */
+.joker-right { right: -80px; transform: rotate(10deg); } /* Right joker card */
+
+/* Statistics Screen Styles */
+.stats-container {
+  background: linear-gradient(135deg, #033a1f 0%, #0d4d2b 50%, #033a1f 100%);
+  border: 3px solid #d4af37;
+  border-radius: 15px;
+  padding: 40px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 
+    0 0 30px rgba(212, 175, 55, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Bebas Neue', cursive;
+}
+
+.stats-title {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 6px;
+  margin-bottom: 40px;
+  color: #d4af37;
+  text-shadow: 
+    3px 3px 0px #b8860b,
+    6px 6px 10px rgba(0, 0, 0, 0.5);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 25px 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.stat-item:hover::before {
+  left: 100%;
+}
+
+.stat-item:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  color: #d4af37;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+  margin-top: 5px;
+}
+
+.stats-back-btn {
+  background: linear-gradient(145deg, #d4af37, #b8860b);
+  color: white;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 0.75rem;
+  text-shadow: 1px 1px 2px #000;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+  border: 3px solid rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  font-family: 'Cardo', serif;
+}
+
+.stats-back-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 1);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .stats-title {
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .stat-label {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+  }
+  
+  .stats-container {
+    padding: 25px 15px;
+  }
+}
