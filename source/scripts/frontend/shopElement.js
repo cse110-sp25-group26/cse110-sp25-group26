@@ -1,6 +1,20 @@
 import { HandElement } from './HandElement.js';
 
+/**
+ * @classdesc UI component representing the Shop interface.
+ * Manages the display and interaction of purchasable cards and packs.
+ * 
+ * @property {HTMLElement} shopContainer - The main container for the shop overlay
+ * @property {HTMLElement} overlay - The full-screen overlay background
+ * @property {HTMLElement} shopBox - The main shop interface box
+ * @property {HTMLElement} cardRow - The container for purchasable joker cards
+ */
 export class ShopElement {
+    /**
+     * @class ShopElement
+     * @param {HTMLElement} shopContainer - The DOM element that will contain the shop interface
+     * @throws {Error} If shopContainer is not a valid HTMLElement
+     */
     constructor(shopContainer) {
         if (!(shopContainer instanceof HTMLElement)) {
             console.error("Invalid shop container provided.");
@@ -84,21 +98,44 @@ export class ShopElement {
         this.shopContainer.appendChild(this.overlay);
     }
 
+    /**
+     * @function getRandomJokers
+     * @description Selects random joker cards from the available pool
+     * @param {string[]} jokerImages - Array of available joker image names
+     * @param {number} count - Number of jokers to select
+     * @returns {string[]} Array of selected joker names
+     */
     getRandomJokers(jokerImages, count) {
         const shuffled = [...jokerImages].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
 
+    /**
+     * @function show
+     * @description Displays the shop interface with a fade-in animation
+     * @public
+     */
     show() {
         this.overlay.classList.remove("hide");
         setTimeout(() => this.overlay.classList.add("show"), 10);
     }
 
+    /**
+     * @function hide
+     * @description Hides the shop interface with a fade-out animation
+     * @public
+     */
     hide() {
         this.overlay.classList.remove("show");
         setTimeout(() => this.overlay.classList.add("hide"), 450);
     }
 
+    /**
+     * @function purchaseJoker
+     * @description Handles the purchase of a joker card
+     * @param {HTMLElement} cardBox - The card box element that was clicked
+     * @private
+     */
     purchaseJoker(cardBox) {
         // Get the joker type from the card box
         const jokerType = cardBox.dataset.jokerType;
@@ -130,6 +167,11 @@ export class ShopElement {
         }
     }
 
+    /**
+     * @function createJokerCards
+     * @description Creates and displays the purchasable joker cards in the shop
+     * @private
+     */
     createJokerCards() {
         // 기존 카드 제거
         this.cardRow.innerHTML = '';
@@ -221,6 +263,11 @@ export class ShopElement {
         });
     }
 
+    /**
+     * @function rerollJokers
+     * @description Refreshes the available joker cards in the shop
+     * @public
+     */
     rerollJokers() {
         console.log("Rerolling jokers...");
         this.createJokerCards();
