@@ -97,7 +97,7 @@ export class CardElement extends HTMLElement {
 		// Attach external CSS
 		const styleLink = document.createElement('link');
 		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		styleLink.setAttribute('href', '/source/styles/card.css');
 		this.shadowRoot.appendChild(styleLink);
 	}
 
