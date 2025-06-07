@@ -246,10 +246,12 @@ export class WebUI extends UIInterface {
 			this.goalScoreEl.textContent = data.minScore;
 		}
 		if (data.roundScore !== undefined && this.roundScoreEl) {
-			this.roundScoreEl.textContent = data.roundScore;
+			this.animateScoreUpdate(data.roundScore);
+			console.log(`Round Score updated to: ${data.roundScore}`);
 		}
 		if (data.handScore !== undefined && this.chipValEl) {
 			this.chipValEl.textContent = data.handScore;
+			console.log(`Hand Score updated to: ${data.handScore}`);
 		}
 		if (data.handMult !== undefined && this.multValEl) {
 			this.multValEl.textContent = data.handMult;
@@ -268,6 +270,9 @@ export class WebUI extends UIInterface {
 		}
 		if (data.blindName !== undefined && this.blindNameEl) {
 			this.blindNameEl.textContent = data.blindName;
+		}
+		if (data.handType !== undefined && this.handTypeEl) {
+			this.handTypeEl.textContent = data.handType;
 		}
 
 		this.updateDeckCount();
@@ -303,20 +308,27 @@ export class WebUI extends UIInterface {
 			position: absolute;
 			color: ${colors && colors[0] ? colors[0] : "#00FF00"};
 			font-weight: bold;
-			font-size: 16px;
+			font-size: 18px;
 			pointer-events: none;
 			z-index: 1000;
-			animation: floatUp 1.5s ease-out forwards;
+			text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+			animation: floatUp 2s ease-out forwards;
 		`;
 
-		// Add CSS animation
+		// Add CSS animation if not already added
 		if (!document.getElementById("scoring-animation-style")) {
 			const style = document.createElement("style");
 			style.id = "scoring-animation-style";
 			style.textContent = `
 				@keyframes floatUp {
-					0% { transform: translateY(0px); opacity: 1; }
-					100% { transform: translateY(-50px); opacity: 0; }
+					0% { transform: translateY(0px) scale(1); opacity: 1; }
+					30% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+					100% { transform: translateY(-60px) scale(1); opacity: 0; }
+				}
+				@keyframes pulseScore {
+					0% { transform: scale(1); background-color: rgba(0,255,0,0.3); }
+					50% { transform: scale(1.1); background-color: rgba(0,255,0,0.6); }
+					100% { transform: scale(1); background-color: transparent; }
 				}
 			`;
 			document.head.appendChild(style);
@@ -324,8 +336,8 @@ export class WebUI extends UIInterface {
 
 		// Position and show the score
 		const rect = cardElement.getBoundingClientRect();
-		scoreDiv.style.left = rect.left + rect.width / 2 + "px";
-		scoreDiv.style.top = rect.top + "px";
+		scoreDiv.style.left = rect.left + rect.width / 2 - 25 + "px";
+		scoreDiv.style.top = rect.top - 10 + "px";
 
 		document.body.appendChild(scoreDiv);
 
@@ -334,7 +346,25 @@ export class WebUI extends UIInterface {
 			if (scoreDiv.parentNode) {
 				scoreDiv.parentNode.removeChild(scoreDiv);
 			}
-		}, 1500);
+		}, 2000);
+	}
+
+	/**
+	 * @function animateScoreUpdate
+	 * @description Animates the round score when it updates
+	 * @param {number} newScore - The new score value
+	 */
+	animateScoreUpdate(newScore) {
+		if (!this.roundScoreEl) return;
+
+		// Pulse animation for the round score
+		this.roundScoreEl.style.animation = "pulseScore 0.6s ease-out";
+		this.roundScoreEl.textContent = newScore;
+
+		// Reset animation
+		setTimeout(() => {
+			this.roundScoreEl.style.animation = "";
+		}, 600);
 	}
 
 	/**
@@ -344,8 +374,34 @@ export class WebUI extends UIInterface {
 	displayBust() {
 		this.showMessage("BUST! Score over 21!");
 		if (this.roundStatusEl) {
-			this.roundStatusEl.textContent = "BUST!";
+			this.roundStatusEl.textContent = "BUST! No points scored";
 			this.roundStatusEl.style.color = "#ff4444";
+
+			// Reset after a few seconds
+			setTimeout(() => {
+				this.roundStatusEl.textContent = "";
+				this.roundStatusEl.style.color = "";
+			}, 3000);
+		}
+	}
+
+	/**
+	 * @function displayHandScored
+	 * @description Shows when a hand successfully scores
+	 * @param {number} handScore - The hand score
+	 * @param {number} multiplier - The multiplier applied
+	 * @param {number} totalAdded - Total points added to round score
+	 */
+	displayHandScored(handScore, multiplier, totalAdded) {
+		if (this.roundStatusEl) {
+			this.roundStatusEl.textContent = `+${totalAdded} points! (${handScore} × ${multiplier})`;
+			this.roundStatusEl.style.color = "#00ff00";
+
+			// Reset after a few seconds
+			setTimeout(() => {
+				this.roundStatusEl.textContent = "";
+				this.roundStatusEl.style.color = "";
+			}, 3000);
 		}
 	}
 

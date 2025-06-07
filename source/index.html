@@ -207,15 +207,8 @@
 			}
 
 			function startGame() {
-				setContent(`
-        <div class="fixed inset-0 bg-gray-900 flex items-center justify-center">
-          <div class="bg-white p-8 rounded-lg max-w-md w-full border-4 border-red-800">
-            <h2 class="text-2xl font-bold mb-4 text-red-800">🂠 Game Screen</h2>
-            <p class="mb-4">Game content coming soon...</p>
-            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
-          </div>
-        </div>
-      `);
+				// Navigate to the gameplay page
+				window.location.href = "gameplay.html";
 			}
 
 			window.onload = () => {
@@ -226,3 +219,4 @@
 		</script>
 	</body>
 </html>
+
