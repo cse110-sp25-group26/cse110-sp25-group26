@@ -9,6 +9,14 @@ export class WebUI extends UIInterface {
 		super();
 		this.gameHandler = null;
 		this.canPlay = false;
+		// Don't setup UI elements in constructor - wait for explicit init call
+	}
+
+	/**
+	 * @function initialize
+	 * @description Initializes the WebUI after DOM is ready
+	 */
+	initialize() {
 		this.setupUIElements();
 		this.setupEventListeners();
 	}
@@ -25,6 +33,10 @@ export class WebUI extends UIInterface {
 		);
 		this.jokersContainer = document.getElementById("jokers-area");
 		this.consumablesContainer = document.getElementById("consumables-area");
+
+		console.log("UI Elements found:");
+		console.log("playerHandContainer:", this.playerHandContainer);
+		console.log("playedCardsContainer:", this.playedCardsContainer);
 
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
@@ -152,9 +164,13 @@ export class WebUI extends UIInterface {
 	 * @param {Card} card - The backend card object
 	 */
 	createUIel(card) {
+		console.log(
+			`Creating UI element for card: ${card.type} of ${card.suit}`
+		);
 		const cardElement = new CardElement(card, true);
 		card.UIel = cardElement;
 		this.cardElements.set(card, cardElement);
+		console.log(`Card element created:`, cardElement);
 	}
 
 	/**
@@ -185,11 +201,18 @@ export class WebUI extends UIInterface {
 	 * @param {number} delay - Animation delay (unused for now)
 	 */
 	moveMultiple(cards, origin, dest, delay = 0) {
+		console.log(`Moving ${cards.length} cards from ${origin} to ${dest}`);
 		const originContainer = this.getContainer(origin);
 		const destContainer = this.getContainer(dest);
+		console.log(`Origin container:`, originContainer);
+		console.log(`Destination container:`, destContainer);
 
 		cards.forEach((card) => {
 			const cardElement = this.cardElements.get(card);
+			console.log(
+				`Moving card ${card.type} of ${card.suit}, element:`,
+				cardElement
+			);
 			if (!cardElement) return;
 
 			// Remove from origin
@@ -199,7 +222,10 @@ export class WebUI extends UIInterface {
 
 			// Add to destination
 			if (destContainer && destContainer.addCard) {
+				console.log(`Adding card to destination container`);
 				destContainer.addCard(cardElement);
+			} else {
+				console.log(`No destination container or addCard method`);
 			}
 
 			// Clear selection state

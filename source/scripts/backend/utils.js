@@ -1,5 +1,4 @@
 import { Card } from "./Card.js";
-import { Card } from "./Card.js";
 
 /**
  * @function calculateBlackjackScore
@@ -26,16 +25,13 @@ export function calculateBlackjackScore(cards) {
 	// First pass: Sum all cards, counting Aces as 11
 	for (const card of cards) {
 		if (card.suit === "joker" || card.suit === "consumable") {
-		if (card.suit === "joker" || card.suit === "consumable") {
 			// Skip jokers and consumables
 			continue;
 		}
 
 		if (card.type === "A") {
-		if (card.type === "A") {
 			aces++;
 			score += 11; // Count Ace as 11 initially
-		} else if (["K", "Q", "J"].includes(card.type)) {
 		} else if (["K", "Q", "J"].includes(card.type)) {
 			score += 10; // Face cards are worth 10
 		} else {

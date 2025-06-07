@@ -105,6 +105,9 @@
 				// Create the WebUI (connects HTML to game logic)
 				const webUI = new WebUI();
 
+				// Initialize the WebUI after DOM is ready
+				webUI.initialize();
+
 				// Create the game handler with our WebUI
 				const game = new gameHandler(webUI);
 
