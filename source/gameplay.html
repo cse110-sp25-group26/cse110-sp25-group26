@@ -63,6 +63,7 @@
                 <nav class="player-hand-actions">
                     <button class="btn-pill" id="play-selected-cards">Play Selected</button>
                     <button class="btn-pill" id="discard-selected-cards">Discard Selected</button>
+                    <button class="btn-pill" id="shop-open">Shop</button>
                 </nav>
 
                 <hand-element id="player-hand-cards" aria-label="Player hand cards" data-card-width="80">
@@ -82,6 +83,7 @@
         import { HandElement } from './scripts/frontend/HandElement.js';
         import { CardElement } from './scripts/frontend/CardElement.js';
         import { enableReordering } from './scripts/frontend/CardMove.js';
+        import { ShopElement } from './scripts/frontend/ShopElement.js';
 
         window.ui = new Scorekeeper();
         window.gameManager = new GameManager();
@@ -107,6 +109,16 @@
                 // Ensure actual test dealing calls remain commented out
                 // window.gameManager.dealCardToPlayerHand();
             }
+        });
+
+        const shopContainer = document.createElement('div');
+        document.body.appendChild(shopContainer);
+        const shop = new ShopElement(shopContainer);
+
+        const shopOpenBtn = document.getElementById('shop-open');
+        shopOpenBtn.addEventListener('click', () => {
+            shop.show();
+            console.log("Shop opened");
         });
     </script>
 </body>
