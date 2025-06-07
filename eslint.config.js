@@ -9,9 +9,9 @@ export default defineConfig([
       "source/scripts/**/*.{js,mjs,cjs}",
 	  "source/scripts/tests/**/*.{js,mjs,cjs}"
     ],
-    plugins: { 
+    plugins: {
       js,
-      jsdoc 
+      jsdoc
     },
     extends: [
       "js/recommended",

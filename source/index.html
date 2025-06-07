@@ -1,224 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Card Game</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      #game-status {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-bottom: 20px;
-      }
-      #game-controls {
-        margin-bottom: 20px;
-      }
-      #hand-display {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-      }
-      .card {
-        width: 80px;
-        height: 120px;
-        border: 1px solid #000;
-        border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-      }
-      .card.selected {
-        background-color: #e0e0ff;
-      }
-      .hearts,
-      .diamonds {
-        color: red;
-      }
-      .clubs,
-      .spades {
-        color: black;
-      }
-      button {
-        padding: 8px 16px;
-        margin-right: 10px;
-      }
-      #console-output {
-        height: 200px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        padding: 10px;
-        background-color: #f5f5f5;
-        font-family: monospace;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Card Game - Game Loop Test</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BlackJack Game Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('https://www.transparenttextures.com/patterns/asfalt-light.png'), #033a1f;
+      font-family: 'Cardo', serif;
+      overflow: hidden;
+    }
 
-    <div id="game-status">
-      <h2>Game Status</h2>
-      <div id="status-display">
-        <p>Ante: <span id="ante-display">1/8</span></p>
-        <p>Blind: <span id="blind-display">1/3</span></p>
-        <p>Hands Played: <span id="hands-played-display">0/4</span></p>
-        <p>Discards Used: <span id="discards-used-display">0/4</span></p>
-        <p>Round Score: <span id="round-score-display">0/40</span></p>
-        <p>Money: <span id="money-display">24</span></p>
-      </div>
-    </div>
+    .card-decor {
+      position: absolute;
+      width: 80px;
+      height: auto;
+      opacity: 0.7;
+      animation: float 4s ease-in-out infinite;
+      z-index: 0;
+    }
 
-    <div id="game-controls">
-      <h2>Controls</h2>
-      <button id="start-game">Start Game</button>
-      <button id="discard-cards" disabled>Discard Selected</button>
-      <button id="play-cards" disabled>Play Selected</button>
-    </div>
+    .card-decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(-15deg); animation-delay: 0s; }
+    .card-decor:nth-child(2) { top: 30%; right: 10%; transform: rotate(10deg); animation-delay: 1s; }
+    .card-decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(-10deg); animation-delay: 2s; }
+    .card-decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(5deg); animation-delay: 3s; }
 
-    <h2>Your Hand</h2>
-    <div id="hand-display"></div>
+    /* New card positions and delays */
+    .card-decor:nth-child(5) { top: 50%; left: 10%; transform: rotate(12deg); animation-delay: 1.5s; }
+    .card-decor:nth-child(6) { top: 70%; right: 25%; transform: rotate(-8deg); animation-delay: 2.5s; }
+    .card-decor:nth-child(7) { bottom: 25%; left: 35%; transform: rotate(7deg); animation-delay: 3.5s; }
+    .card-decor:nth-child(8) { bottom: 40%; right: 5%; transform: rotate(-12deg); animation-delay: 0.7s; }
 
-    <h2>Console Output</h2>
-    <div id="console-output"></div>
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(var(--rotate)); }
+      50% { transform: translateY(-10px) rotate(var(--rotate)); }
+    }
 
-    <script type="module">
-      import { GameLoop } from "./scripts/backend/gameLoop.js";
+    .menu-content {
+      position: relative;
+      z-index: 10;
+    }
 
-      // Override console.log to display in the console-output div
-      const originalConsoleLog = console.log;
-      console.log = function (...args) {
-        originalConsoleLog.apply(console, args);
-        const output = document.getElementById("console-output");
-        output.innerHTML += args.join(" ") + "<br>";
-        output.scrollTop = output.scrollHeight;
-      };
+    .fancy-btn {
+      background: linear-gradient(145deg, #d4af37, #b8860b);
+      color: white;
+      font-weight: bold;
+      padding: 1.5rem 2.5rem;
+      font-size: 1.25rem;
+      border-radius: 0.75rem;
+      text-shadow: 1px 1px 2px #000;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 20rem;
+      text-align: center;
+      border: 3px solid rgba(0, 0, 0, 0.5);
+    }
 
-      // Game state
-      let gameLoop;
-      let selectedCards = [];
+    .fancy-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 1);
+    }
 
-      // DOM elements
-      const startGameBtn = document.getElementById("start-game");
-      const discardCardsBtn = document.getElementById("discard-cards");
-      const playCardsBtn = document.getElementById("play-cards");
-      const handDisplay = document.getElementById("hand-display");
+    .joker-card {
+      width: 60px;
+      height: auto;
+      position: absolute;
+      top: 0;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+    }
 
-      // Start game button
-      startGameBtn.addEventListener("click", () => {
-        console.log("Starting game...");
-        gameLoop = new GameLoop();
-        gameLoop.start();
-        updateUI();
+    .joker-left { left: -80px; transform: rotate(-10deg); }
+    .joker-right { right: -80px; transform: rotate(10deg); }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 relative">
+  <!-- Floating cards background -->
+  <img src="https://deckofcardsapi.com/static/img/KH.png" class="card-decor" style="--rotate: -15deg;">
+  <img src="https://deckofcardsapi.com/static/img/0C.png" class="card-decor" style="--rotate: 10deg;">
+  <img src="https://deckofcardsapi.com/static/img/AS.png" class="card-decor" style="--rotate: -10deg;">
+  <img src="https://deckofcardsapi.com/static/img/5D.png" class="card-decor" style="--rotate: 5deg;">
+  
+  <img src="https://deckofcardsapi.com/static/img/3H.png" class="card-decor" style="--rotate: 12deg;">
+  <img src="https://deckofcardsapi.com/static/img/QS.png" class="card-decor" style="--rotate: -8deg;">
+  <img src="https://deckofcardsapi.com/static/img/7C.png" class="card-decor" style="--rotate: 7deg;">
+  <img src="https://deckofcardsapi.com/static/img/JD.png" class="card-decor" style="--rotate: -12deg;">
 
-        startGameBtn.disabled = true;
-        discardCardsBtn.disabled = false;
-        playCardsBtn.disabled = false;
-      });
+  <!-- Main app content -->
+  <div id="app" class="menu-content"></div>
 
-      // Discard selected cards
-      discardCardsBtn.addEventListener("click", () => {
-        if (selectedCards.length === 0) {
-          console.log("No cards selected for discard.");
-          return;
-        }
+  <audio id="bg-music" loop autoplay>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-        console.log(`Discarding cards at indices: ${selectedCards.join(", ")}`);
-        gameLoop.executeHandCycle(selectedCards, []);
-        selectedCards = [];
-        updateUI();
-      });
+  <script>
+    function setContent(html) {
+      document.getElementById('app').innerHTML = html;
+    }
 
-      // Play selected cards
-      playCardsBtn.addEventListener("click", () => {
-        if (selectedCards.length === 0) {
-          console.log("No cards selected to play.");
-          return;
-        }
+    function showMainMenu() {
+      setContent(`
+        <div class="flex flex-col items-center space-y-8 relative">
+          <div class="relative">
+            <img src="https://deckofcardsapi.com/static/img/joker.png" alt="Joker Left" class="joker-card joker-left" style="--rotate:-10deg;">
+            <h1 class="text-5xl font-bold text-yellow-400 drop-shadow-lg mb-8"> BlackJack Game Menu </h1>
+            <img src="https://deckofcardsapi.com/static/img/joker2.png" alt="Joker Right" class="joker-card joker-right" style="--rotate:10deg;">
+          </div>
+          <div class="flex flex-col items-center space-y-6">
+            <button class="fancy-btn" onclick="showStats()"> Stats</button>
+            <button class="fancy-btn" onclick="showSavedGames()">Saved Games</button>
+            <button class="fancy-btn" onclick="showStartMenu()">Start Game</button>
+          </div>
+        </div>
+      `);
+    }
 
-        console.log(`Playing cards at indices: ${selectedCards.join(", ")}`);
-        gameLoop.executeHandCycle([], selectedCards);
-        selectedCards = [];
-        updateUI();
+    function showStats() {
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
+            <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Statistics</h2>
+            <p class="mb-4 text-center">Statistics will be implemented in task #47.</p>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
 
-        // Check if blind cycle is complete
-        const blindComplete = gameLoop.executeBlindCycle();
-        if (blindComplete) {
-          console.log("Blind cycle complete!");
-        }
-      });
+    function showSavedGames() {
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
+            <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Saved Games</h2>
+            <p class="mb-4 text-center">Saved game management will be implemented in task #47.</p>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
 
-      // Update UI with current game state
-      function updateUI() {
-        if (!gameLoop) return;
+    function showStartMenu() {
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800 text-center">
+            <h2 class="text-2xl font-bold mb-4 text-red-800">Start Game</h2>
+            <button class="fancy-btn w-full mb-3" onclick="startGame()">🆕 New Game</button>
+            <button class="fancy-btn w-full mb-3">▶ Resume</button>
+            <button class="fancy-btn w-full" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
 
-        const gameHandler = gameLoop.gameHandler;
-        const state = gameHandler.state;
+    function startGame() {
+      setContent(`
+        <div class="fixed inset-0 bg-gray-900 flex items-center justify-center">
+          <div class="bg-white p-8 rounded-lg max-w-md w-full border-4 border-red-800">
+            <h2 class="text-2xl font-bold mb-4 text-red-800">🂠 Game Screen</h2>
+            <p class="mb-4">Game content coming soon...</p>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
 
-        // Update status display
-        document.getElementById(
-          "ante-display"
-        ).textContent = `${state.currAnte}/${state.totalAntes}`;
-        document.getElementById(
-          "blind-display"
-        ).textContent = `${state.currBlind}/${state.blindsPerAnte}`;
-        document.getElementById(
-          "hands-played-display"
-        ).textContent = `${state.handsPlayed}/${state.totalHands}`;
-        document.getElementById(
-          "discards-used-display"
-        ).textContent = `${state.discardsUsed}/${state.discardCount}`;
-        document.getElementById("round-score-display").textContent = `${
-          state.roundScore
-        }/${state.blindRequirements[state.currBlind - 1]}`;
-        document.getElementById("money-display").textContent = state.money;
-
-        // Update hand display
-        handDisplay.innerHTML = "";
-        state.hands.main.cards.forEach((card, index) => {
-          const cardElement = document.createElement("div");
-          cardElement.className = `card ${card.suit}`;
-          if (card.isSelected) {
-            cardElement.classList.add("selected");
-          }
-
-          const valueElement = document.createElement("div");
-          valueElement.className = "card-value";
-          valueElement.textContent = card.type;
-
-          const suitElement = document.createElement("div");
-          suitElement.className = "card-suit";
-          suitElement.textContent = card.suit;
-
-          cardElement.appendChild(valueElement);
-          cardElement.appendChild(suitElement);
-
-          // Add click handler to select/deselect card
-          cardElement.addEventListener("click", () => {
-            const cardIdx = index;
-            const selectedIndex = selectedCards.indexOf(cardIdx);
-
-            if (selectedIndex === -1) {
-              selectedCards.push(cardIdx);
-              cardElement.classList.add("selected");
-            } else {
-              selectedCards.splice(selectedIndex, 1);
-              cardElement.classList.remove("selected");
-            }
-
-            console.log(`Selected cards: ${selectedCards.join(", ")}`);
-          });
-
-          handDisplay.appendChild(cardElement);
-        });
-      }
-    </script>
-  </body>
+    window.onload = () => {
+      const audio = document.getElementById('bg-music');
+      audio.play().catch(error => console.error('Audio playback failed:', error));
+      showMainMenu();
+    };
+  </script>
+</body>
 </html>
