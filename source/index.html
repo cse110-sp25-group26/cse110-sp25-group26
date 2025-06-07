@@ -4,15 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BlackJack Game Menu</title>
-  <!-- Tailwind CSS for styling -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts for custom typography -->
   <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@700&display=swap" rel="stylesheet">
-  <!-- Custom styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 relative">
-  <!-- Floating cards background, will be replaced by new card design -->
+  <!-- Floating cards background -->
   <img src="https://deckofcardsapi.com/static/img/KH.png" class="card-decor" style="--rotate: -15deg;">
   <img src="https://deckofcardsapi.com/static/img/0C.png" class="card-decor" style="--rotate: 10deg;">
   <img src="https://deckofcardsapi.com/static/img/AS.png" class="card-decor" style="--rotate: -10deg;">
@@ -23,38 +21,60 @@
   <img src="https://deckofcardsapi.com/static/img/7C.png" class="card-decor" style="--rotate: 7deg;">
   <img src="https://deckofcardsapi.com/static/img/JD.png" class="card-decor" style="--rotate: -12deg;">
 
-  <!-- Main app content container -->
+  <!-- Main app content -->
   <div id="app" class="menu-content"></div>
 
-  <!-- Background music-->
   <audio id="bg-music" loop autoplay>
-    <source src="./backgroundmusic.mp3" type="audio/mpeg">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-
+  <!-- Import GameStorage if using modules -->
+  <script type="module" src="GameStorage.js"></script>
+  
   <script>
-    /**
-     * Sets the inner HTML content of the app container.
-     * @param {string} html - The HTML content to display.
-     */
+    // Initialize GameStorage
+    let gameStorage;
+    
+    // Initialize storage when page loads
+    function initializeGameStorage() {
+      // If using modules, you'd import this differently
+      // For now, assuming GameStorage is globally available
+      if (typeof GameStorage !== 'undefined') {
+        gameStorage = new GameStorage();
+      }
+    }
+    
     function setContent(html) {
       document.getElementById('app').innerHTML = html;
     }
+    
+    // Function to get current stats from storage
+    function getCurrentStats() {
+      if (!gameStorage) return getDefaultStats();
+      return gameStorage.getStats();
+    }
+    
+    // Default stats if storage isn't available
+    function getDefaultStats() {
+      return {
+        gamesStarted: 0,
+        gamesCompleted: 0,
+        highestAnteReached: 0,
+        highestRoundScore: 0,
+        totalHandsPlayed: 0,
+        totalJokersUsed: 0
+      };
+    }
 
-    /**
-     * Displays the main menu.
-     */
     function showMainMenu() {
       setContent(`
         <div class="flex flex-col items-center space-y-8 relative">
           <div class="relative">
-            <!-- Joker cards for decoration -->
             <img src="https://deckofcardsapi.com/static/img/joker.png" alt="Joker Left" class="joker-card joker-left" style="--rotate:-10deg;">
             <h1 class="text-5xl font-bold text-yellow-400 drop-shadow-lg mb-8"> BlackJack Game Menu </h1>
             <img src="https://deckofcardsapi.com/static/img/joker2.png" alt="Joker Right" class="joker-card joker-right" style="--rotate:10deg;">
           </div>
-          <!-- Menu buttons -->
           <div class="flex flex-col items-center space-y-6">
             <button class="fancy-btn" onclick="showStats()"> Stats</button>
             <button class="fancy-btn" onclick="showSavedGames()">Saved Games</button>
@@ -64,24 +84,54 @@
       `);
     }
 
-    /**
-     * Displays the statistics screen.
-     */
     function showStats() {
+      const stats = getCurrentStats();
+      
       setContent(`
-        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
-            <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Statistics</h2>
-            <p class="mb-4 text-center">Statistics will be implemented in task #47.</p>
-            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
+        <div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div class="stats-container">
+            <h1 class="stats-title">STATISTICS</h1>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-label">GAMES STARTED</div>
+                <div class="stat-value">${stats.gamesStarted.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">GAMES COMPLETED</div>
+                <div class="stat-value">${stats.gamesCompleted.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">HIGHEST ANTE REACHED</div>
+                <div class="stat-value">${stats.highestAnteReached}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">HIGHEST ROUND SCORE</div>
+                <div class="stat-value">${stats.highestRoundScore.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">TOTAL HANDS PLAYED</div>
+                <div class="stat-value">${stats.totalHandsPlayed.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">TOTAL JOKERS USED</div>
+                <div class="stat-value">${stats.totalJokersUsed.toLocaleString()}</div>
+              </div>
+            </div>
+            
+            <div class="flex justify-center">
+              <button class="stats-back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
+            </div>
           </div>
         </div>
       `);
     }
 
-    /**
-     * Displays the saved games screen.
-     */
     function showSavedGames() {
       setContent(`
         <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
@@ -94,9 +144,6 @@
       `);
     }
 
-    /**
-     * Displays the start menu.
-     */
     function showStartMenu() {
       setContent(`
         <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
@@ -110,9 +157,6 @@
       `);
     }
 
-    /**
-     * Displays the game screen.
-     */
     function startGame() {
       setContent(`
         <div class="fixed inset-0 bg-gray-900 flex items-center justify-center">
@@ -125,18 +169,9 @@
       `);
     }
 
-    /**
-     * Enables audio playback when the user interacts with the page.
-     */
-    function enableAudioPlayback() {
+    window.onload = () => {
       const audio = document.getElementById('bg-music');
       audio.play().catch(error => console.error('Audio playback failed:', error));
-      document.removeEventListener('click', enableAudioPlayback);
-    }
-
-    // Initialize the page and set up event listeners
-    window.onload = () => {
-      document.addEventListener('click', enableAudioPlayback);
       showMainMenu();
     };
   </script>
