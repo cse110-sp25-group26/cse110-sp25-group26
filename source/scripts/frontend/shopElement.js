@@ -248,6 +248,11 @@ export class ShopElement {
 
             cardBox.appendChild(cardElement);
 
+            const label = document.createElement("div");
+            label.className = "shop-card-label";
+            label.textContent = jokerName.replace("card_joker_", "").replace(/_/g, " ").toUpperCase();
+            cardBox.appendChild(label);
+
             // Add click event listener for purchase
             cardBox.addEventListener('click', () => this.purchaseJoker(cardBox));
 
@@ -336,11 +341,6 @@ export class ShopElement {
             price.className = "shop-pack-price";
             packBox.appendChild(price);
     
-            const label = document.createElement("div");
-            label.textContent = packType.replace('_', ' ').toUpperCase();
-            label.className = "shop-pack-label";
-            packBox.appendChild(label);
-    
             const cardElement = document.createElement('card-element');
             cardElement.setAttribute('suit', 'consumable');
             cardElement.setAttribute('type', packType);
@@ -351,11 +351,21 @@ export class ShopElement {
             cardImg.style.width = '100%';
             cardImg.style.height = '100%';
             cardElement.appendChild(cardImg);
+
+            
     
             packBox.appendChild(cardElement);
+
+            const label = document.createElement("div");
+            label.textContent = packType.replace('_', ' ').toUpperCase();
+            label.className = "shop-pack-label";
+            packBox.appendChild(label);
+    
     
             packBox.addEventListener('click', () => this.purchaseConsumable(packBox));
             packRow.appendChild(packBox);
+
+
         });
     
         return packRow; // 
