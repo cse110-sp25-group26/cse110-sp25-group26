@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Testing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats-display {
+            background: #e8f5e8;
+            border: 2px solid #4CAF50;
+        }
+        
+        .controls {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .danger {
+            background: linear-gradient(145deg, #f44336, #da190b) !important;
+        }
+        
+        .warning {
+            background: linear-gradient(145deg, #ff9800, #f57000) !important;
+        }
+        
+        .info {
+            background: linear-gradient(145deg, #2196F3, #0b7dda) !important;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .localStorage-display {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            margin-top: 20px;
+        }
+        
+        .raw-data {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .log {
+            background: #fafafa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .log-action {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .log-update {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 BlackJack Statistics Testing</h1>
+    <p style="text-align: center; color: #666;">
+        Test the statistics system without changing your game files. All data is stored in localStorage.
+    </p>
+
+    <div class="container">
+        <!-- Statistics Display -->
+        <div class="panel stats-display">
+            <h2>📊 Current Statistics</h2>
+            <div id="stats-container">
+                <!-- Stats will be populated here -->
+            </div>
+            
+            <div class="button-group">
+                <button onclick="refreshStats()" class="info">🔄 Refresh Stats</button>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="panel controls">
+            <h2>🎮 Simulate Game Actions</h2>
+            
+            <h3>Game Flow:</h3>
+            <div class="button-group">
+                <button onclick="simulateStartGame()">🎯 Start Game</button>
+                <button onclick="simulatePlayHand()">🃏 Play Hand</button>
+                <button onclick="simulateCompleteGame()">🏆 Complete Game</button>
+                <button onclick="simulateUseJoker()">🃏 Use Joker</button>
+            </div>
+            
+            <h3>High Scores:</h3>
+            <div class="button-group">
+                <button onclick="simulateHighScore()">📈 Set High Score</button>
+                <button onclick="simulateHighAnte()">⬆️ Reach High Ante</button>
+            </div>
+            
+            <h3>Bulk Testing:</h3>
+            <div class="button-group">
+                <button onclick="simulateFullGame()" class="warning">🎮 Simulate Full Game</button>
+                <button onclick="simulate10Games()" class="warning">🎯 Simulate 10 Games</button>
+            </div>
+            
+            <h3>Data Management:</h3>
+            <div class="button-group">
+                <button onclick="exportStats()" class="info">📁 Export Data</button>
+                <button onclick="clearAllData()" class="danger">🗑️ Clear All Data</button>
+            </div>
+            
+            <h3>📝 Action Log:</h3>
+            <div id="action-log" class="log"></div>
+        </div>
+    </div>
+
+    <!-- Raw localStorage Data -->
+    <div class="panel localStorage-display">
+        <h2>💾 Raw localStorage Data</h2>
+        <p>This is what gets saved in your browser:</p>
+        <div id="raw-data" class="raw-data"></div>
+        <button onclick="refreshRawData()" class="info">🔄 Refresh Raw Data</button>
+    </div>
+
+    <script type="module">
+        // Import the GameStorage class
+        import { GameStorage } from './GameStorage.js';
+        
+        // Initialize GameStorage
+        let gameStorage;
+        let actionLog = [];
+        
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                gameStorage = new GameStorage();
+                window.gameStorage = gameStorage; // Make it globally available
+                
+                logAction('System initialized', 'system');
+                refreshStats();
+                refreshRawData();
+            } catch (error) {
+                console.error('Failed to initialize GameStorage:', error);
+                logAction('Failed to initialize: ' + error.message, 'error');
+            }
+        });
+        
+        // Make functions globally available
+        window.refreshStats = function() {
+            if (!gameStorage) {
+                logAction('GameStorage not initialized', 'error');
+                return;
+            }
+            
+            const stats = gameStorage.getStats();
+            const container = document.getElementById('stats-container');
+            
+            container.innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-label">Games Started:</span>
+                    <span class="stat-value">${stats.gamesStarted.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Games Completed:</span>
+                    <span class="stat-value">${stats.gamesCompleted.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Completion Rate:</span>
+                    <span class="stat-value">${stats.gamesStarted > 0 ? ((stats.gamesCompleted / stats.gamesStarted) * 100).toFixed(1) + '%' : '0%'}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Highest Ante Reached:</span>
+                    <span class="stat-value">${stats.highestAnteReached}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Highest Round Score:</span>
+                    <span class="stat-value">${stats.highestRoundScore.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Hands Played:</span>
+                    <span class="stat-value">${stats.totalHandsPlayed.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Jokers Used:</span>
+                    <span class="stat-value">${stats.totalJokersUsed.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">First Game Date:</span>
+                    <span class="stat-value">${stats.firstGameDate ? new Date(stats.firstGameDate).toLocaleDateString() : 'Never'}</span>
+                </div>
+            `;
+            
+            logAction('Statistics refreshed', 'update');
+        };
+        
+        window.refreshRawData = function() {
+            const rawData = localStorage.getItem('gameData');
+            const container = document.getElementById('raw-data');
+            
+            if (rawData) {
+                try {
+                    const parsed = JSON.parse(rawData);
+                    container.textContent = JSON.stringify(parsed, null, 2);
+                } catch (error) {
+                    container.textContent = 'Error parsing data: ' + error.message;
+                }
+            } else {
+                container.textContent = 'No data found in localStorage';
+            }
+        };
+        
+        // Simulation functions
+        window.simulateStartGame = function() {
+            gameStorage.updateStat('gamesStarted');
+            logAction('Started new game', 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulatePlayHand = function() {
+            gameStorage.updateStat('totalHandsPlayed');
+            logAction('Played a hand', 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulateCompleteGame = function() {
+            gameStorage.updateStat('gamesCompleted');
+            logAction('Completed a game', 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulateUseJoker = function() {
+            gameStorage.updateStat('totalJokersUsed');
+            logAction('Used a joker', 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulateHighScore = function() {
+            const currentStats = gameStorage.getStats();
+            const newScore = currentStats.highestRoundScore + Math.floor(Math.random() * 5000) + 1000;
+            
+            const data = gameStorage.readFromStorage();
+            data.lifetimeStats.highestRoundScore = newScore;
+            gameStorage.writeToStorage(data);
+            
+            logAction(`New high score: ${newScore.toLocaleString()}`, 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulateHighAnte = function() {
+            const currentStats = gameStorage.getStats();
+            const newAnte = currentStats.highestAnteReached + 1;
+            
+            const data = gameStorage.readFromStorage();
+            data.lifetimeStats.highestAnteReached = newAnte;
+            gameStorage.writeToStorage(data);
+            
+            logAction(`Reached ante ${newAnte}`, 'action');
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulateFullGame = function() {
+            logAction('--- Starting full game simulation ---', 'action');
+            
+            // Start game
+            gameStorage.updateStat('gamesStarted');
+            
+            // Play multiple hands
+            const handsToPlay = Math.floor(Math.random() * 20) + 10;
+            for (let i = 0; i < handsToPlay; i++) {
+                gameStorage.updateStat('totalHandsPlayed');
+            }
+            
+            // Use some jokers
+            const jokersToUse = Math.floor(Math.random() * 5);
+            for (let i = 0; i < jokersToUse; i++) {
+                gameStorage.updateStat('totalJokersUsed');
+            }
+            
+            // Maybe complete the game (70% chance)
+            if (Math.random() > 0.3) {
+                gameStorage.updateStat('gamesCompleted');
+                logAction(`Full game completed (${handsToPlay} hands, ${jokersToUse} jokers)`, 'action');
+            } else {
+                logAction(`Game ended early (${handsToPlay} hands, ${jokersToUse} jokers)`, 'action');
+            }
+            
+            refreshStats();
+            refreshRawData();
+        };
+        
+        window.simulate10Games = function() {
+            logAction('--- Simulating 10 games ---', 'action');
+            
+            for (let game = 0; game < 10; game++) {
+                simulateFullGame();
+            }
+            
+            logAction('--- 10 game simulation complete ---', 'action');
+        };
+        
+        window.exportStats = function() {
+            const data = gameStorage.readFromStorage();
+            const dataStr = JSON.stringify(data, null, 2);
+            
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'blackjack-stats-' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            logAction('Statistics exported to file', 'action');
+        };
+        
+        window.clearAllData = function() {
+            if (confirm('Are you sure you want to clear ALL statistics data? This cannot be undone!')) {
+                localStorage.removeItem('gameData');
+                
+                // Reinitialize GameStorage
+                gameStorage = new GameStorage();
+                
+                logAction('All data cleared and reset', 'action');
+                refreshStats();
+                refreshRawData();
+            }
+        };
+        
+        // Logging function
+        function logAction(message, type = 'action') {
+            const timestamp = new Date().toLocaleTimeString();
+            actionLog.push({ message, type, timestamp });
+            
+            // Keep only last 20 entries
+            if (actionLog.length > 20) {
+                actionLog.shift();
+            }
+            
+            updateLogDisplay();
+        }
+        
+        function updateLogDisplay() {
+            const logContainer = document.getElementById('action-log');
+            logContainer.innerHTML = actionLog.map(entry => 
+                `<div class="log-entry log-${entry.type}">[${entry.timestamp}] ${entry.message}</div>`
+            ).reverse().join('');
+            
+            // Scroll to top to show latest entries
+            logContainer.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BlackJack Game Menu - Stats Testing</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for custom typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* All necessary styles included inline */
+    body {
+      background: url('https://www.transparenttextures.com/patterns/asfalt-light.png'), #033a1f;
+      font-family: 'Cardo', serif;
+      overflow: hidden;
+    }
+
+    .card-decor {
+      position: absolute;
+      width: 80px;
+      height: auto;
+      opacity: 0.7;
+      animation: float 4s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .card-decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(-15deg); animation-delay: 0s; }
+    .card-decor:nth-child(2) { top: 30%; right: 10%; transform: rotate(10deg); animation-delay: 1s; }
+    .card-decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(-10deg); animation-delay: 2s; }
+    .card-decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(5deg); animation-delay: 3s; }
+    .card-decor:nth-child(5) { top: 50%; left: 10%; transform: rotate(12deg); animation-delay: 1.5s; }
+    .card-decor:nth-child(6) { top: 70%; right: 25%; transform: rotate(-8deg); animation-delay: 2.5s; }
+    .card-decor:nth-child(7) { bottom: 30%; left: 30%; transform: rotate(7deg); animation-delay: 3.5s; }
+    .card-decor:nth-child(8) { bottom: 40%; right: 5%; transform: rotate(-12deg); animation-delay: 0.7s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(var(--rotate)); }
+      50% { transform: translateY(-10px) rotate(var(--rotate)); }
+    }
+
+    .menu-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    .fancy-btn {
+      background: linear-gradient(145deg, #d4af37, #b8860b);
+      color: white;
+      font-weight: bold;
+      padding: 1.5rem 2.5rem;
+      font-size: 1.25rem;
+      border-radius: 0.75rem;
+      text-shadow: 1px 1px 2px #000;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 20rem;
+      text-align: center;
+      border: 3px solid rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+    }
+
+    .fancy-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 1);
+    }
+
+    .joker-card {
+      width: 60px;
+      height: auto;
+      position: absolute;
+      top: 0;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .joker-left { left: -80px; transform: rotate(-10deg); }
+    .joker-right { right: -80px; transform: rotate(10deg); }
+
+    /* Statistics Screen Styles */
+    .stats-container {
+      background: linear-gradient(135deg, #033a1f 0%, #0d4d2b 50%, #033a1f 100%);
+      border: 3px solid #d4af37;
+      border-radius: 15px;
+      padding: 40px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 
+        0 0 30px rgba(212, 175, 55, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Bebas Neue', cursive;
+    }
+
+    .stats-title {
+      text-align: center;
+      font-size: 3.5rem;
+      font-weight: bold;
+      letter-spacing: 6px;
+      margin-bottom: 40px;
+      color: #d4af37;
+      text-shadow: 
+        3px 3px 0px #b8860b,
+        6px 6px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+      margin-bottom: 30px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 25px 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 2px solid rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .stat-item:hover::before {
+      left: 100%;
+    }
+
+    .stat-item:hover {
+      border-color: #d4af37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 1.4rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      color: #d4af37;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+      margin-top: 5px;
+    }
+
+    .stats-back-btn {
+      background: linear-gradient(145deg, #d4af37, #b8860b);
+      color: white;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 0.75rem;
+      text-shadow: 1px 1px 2px #000;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+      border: 3px solid rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      font-family: 'Cardo', serif;
+    }
+
+    .stats-back-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 1);
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+      .stats-title {
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+        margin-bottom: 25px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .stat-label {
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+      
+      .stat-value {
+        font-size: 1.8rem;
+      }
+      
+      .stats-container {
+        padding: 25px 15px;
+      }
+    }
+
+    /* Testing panel styles */
+    .testing-panel {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      z-index: 1000;
+      max-width: 300px;
+      border: 2px solid #d4af37;
+    }
+
+    .test-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 2px;
+      width: 100%;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .test-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .test-btn.blue { background: #2196F3; }
+    .test-btn.red { background: #f44336; }
+    .test-btn.orange { background: #FF9800; }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 relative">
+  <!-- Floating cards background -->
+  <img src="./res/img/card_king_heart.png" class="card-decor" style="--rotate: -15deg;" onerror="this.src='https://via.placeholder.com/80x112/4CAF50/white?text=K♥'">
+  <img src="./res/img/card_3_spade.png" class="card-decor" style="--rotate: 10deg;" onerror="this.src='https://via.placeholder.com/80x112/000000/white?text=3♠'">
+  <img src="./res/img/card_5_spade.png " class="card-decor" style="--rotate: -10deg;" onerror="this.src='https://via.placeholder.com/80x112/000000/white?text=5♠'">
+  <img src="./res/img/card_10_heart.png" class="card-decor" style="--rotate: 5deg;" onerror="this.src='https://via.placeholder.com/80x112/FF0000/white?text=10♥'">
+  
+  <img src="res/img/card_3_heart.png" class="card-decor" style="--rotate: 12deg;" onerror="this.src='https://via.placeholder.com/80x112/FF0000/white?text=3♥'">
+  <img src="res/img/card_queen_spade.png" class="card-decor" style="--rotate: -8deg;" onerror="this.src='https://via.placeholder.com/80x112/000000/white?text=Q♠'">
+  <img src="res/img/card_7_club.png" class="card-decor" style="--rotate: 7deg;" onerror="this.src='https://via.placeholder.com/80x112/000000/white?text=7♣'">
+  <img src="res/img/card_jack_diamond.png" class="card-decor" style="--rotate: -12deg;" onerror="this.src='https://via.placeholder.com/80x112/FF0000/white?text=J♦'">
+
+  <!-- Main app content container -->
+  <div id="app" class="menu-content"></div>
+
+  <!-- Background music-->
+  <audio id="bg-music" loop>
+    <source src="./backgroundmusic.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Testing Controls Panel -->
+  <div class="testing-panel">
+    <h3 style="margin: 0 0 10px 0; color: #ffd700; font-size: 14px;">📊 Stats Testing Panel</h3>
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+      <button onclick="addSampleData()" class="test-btn">📈 Add Sample Data</button>
+      <button onclick="addRandomStats()" class="test-btn blue">🎲 Add Random Stats</button>
+      <button onclick="clearStats()" class="test-btn red">🗑️ Clear Stats</button>
+      <button onclick="showCurrentStats()" class="test-btn orange">👁️ View Stats</button>
+    </div>
+    <div id="current-stats-display" style="margin-top: 10px; font-size: 10px; opacity: 0.8; line-height: 1.2;"></div>
+  </div>
+
+  <script>
+    // Global variables
+    let gameStorage = null;
+
+    // Define the GameStorage class inline since module import might not work
+    class GameStorage {
+      constructor() {
+        this.storageKey = 'gameData';
+        this.currentVersion = '1.0.0';
+        this.defaultStats = {
+          gamesStarted: 0,
+          gamesCompleted: 0,
+          highestAnteReached: 0,
+          highestRoundScore: 0,
+          totalHandsPlayed: 0,
+          totalJokersUsed: 0,
+          uniqueJokersFound: 0,
+          firstGameDate: null
+        };
+        this.initializeStorage();
+      }
+
+      storageExists() {
+        const data = localStorage.getItem(this.storageKey);
+        return data !== null;
+      }
+
+      initializeStorage() {
+        if (!this.storageExists()) {
+          const defaultData = {
+            saves: [],
+            lifetimeStats: { ...this.defaultStats },
+            unlockedJokers: [],
+            uniqueJokersDiscovered: [],
+            lastSaved: new Date().toISOString(),
+            version: this.currentVersion
+          };
+          this.writeToStorage(defaultData);
+        }
+      }
+
+      readFromStorage() {
+        const data = localStorage.getItem(this.storageKey);
+        try {
+          return data ? JSON.parse(data) : null;
+        } catch (err) {
+          console.error("Failed to parse gameData", err);
+          return null;
+        }
+      }
+
+      writeToStorage(data) {
+        try {
+          localStorage.setItem(this.storageKey, JSON.stringify(data));
+          console.log("Game data saved.");
+        } catch (err) {
+          console.error("Failed to write gameData", err);
+        }
+      }
+
+      getStats() {
+        return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
+      }
+
+      updateStat(statKey, delta = 1) {
+        const data = this.readFromStorage();
+        if (!(statKey in data.lifetimeStats)) data.lifetimeStats[String(statKey)] = 0;
+        data.lifetimeStats[String(statKey)] += delta;
+        this.writeToStorage(data);
+      }
+    }
+    
+    // Initialize GameStorage
+    function initializeGameStorage() {
+      try {
+        gameStorage = new GameStorage();
+        console.log("✅ GameStorage initialized successfully");
+        updateCurrentStatsDisplay();
+        return true;
+      } catch (error) {
+        console.error("❌ Failed to initialize GameStorage:", error);
+        return false;
+      }
+    }
+    
+    function setContent(html) {
+      document.getElementById('app').innerHTML = html;
+    }
+    
+    // Function to get current stats from storage
+    function getCurrentStats() {
+      if (!gameStorage) {
+        console.warn("GameStorage not initialized, using default stats");
+        return getDefaultStats();
+      }
+      return gameStorage.getStats();
+    }
+    
+    // Default stats if storage isn't available
+    function getDefaultStats() {
+      return {
+        gamesStarted: 0,
+        gamesCompleted: 0,
+        highestAnteReached: 0,
+        highestRoundScore: 0,
+        totalHandsPlayed: 0,
+        totalJokersUsed: 0
+      };
+    }
+
+    // Menu functions
+    function showMainMenu() {
+      setContent(`
+        <div class="flex flex-col items-center space-y-8 relative">
+          <div class="relative">
+            <img src="res/img/card_joker_lucky_loop.png" alt="Joker Left" class="joker-card joker-left" style="--rotate:-10deg;" onerror="this.src='https://via.placeholder.com/60x84/FFD700/black?text=🃏'">
+            <h1 class="text-5xl font-bold text-yellow-400 drop-shadow-lg mb-8"> BlackJack Game Menu </h1>
+            <img src="res/img/card_joker_mirror_mask.png" alt="Joker Right" class="joker-card joker-right" style="--rotate:10deg;" onerror="this.src='https://via.placeholder.com/60x84/FFD700/black?text=🃏'">
+          </div>
+          <div class="flex flex-col items-center space-y-6">
+            <button class="fancy-btn" onclick="showStats()">📊 Stats</button>
+            <button class="fancy-btn" onclick="showSavedGames()">💾 Saved Games</button>
+            <button class="fancy-btn" onclick="showStartMenu()">🎮 Start Game</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function showStats() {
+      const stats = getCurrentStats();
+      console.log("📊 Displaying stats:", stats);
+      
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div class="stats-container">
+            <h1 class="stats-title">STATISTICS</h1>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-label">GAMES STARTED</div>
+                <div class="stat-value">${stats.gamesStarted.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">GAMES COMPLETED</div>
+                <div class="stat-value">${stats.gamesCompleted.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">HIGHEST ANTE REACHED</div>
+                <div class="stat-value">${stats.highestAnteReached}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">HIGHEST ROUND SCORE</div>
+                <div class="stat-value">${stats.highestRoundScore.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">TOTAL HANDS PLAYED</div>
+                <div class="stat-value">${stats.totalHandsPlayed.toLocaleString()}</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-label">TOTAL JOKERS USED</div>
+                <div class="stat-value">${stats.totalJokersUsed.toLocaleString()}</div>
+              </div>
+            </div>
+            
+            <div class="flex justify-center">
+              <button class="stats-back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    function showSavedGames() {
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800">
+            <h2 class="text-2xl font-bold mb-4 text-center text-red-800">Saved Games</h2>
+            <p class="mb-4 text-center">Saved game management will be implemented in task #47.</p>
+            <button class="fancy-btn w-full mt-4" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function showStartMenu() {
+      setContent(`
+        <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div class="bg-white p-8 max-w-md w-full rounded-lg border-4 border-red-800 text-center">
+            <h2 class="text-2xl font-bold mb-4 text-red-800">Start Game</h2>
+            <button class="fancy-btn w-full mb-3" onclick="startGame()">🆕 New Game</button>
+            <button class="fancy-btn w-full mb-3">▶ Resume</button>
+            <button class="fancy-btn w-full" onclick="showMainMenu()">⬅ Back</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function startGame() {
+      alert("This is the test version. In the real version, this would redirect to gameplay.html");
+      showMainMenu();
+    }
+
+    // Testing functions
+    function addSampleData() {
+      if (!gameStorage) {
+        alert("GameStorage not initialized");
+        return;
+      }
+      
+      const data = gameStorage.readFromStorage();
+      data.lifetimeStats = {
+        gamesStarted: 27,
+        gamesCompleted: 18,
+        highestAnteReached: 6,
+        highestRoundScore: 25640,
+        totalHandsPlayed: 342,
+        totalJokersUsed: 89,
+        uniqueJokersFound: 12,
+        firstGameDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      };
+      gameStorage.writeToStorage(data);
+      
+      console.log("✅ Added sample data");
+      updateCurrentStatsDisplay();
+      
+      if (document.querySelector('.stats-container')) {
+        showStats();
+      }
+    }
+    
+    function addRandomStats() {
+      if (!gameStorage) {
+        alert("GameStorage not initialized");
+        return;
+      }
+      
+      gameStorage.updateStat('gamesStarted', Math.floor(Math.random() * 5) + 1);
+      gameStorage.updateStat('gamesCompleted', Math.floor(Math.random() * 3) + 1);
+      gameStorage.updateStat('totalHandsPlayed', Math.floor(Math.random() * 20) + 5);
+      gameStorage.updateStat('totalJokersUsed', Math.floor(Math.random() * 8) + 1);
+      
+      if (Math.random() > 0.5) {
+        const currentStats = gameStorage.getStats();
+        const data = gameStorage.readFromStorage();
+        data.lifetimeStats.highestRoundScore = Math.max(
+          currentStats.highestRoundScore, 
+          Math.floor(Math.random() * 10000) + 5000
+        );
+        data.lifetimeStats.highestAnteReached = Math.max(
+          currentStats.highestAnteReached, 
+          Math.floor(Math.random() * 3) + 1
+        );
+        gameStorage.writeToStorage(data);
+      }
+      
+      console.log("🎲 Added random stats");
+      updateCurrentStatsDisplay();
+      
+      if (document.querySelector('.stats-container')) {
+        showStats();
+      }
+    }
+    
+    function clearStats() {
+      if (confirm("Clear all statistics data?")) {
+        localStorage.removeItem('gameData');
+        gameStorage = new GameStorage();
+        console.log("🗑️ Cleared all stats");
+        updateCurrentStatsDisplay();
+        
+        if (document.querySelector('.stats-container')) {
+          showStats();
+        }
+      }
+    }
+    
+    function showCurrentStats() {
+      const stats = getCurrentStats();
+      alert(`Current Stats:
+Games Started: ${stats.gamesStarted}
+Games Completed: ${stats.gamesCompleted}
+Highest Ante: ${stats.highestAnteReached}
+Highest Score: ${stats.highestRoundScore.toLocaleString()}
+Total Hands: ${stats.totalHandsPlayed.toLocaleString()}
+Total Jokers: ${stats.totalJokersUsed.toLocaleString()}`);
+    }
+    
+    function updateCurrentStatsDisplay() {
+      const stats = getCurrentStats();
+      const display = document.getElementById('current-stats-display');
+      if (display) {
+        display.innerHTML = `
+          Games: ${stats.gamesStarted}/${stats.gamesCompleted}<br>
+          Ante: ${stats.highestAnteReached} | Score: ${stats.highestRoundScore.toLocaleString()}<br>
+          Hands: ${stats.totalHandsPlayed.toLocaleString()} | Jokers: ${stats.totalJokersUsed.toLocaleString()}
+        `;
+      }
+    }
+
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log("🚀 Initializing stats testing page...");
+      
+      const initialized = initializeGameStorage();
+      if (initialized) {
+        console.log("✅ Page ready for stats testing");
+      } else {
+        console.error("❌ Failed to initialize - some features may not work");
+      }
+      
+      showMainMenu();
+    });
+  </script>
+</body>
+</html>
