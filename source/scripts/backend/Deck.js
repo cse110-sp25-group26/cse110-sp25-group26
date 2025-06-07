@@ -1,8 +1,8 @@
-import { Card } from './Card.js';
+import { Card } from "./Card.js";
 
 /**
  * @classdesc Represents a deck of cards in the game.
- * 
+ *
  * @property {Card[]} availableCards - The cards available in the deck.
  * @property {Card[]} usedCards - The cards that have been used from the deck.
  * @property {Card[]} allCards - All cards in the deck, including available and used cards.
@@ -27,7 +27,10 @@ export class Deck {
 	shuffle() {
 		for (let i = this.availableCards.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[this.availableCards[i], this.availableCards[j]] = [this.availableCards[j], this.availableCards[i]];
+			[this.availableCards[i], this.availableCards[j]] = [
+				this.availableCards[j],
+				this.availableCards[i],
+			];
 		}
 	}
 
@@ -94,7 +97,9 @@ export class Deck {
 	removeCard(card) {
 		const index = this.allCards.indexOf(card);
 		if (index === -1) {
-			console.error("Deck::removeCard - Card does not exist in the deck.");
+			console.error(
+				"Deck::removeCard - Card does not exist in the deck."
+			);
 			return false;
 		}
 		this.allCards.splice(index, 1);
@@ -102,3 +107,4 @@ export class Deck {
 		return true;
 	}
 }
+

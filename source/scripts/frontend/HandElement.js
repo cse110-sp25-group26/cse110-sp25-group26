@@ -1,4 +1,4 @@
-import { CardElement } from './CardElement.js';
+import { CardElement } from "./CardElement.js";
 
 /**
  * @class HandElement
@@ -11,11 +11,11 @@ export class HandElement extends HTMLElement {
 	 */
 	constructor() {
 		super();
-		this.attachShadow({ mode: 'open' });
+		this.attachShadow({ mode: "open" });
 
 		// Hand container
-		this._container = document.createElement('div');
-		this._container.classList.add('hand');
+		this._container = document.createElement("div");
+		this._container.classList.add("hand");
 		this.shadowRoot.appendChild(this._container);
 
 		// card animation movement test
@@ -25,9 +25,9 @@ export class HandElement extends HTMLElement {
 		this.shadowRoot.appendChild(animationLink);
 		
 		// Attach external CSS
-		const styleLink = document.createElement('link');
-		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/hand.css');
+		const styleLink = document.createElement("link");
+		styleLink.setAttribute("rel", "stylesheet");
+		styleLink.setAttribute("href", "/source/scripts/frontend/hand.css");
 		this.shadowRoot.appendChild(styleLink);
 
 		// Internal state
@@ -35,7 +35,7 @@ export class HandElement extends HTMLElement {
 
 		// Listen for card-dropped events to re-run layout
 		// This ensures cards re-home correctly after being dragged and dropped.
-		this._container.addEventListener('card-dropped', () => {
+		this._container.addEventListener("card-dropped", () => {
 			this._updateLayout();
 		});
 	}
@@ -46,7 +46,9 @@ export class HandElement extends HTMLElement {
 	 * @param {CardElement} cardElement - The card element to add.
 	 */
 	addCard(cardElement) {
-		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+		cardElement.addEventListener("click", () =>
+			this._onCardSelect(cardElement)
+		);
 		this.cards.push(cardElement);
 		this._container.appendChild(cardElement);
 		this._updateLayout();
@@ -74,7 +76,7 @@ export class HandElement extends HTMLElement {
 	 */
 	removeSelectedCards() {
 		const selectedCards = this.getSelectedCards();
-		selectedCards.forEach(card => this.removeCard(card));
+		selectedCards.forEach((card) => this.removeCard(card));
 	}
 
 	/**
@@ -83,7 +85,7 @@ export class HandElement extends HTMLElement {
 	 * @returns {CardElement[]} An array of selected card elements.
 	 */
 	getSelectedCards() {
-		return this.cards.filter(card => card.classList.contains('selected'));
+		return this.cards.filter((card) => card.classList.contains("selected"));
 	}
 
 	/**
@@ -101,9 +103,11 @@ export class HandElement extends HTMLElement {
 		}
 
 		this.cards.forEach((card, index) => {
-			card.style.position = 'absolute';
+			card.style.position = "absolute";
 			card.style.left = `${index * (cardWidth - overlap)}px`;
-			card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
+			card.style.transform = card.classList.contains("selected")
+				? "translateY(-20px)"
+				: "translateY(0)";
 			card.style.zIndex = index.toString(); // Set zIndex for stacking
 			card.style.width = `${cardWidth}px`; // Ensure consistent width
 		});
@@ -119,12 +123,14 @@ export class HandElement extends HTMLElement {
 		if (cardElement._wasDragged) {
 			return;
 		}
-		const isSelected = cardElement.classList.toggle('selected');
-		this.dispatchEvent(new CustomEvent('card-selected', {
-			detail: { card: cardElement, selected: isSelected },
-			bubbles: true,
-			composed: true
-		}));
+		const isSelected = cardElement.classList.toggle("selected");
+		this.dispatchEvent(
+			new CustomEvent("card-selected", {
+				detail: { card: cardElement, selected: isSelected },
+				bubbles: true,
+				composed: true,
+			})
+		);
 		this._updateLayout();
 	}
 	
@@ -180,4 +186,5 @@ export class HandElement extends HTMLElement {
 	}
 }
 
-customElements.define('hand-element', HandElement);
+customElements.define("hand-element", HandElement);
+
