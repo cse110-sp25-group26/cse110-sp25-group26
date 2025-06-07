@@ -1,8 +1,9 @@
 import { Deck } from "./Deck.js";
 import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
-// import { calculateBlackjackScore } from "./utils.js";
+import { calculateBlackjackScore } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
+import { GameStorage } from "./GameStorage.js";
 
 /**
  * @typedef {object} HandHolder
@@ -34,9 +35,8 @@ import { UIInterface } from "./UIInterface.js";
  * @property {UIInterface}	  uiInterface      - interface provided by the UI to interact with the game
  * @property {string}         currentBlindName – name of the current blind level
  */
-import { calculateBlackjackScore } from "./utils.js";
-import { UIInterface } from "./UIInterface.js";
-import { GameStorage } from "./GameStorage.js";
+
+
 
 /**
  * @classdesc Handles game logic and interactions with statistics tracking.
