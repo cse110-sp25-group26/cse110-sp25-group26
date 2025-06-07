@@ -31,7 +31,7 @@ import { Card } from "./Card.js";
 
 /**
  * @classdesc Handles game logic and interactions.
- * 
+ *
  * @property {GameState} state - The current state of the game.
  * @property {string[]} suits - The suits of the cards.
  * @property {string[]} types - The types of the cards.
@@ -55,7 +55,7 @@ export class gameHandler {
 				main: new Hand(),
 				played: new Hand(),
 				joker: new Hand(),
-				consumable: new Hand()
+				consumable: new Hand(),
 			},
 
 			// Core progression
@@ -87,8 +87,22 @@ export class gameHandler {
 			discardsUsed: 0,
 		};
 
-		this.suits = ['hearts', 'diamonds', 'clubs', 'spades'];
-		this.types = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+		this.suits = ["hearts", "diamonds", "clubs", "spades"];
+		this.types = [
+			"2",
+			"3",
+			"4",
+			"5",
+			"6",
+			"7",
+			"8",
+			"9",
+			"10",
+			"J",
+			"Q",
+			"K",
+			"A",
+		];
 		this.defaultCards = [];
 		for (let suit of this.suits) {
 			for (let type of this.types) {
@@ -103,7 +117,10 @@ export class gameHandler {
 	 * @description Deals cards to the main hand until the hand is full or no cards are left in the deck.
 	 */
 	dealCards() {
-		while (this.state.hands.main.cards.length < this.state.handSize && this.state.deck.availableCards.length > 0) {
+		while (
+			this.state.hands.main.cards.length < this.state.handSize &&
+			this.state.deck.availableCards.length > 0
+		) {
 			const card = this.state.deck.drawCard();
 			if (card) {
 				this.state.hands.main.addCard(card);
@@ -131,7 +148,11 @@ export class gameHandler {
 		const card = hand.cards[index];
 		const newState = card.toggleSelect();
 
-		console.log(`Card ${card.type} of ${card.suit} is now ${newState ? "selected" : "deselected"}.`);
+		console.log(
+			`Card ${card.type} of ${card.suit} is now ${
+				newState ? "selected" : "deselected"
+			}.`
+		);
 		return newState;
 	}
 
@@ -145,16 +166,18 @@ export class gameHandler {
 			return;
 		}
 
-		const selectedCards = this.state.hands.main.cards.filter(card => card.isSelected);
+		const selectedCards = this.state.hands.main.cards.filter(
+			(card) => card.isSelected
+		);
 		if (selectedCards.length === 0) {
 			console.error("No cards selected for discard.");
 			return;
 		}
 
 		// Deselect cards after discarding
-		selectedCards.forEach(card => card.toggleSelect());
+		selectedCards.forEach((card) => card.toggleSelect());
 
-		selectedCards.forEach(card => {
+		selectedCards.forEach((card) => {
 			this.state.hands.main.removeCard(card);
 			console.log(`Discarded card: ${card.type} of ${card.suit}`);
 		});
@@ -169,16 +192,18 @@ export class gameHandler {
 	 * @description Plays selected cards from the main hand and scores them.
 	 */
 	playCards() {
-		const selectedCards = this.state.hands.main.cards.filter(card => card.isSelected);
+		const selectedCards = this.state.hands.main.cards.filter(
+			(card) => card.isSelected
+		);
 		if (selectedCards.length === 0) {
 			console.error("No cards selected for play.");
 			return;
 		}
 
 		// Deselect cards after playing
-		selectedCards.forEach(card => card.toggleSelect());
+		selectedCards.forEach((card) => card.toggleSelect());
 
-		selectedCards.forEach(card => {
+		selectedCards.forEach((card) => {
 			this.state.hands.played.addCard(card);
 			this.state.hands.main.removeCard(card);
 			console.log(`Played card: ${card.type} of ${card.suit}`);

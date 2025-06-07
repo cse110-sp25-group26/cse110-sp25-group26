@@ -1,85 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Gameplay</title>
+		<link rel="stylesheet" href="styles/gameplay.css" />
+	</head>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gameplay</title>
-    <link rel="stylesheet" href="styles/gameplay.css">
-</head>
+	<body>
+		<div id="stage">
+			<!-- SCOREKEEPER SIDEBAR -->
+			<aside id="scoreboard">
+				<button class="btn-pill" id="buy-in">Buy In</button>
 
-<body>
-    <div id="stage">
-        <!-- SCOREKEEPER SIDEBAR -->
-        <aside id="scoreboard">
-            <button class="btn-pill" id="buy-in">Buy In</button>
+				<section class="card card-goal">
+					<p>Score at least</p>
+					<h1 id="goal-score">—</h1>
+				</section>
 
-            <section class="card card-goal">
-                <p>Score at least</p>
-                <h1 id="goal-score">—</h1>
-            </section>
+				<section class="card card-round">
+					<p>Current Round Score</p>
+					<h1 id="round-score">—</h1>
+				</section>
 
-            <section class="card card-round">
-                <p>Current Round Score</p>
-                <h1 id="round-score">—</h1>
-            </section>
+				<section class="card card-chips">
+					<div class="chip-row">
+						<div class="chip green"><span id="chip-val">1</span></div>
+						<span class="times">×</span>
+						<div class="chip pink"><span id="mult-val">1</span></div>
+					</div>
+					<p class="chip-label">Chips / Mult</p>
+				</section>
 
-            <section class="card card-chips">
-                <div class="chip-row">
-                    <div class="chip green"><span id="chip-val">1</span></div>
-                    <span class="times">×</span>
-                    <div class="chip pink"><span id="mult-val">1</span></div>
-                </div>
-                <p class="chip-label">Chips / Mult</p>
-            </section>
+				<nav class="actions">
+					<button class="btn-pill" id="info">Info</button>
+					<button class="btn-pill" id="options">Options</button>
+				</nav>
 
-            <nav class="actions">
-                <button class="btn-pill" id="info">Info</button>
-                <button class="btn-pill" id="options">Options</button>
-            </nav>
+				<div class="bank-balance">$<span id="bank-amount">—</span></div>
 
-            <div class="bank-balance">
-                $<span id="bank-amount">—</span>
-            </div>
+				<ul class="stats-list">
+					<li>Discards: <strong id="discards">0</strong></li>
+				</ul>
+			</aside>
 
-            <ul class="stats-list">
-                <li>Discards: <strong id="discards">0</strong></li>
-            </ul>
-        </aside>
+			<!-- MAIN GAME AREA -->
+			<main id="board">
+				<section id="play-area" aria-label="Game play area">
+					<!-- game canvas / elements go here -->
+				</section>
 
-        <!-- MAIN GAME AREA -->
-        <main id="board">
-            <section id="play-area" aria-label="Game play area">
-                <!-- game canvas / elements go here -->
-            </section>
+				<footer id="hand-strip">
+					<p id="card-count">0/0</p>
 
-            <footer id="hand-strip">
-                <p id="card-count">0/0</p>
+					<section id="hand-cards" aria-label="Player hand">
+						<!-- cards injected by JS -->
+					</section>
 
-                <section id="hand-cards" aria-label="Player hand">
-                    <!-- cards injected by JS -->
-                </section>
+					<nav class="hand-actions">
+						<button class="btn-pill" id="discard">Discard</button>
+						<button class="btn-pill" id="draw">Draw</button>
+					</nav>
 
-                <nav class="hand-actions">
-                    <button class="btn-pill" id="discard">Discard</button>
-                    <button class="btn-pill" id="draw">Draw</button>
-                </nav>
+					<div id="deck" aria-label="Deck"></div>
+				</footer>
+			</main>
+		</div>
 
-                <div id="deck" aria-label="Deck"></div>
-            </footer>
-        </main>
-    </div>
-
-    <script type="module">
-        import Scorekeeper from './scripts/frontend/UI_scorekeeper.js';
-         window.ui = new Scorekeeper();
-        ui.setGoalScore(40);
-        ui.setRoundScore(12);
-        ui.updateChips(3);
-        ui.updateMultiplier(2);
-        ui.setBank(24);
-        ui.setDiscards(4);
-    </script>
-</body>
-
+		<script type="module">
+			import Scorekeeper from "./scripts/frontend/UI_scorekeeper.js";
+			window.ui = new Scorekeeper();
+			ui.setGoalScore(40);
+			ui.setRoundScore(12);
+			ui.updateChips(3);
+			ui.updateMultiplier(2);
+			ui.setBank(24);
+			ui.setDiscards(4);
+		</script>
+	</body>
 </html>
