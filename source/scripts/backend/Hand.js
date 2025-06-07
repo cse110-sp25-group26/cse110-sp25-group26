@@ -192,16 +192,23 @@ export class Hand {
 
 	/**
 	 * @function removeCard
-	 * @description Removes a card from the hand.
-	 * @param {number} index - The index of the card to remove.
-	 * @returns {Card} - The removed card.
+	 * @description Removes a card from the hand. Can take either a card
+	 *              object or an index.
+	 * @param {number|Card} target - The index of the card to remove or the
+	 *                                card object itself.
+	 * @returns {Card|null} - The removed card, or null if the card/index is
+	 *                        invalid.
 	 */
-	removeCard(index) {
-		if (index < 0 || index >= this.cards.length) {
-			return null; // Invalid index
+	removeCard(target) {
+		let index = target;
+
+		if (target instanceof Card) {
+			index = this.cards.indexOf(target);
 		}
 
-		// TODO_UI: Call back to the UI hand to remove the card from the hand
+		if (typeof index !== 'number' || index < 0 || index >= this.cards.length) {
+			return null; // Invalid index or card not found
+		}
 
 		return this.cards.splice(index, 1)[0];
 	}

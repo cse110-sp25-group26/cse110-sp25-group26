@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: backend/utils.js</title>
+    <title>JSDoc: Source: frontend/UI_ScoreKeeper.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: backend/utils.js</h1>
+    <h1 class="page-title">Source: frontend/UI_ScoreKeeper.js</h1>
 
     
 
@@ -26,77 +26,86 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Card } from './Card.js';
-
-/**
- * @function calculateBlackjackScore
- * @description Calculates the Blackjack score from an array of cards.
- * @param {Card[]} cards - An array of Card objects.
- * 
- * @example
- * const cards = [
- *   new Card('hearts', 'A'),
- *   new Card('spades', 'K'),
- *   new Card('diamonds', '5')
- *  ];
- * const score = calculateBlackjackScore(cards);
- * console.log(score); // Outputs 16
- * 
- * @returns {number} The calculated score.
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents a scorekeeper UI element that displays various game scores and stats.
  */
-export function calculateBlackjackScore(cards) {
-	let score = 0;
-	let aces = 0;
+export default class ScoreKeeper {
+	/**
+	 * Creates an instance of ScoreKeeper.
+	 * Initializes references to the DOM elements that display game scores and stats.
+	 */
+	constructor() {
+		this.goal = document.getElementById('goal-score');
+		this.round = document.getElementById('round-score');
+		this.chips = document.getElementById('chip-val');
+		this.mult = document.getElementById('mult-val');
+		this.bank = document.getElementById('bank-amount');
+		this.discards = document.getElementById('discards');
 
-	// First pass: Sum all cards, counting Aces as 11
-	for (const card of cards) {
-		if (card.suit === 'joker' || card.suit === 'consumable') {
-			// Skip jokers and consumables
-			continue;
-		}
-
-		if (card.type === 'A') {
-			aces++;
-			score += 11; // Count Ace as 11 initially
-		} else if (['K', 'Q', 'J'].includes(card.type)) {
-			score += 10; // Face cards are worth 10
-		} else {
-			score += parseInt(card.type, 10); // Number cards are worth their value
-		}
+		// initialize some variables like this.scoreElement, this.chipsElement, etc.
 	}
 
-	// Second pass: Adjust for Aces if score exceeds 21
-	while (score > 21 &amp;&amp; aces > 0) {
-		score -= 10; // Count Ace as 1 instead of 11
-		aces--;
+	/**
+	 * Sets the text content of the goal score display.
+	 * @param {number|string} value - The value to display as the goal score.
+	 */
+	setGoalScore(value) {
+		this.goal.textContent = value;
 	}
 
-	return score;
+	/**
+	 * Set the current round score.
+	 * @param {number|string} value - The value to display as the round score.
+	 */
+	setRoundScore(value) {
+		this.round.textContent = value;
+	}
+
+	/**
+	 * Update the number of chips.
+	 * @param {number|string} count - The new number of chips to display.
+	 */
+	updateChips(count) {
+		this.chips.textContent = count;
+	}
+
+	/**
+	 * Update the multiplier.
+	 * @param {number|string} multiplier - The new multiplier value to display.
+	 */
+	updateMultiplier(multiplier) {
+		this.mult.textContent = multiplier;
+	}
+
+	/**
+	 * Update the bank total.
+	 * @param {number|string} amount - The new bank amount to display.
+	 */
+	setBank(amount) {
+		this.bank.textContent = amount;
+	}
+
+	/**
+	 * Update the discards count.
+	 * @param {number|string} count - The new discards count to display.
+	 */
+	setDiscards(count) {
+		this.discards.textContent = count;
+	}
+
+	/**
+	 * Reset all fields to zero or placeholder.
+	 */
+	reset() {
+		this.setGoalScore('—');
+		this.setRoundScore('—');
+		this.updateChips(0);
+		this.updateMultiplier(0);
+		this.setBank(0);
+		this.setDiscards(0);
+	}
 }
-
-/**
- * @function staggered
- * @description Executes a function on array items with staggered timing.
- * @param {Array} array - The array of items to process.
- * @param {Function} fn - The function to execute on each item.
- * @param {number} [delay=0] - The delay in milliseconds between each function call.
- * @returns {Promise} A promise that resolves when all items have been processed.
- */
-export function staggered(array, fn, delay = 0) {
-	return new Promise((resolve) => {
-		let index = 0;
-
-		const interval = setInterval(() => {
-			if (index &lt; array.length) {
-				fn(array[index]);
-				index++;
-			} else {
-				clearInterval(interval);
-				resolve();
-			}
-		}, delay);
-	});
-}</code></pre>
+</code></pre>
         </article>
     </section>
 
