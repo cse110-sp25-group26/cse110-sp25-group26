@@ -156,6 +156,7 @@ export class scoringHandler {
 	 * @function onDraw
 	 * @description Called when a card is drawn from the deck.
 	 *              This can be used to trigger any scoring-related effects.
+	 * @param {object} card - The card that was drawn.
 	 */
 	onDraw(card) {
 		const jokers = this.handler.state.hands.joker.cards;

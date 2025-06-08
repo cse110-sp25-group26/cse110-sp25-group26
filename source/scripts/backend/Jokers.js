@@ -1,4 +1,5 @@
 import { Card } from "./Card.js";
+import { calculateBlackjackScore } from "./utils.js";
 
 // TODO: Documentation. Running out of time.
 
@@ -64,7 +65,7 @@ export class Joker extends Card {
 		"onScoringEnd",
 		"onCardScore",
 		"onScoringStart"
-	]
+	];
 }
 
 
@@ -94,7 +95,20 @@ class StickShift extends Joker {
 }
 Joker.registerJoker("stick_shift", StickShift);
 
-// TODO: Piggy Bank needs interest to be implemented
+class PiggyBank extends Joker {
+	constructor() {
+		super("piggy_bank");
+	}
+
+	onJokerEnter(params) {
+		params.gameHandler.state.interestCap += 1;
+	}
+
+	onJokerLeave(params) {
+		params.gameHandler.state.interestCap -= 1;
+	}
+}
+Joker.registerJoker("piggy_bank", PiggyBank);
 
 class EvenSteven extends Joker {
 	constructor() {
@@ -125,38 +139,41 @@ Joker.registerJoker("odd_rod", OddRod);
 // TODO: Softie needs a way to detect soft aces
 
 class MirrorMask extends Joker {
-  constructor() {
-    super("mirror_mask");
-    
-    // Create a proxy to intercept all method calls
-    return new Proxy(this, {
-      get(target, prop, receiver) {
-        // Get the original property/method
-        const value = Reflect.get(target, prop, receiver);
-        
-        // Make sure the property is a function and valid joker method
-        if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
-          
-          // Return a new function that forwards the call
-          return function(...args) {
-            const params = args[0]; // First argument should be the params object
-			const leftJoker = Joker.getJokerAt(params, -1);
-            
-            if (leftJoker && typeof leftJoker[prop] === 'function') {
-              // Forward the call to the joker
-              return leftJoker[prop](...args);
-            }
-            
-            // Fallback to the original if not found
-            return value.apply(target, args);
-          };
-        }
-        
-        // Not a function or not a joker method, return the original value
-        return value;
-      }
-    });
-  }
+	constructor() {
+		super("mirror_mask");
+		// Create a proxy to intercept all method calls
+		return new Proxy(this, {
+			get(target, prop, receiver) {
+				// Get the original property/method
+				const value = Reflect.get(target, prop, receiver);
+
+				// Make sure the property is a function and valid joker method
+				if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
+
+					// Return a new function that forwards the call
+					return function (...args) {
+						const params = args[0]; // First argument should be the params object
+						const leftJoker = Joker.getJokerAt(params, -1);
+
+						if (leftJoker && typeof leftJoker[prop] === 'function') {
+							// Forward the call to the joker
+							return leftJoker[prop](...args);
+						}
+
+						// Fallback to the original if not found
+						return value.apply(target, args);
+					};
+				}
+
+				// Not a function or not a joker method, return the original value
+				return value;
+			}
+		});
+	}
+
+	getDescription() {
+		return `<b>Mirror Mask</b><br>Copies the effect of the Joker to its left.`;
+	}
 }
 Joker.registerJoker("mirror_mask", MirrorMask);
 
@@ -217,15 +234,52 @@ class TwentyOneder extends Joker {
 		super("twenty_oneder");
 	}
 
-	onCardScore(params) {
-		if (params.score == 21) {
+	onScoringEnd(params) {
+		if (params.score == 21 && calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
 			params.scoringHandler.addMult(params, 0.5);
 		}
 	}
 }
 Joker.registerJoker("twenty_oneder", TwentyOneder);
 
-// TODO: Blueprint is like Mirror Mask but I don't want to mess with that right now
+// Blueprint - like Mirror Mask, but copies every joker to the left until null
+class Blueprint extends Joker {
+	constructor() {
+		super("blueprint");
+
+		// Create a proxy to intercept all method calls
+		return new Proxy(this, {
+			get(target, prop, receiver) {
+				// Get the original property/method
+				const value = Reflect.get(target, prop, receiver);
+
+				// Make sure the property is a function and valid joker method
+				if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
+
+					// Return a new function that forwards the call
+					return function (...args) {
+						const params = args[0]; // First argument should be the params object
+						let offset = -1;
+						let leftJoker = Joker.getJokerAt(params, offset);
+
+						while (leftJoker && typeof leftJoker[prop] === 'function') {
+							leftJoker[prop](...args);
+							offset--;
+							leftJoker = Joker.getJokerAt(params, offset);
+						}
+
+						// Fallback to the original if not found
+						return value.apply(target, args);
+					};
+				}
+
+				// Not a function or not a joker method, return the original value
+				return value;
+			}
+		});
+	}
+}
+Joker.registerJoker("blueprint", Blueprint);
 
 class Martingale extends Joker {
 	constructor() {
@@ -248,9 +302,33 @@ class Martingale extends Joker {
 }
 Joker.registerJoker("martingale", Martingale);
 
-// TODO: Wildcard Joker
+class WildcardJoker extends Joker {
+	constructor() {
+		super("wildcard_joker");
+	}
 
-// TODO: Overclock
+	onScoringEnd(params) {
+		if (params.score < 21) {
+			const remaining = 21 - params.score;
+			const addValue = Math.floor(Math.random() * (remaining + 1));
+			params.scoringHandler.addChips(params, addValue);
+		}
+	}
+}
+Joker.registerJoker("wildcard_joker", WildcardJoker);
+
+class Overclock extends Joker {
+	constructor() {
+		super("overclock");
+	}
+
+	onScoringStart(params) {
+		if (params.gameHandler.state.hands.played.cards.length > 5) {
+			params.scoringHandler.addMult(params, (params.gameHandler.state.hands.played.cards.length - 5) * 0.5);
+		}
+	}
+}
+Joker.registerJoker("overclock", Overclock);
 
 // TODO: Phantom Hand
 
@@ -301,6 +379,17 @@ class Snowballer extends Joker {
 }
 Joker.registerJoker("snowballer", Snowballer);
 
-// TODO: Hiccup
+class Hiccup extends Joker {
+	constructor() {
+		super("hiccup");
+	}
+
+	onScoringStart(params) {
+		if (params.gameHandler.state.hands.played.cards.length > 7) {
+			params.scoringHandler.addChips(params, 1);
+		}
+	}
+}
+Joker.registerJoker("hiccup", Hiccup);
 
 // TODO: Penny Pincher

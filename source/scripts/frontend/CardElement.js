@@ -222,11 +222,15 @@ export class CardElement extends HTMLElement {
 			typeMap[this._card.type] || this._card.type.toLowerCase();
 
 		// Update existing front image
-		const filename = `${typeName}_${suitName}.png`;
-		this._frontImg.src = `/source/res/img/card/${filename}?v=${Date.now()}`;
-		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
-
-		console.log(`Loading card image: ${filename}`);
+		if (this._card.suit === "joker") {
+			const filename = `${typeName}.png`;
+			this._frontImg.alt = this._card.type;
+			this._frontImg.src = `/source/res/img/card/joker/${filename}?v=${Date.now()}`;
+		} else {
+			const filename = `${typeName}_${suitName}.png`;
+			this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+			this._frontImg.src = `/source/res/img/card/${filename}?v=${Date.now()}`;
+		}
 	}
 
 	/**

@@ -34,6 +34,7 @@ import { Joker } from "./Jokers.js";
  * @property {boolean}        endlessMode     	- whether the game is in endless mode
  * @property {UIInterface}	  uiInterface     	- interface provided by the UI to interact with the game
  * @property {string}         currentBlindName	- name of the current blind level
+ * @property {number}		  interestCap       - Maximum amount that may be reached by interest
  *	
 
 /**
@@ -101,6 +102,9 @@ export class gameHandler {
 			discardsUsed: 0,
 			endlessMode: false,
 			currentBlindName: "Small Blind",
+
+			// Economy
+			interestCap: 40,
 		};
 
 		this.suits = ["hearts", "diamonds", "clubs", "spades"];
@@ -372,6 +376,14 @@ export class gameHandler {
 				"Remaining Hands",
 				this.state.totalHands - this.state.handsPlayed,
 			]);
+		}
+		// Add a 10% interest bonus
+		let interest = Math.floor(baseMoney * 0.1);
+		if (interest > 0 && this.state.money < this.state.interestCap) {
+			if (this.state.money + interest > this.state.interestCap) {
+				interest = this.state.interestCap - this.state.money;
+			}
+			extras.push(["Interest", interest]);
 		}
 
 		this.state.money += baseMoney;
