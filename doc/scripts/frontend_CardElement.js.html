@@ -103,7 +103,7 @@ export class CardElement extends HTMLElement {
 		// Card back image
 		this._cardBack.innerHTML = '';
 		const backImg = document.createElement('img');
-		backImg.src = '/source/res/img/back.png';
+		backImg.src = '/source/res/img/card/back.png';
 		backImg.alt = 'Card back';
 		backImg.style.width = '100%';
 		backImg.style.height = '100%';
@@ -216,7 +216,7 @@ export class CardElement extends HTMLElement {
 	updateCardFace() {
 		// Update existing front image
 		const filename = `card_${this._card.type.toLowerCase()}_${this._card.suit.toLowerCase()}.png`;
-		this._frontImg.src = `/source/res/img/${filename}`;
+		this._frontImg.src = `/source/res/img/card/${filename}`;
 		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
 	}
 

@@ -222,8 +222,8 @@ export class CardElement extends HTMLElement {
 			typeMap[this._card.type] || this._card.type.toLowerCase();
 
 		// Update existing front image
-		const filename = `card_${typeName}_${suitName}.png`;
-		this._frontImg.src = `/source/res/img/${filename}?v=${Date.now()}`;
+		const filename = `${typeName}_${suitName}.png`;
+		this._frontImg.src = `/source/res/img/card/${filename}?v=${Date.now()}`;
 		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
 
 		console.log(`Loading card image: ${filename}`);

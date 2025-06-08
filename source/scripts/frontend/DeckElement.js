@@ -31,7 +31,7 @@ export class DeckElement {
 
 		// Set up the deck background image
 		this.deckImage = document.createElement("img");
-		this.deckImage.src = `/source/res/img/${back}.png?v=${Date.now()}`;
+		this.deckImage.src = `/source/res/img/card/${back}.png?v=${Date.now()}`;
 		this.deckImage.alt = "Deck";
 		this.deckImage.style.width = "80px";
 		this.deckImage.style.height = "120px";
