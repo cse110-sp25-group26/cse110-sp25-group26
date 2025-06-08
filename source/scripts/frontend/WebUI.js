@@ -89,6 +89,13 @@ export class WebUI extends UIInterface {
 			return;
 		}
 
+		const mainHandCards = this.gameHandler.state.hands.main.cards;
+
+		// Reset card selection states
+		mainHandCards.forEach((card) => {
+			card.isSelected = false;
+		});
+
 		// Mark cards as selected in the backend
 		selectedCards.forEach((cardElement) => {
 			cardElement._card.isSelected = true;
@@ -110,6 +117,13 @@ export class WebUI extends UIInterface {
 			this.showMessage("Please select cards to discard first!");
 			return;
 		}
+
+		const mainHandCards = this.gameHandler.state.hands.main.cards;
+
+		// Reset card selection states
+		mainHandCards.forEach((card) => {
+			card.isSelected = false;
+		});
 
 		// Mark cards as selected in the backend
 		selectedCards.forEach((cardElement) => {

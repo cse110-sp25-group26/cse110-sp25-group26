@@ -147,7 +147,7 @@ export class GameStorage {
 
 	/**
 	 * @function deleteSave
-	 * @description Deletes a save from the specified index.
+	 * @description Deletes a save from the specified index.z
 	 * @param {number} index - Index of the save to remove.
 	 * @returns {boolean} True if deletion succeeded.
 	 */
