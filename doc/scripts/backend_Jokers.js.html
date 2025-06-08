@@ -1,4 +1,32 @@
-import { Card } from "./Card.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/Jokers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/Jokers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Card } from "./Card.js";
 import { calculateBlackjackScore } from "./utils.js";
 
 /**
@@ -18,21 +46,21 @@ import { calculateBlackjackScore } from "./utils.js";
 
 /**
  * Formats special sequences in joker descriptions:
- * !<c(+X)!> for chips - displays in bold blue
- * !<t(+X)!> for multiplier - displays in bold red
+ * !&lt;c(+X)!> for chips - displays in bold blue
+ * !&lt;t(+X)!> for multiplier - displays in bold red
  * @param {string} text - The text with special sequences
  * @returns {string} Formatted HTML text
  */
 export function formatJokerDescription(text) {
 	return text
-		.replace(/!<c\(([^)]+)\)!>/g, '<span style="color:blue;font-weight:bold">$1 chips</span>')
-		.replace(/!<t\(([^)]+)\)!>/g, '<span style="color:red;font-weight:bold">$1x mult</span>');
+		.replace(/!&lt;c\(([^)]+)\)!>/g, '&lt;span style="color:blue;font-weight:bold">$1 chips&lt;/span>')
+		.replace(/!&lt;t\(([^)]+)\)!>/g, '&lt;span style="color:red;font-weight:bold">$1x mult&lt;/span>');
 }
 
 /**
  * @classdesc Represents a Joker in the game.
  * 
- * @property {Map<string, Joker>} jokerTypes - A map of registered joker types.
+ * @property {Map&lt;string, Joker>} jokerTypes - A map of registered joker types.
  */
 export class Joker extends Card {
 	static jokerTypes = new Map();
@@ -63,7 +91,7 @@ export class Joker extends Card {
 
 	/**
 	 * Retrieves all registered joker names.
-	 * @returns {Array<string>} An array of all registered joker names.
+	 * @returns {Array&lt;string>} An array of all registered joker names.
 	 */
 	static getJokerTypes() {
 		return Array.from(Joker.jokerTypes.keys());
@@ -77,7 +105,7 @@ export class Joker extends Card {
 	 */
 	static getJokerAt(params, delta) {
 		const jokerIdx = params.jokerIdx + delta;
-		if (jokerIdx < 0 || jokerIdx >= params.gameHandler.state.hands.joker.cards.length) {
+		if (jokerIdx &lt; 0 || jokerIdx >= params.gameHandler.state.hands.joker.cards.length) {
 			return null;
 		}
 		return params.gameHandler.state.hands.joker.cards[jokerIdx];
@@ -100,7 +128,7 @@ export class Joker extends Card {
 	 */
 	getDescription() {
 		// Default description, individual jokers should override this
-		return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>No description available.`;
+		return `&lt;b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}&lt;/b>&lt;br>No description available.`;
 	}
 
 	/* eslint-disable no-unused-vars */
@@ -181,7 +209,7 @@ class LuckyRabbit extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Lucky Rabbit</b><br>When you draw a card, gain !<c(+2)!>.`;
+		return `&lt;b>Lucky Rabbit&lt;/b>&lt;br>When you draw a card, gain !&lt;c(+2)!>.`;
 	}
 }
 Joker.registerJoker("lucky_rabbit", LuckyRabbit);
@@ -208,7 +236,7 @@ class StickShift extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Stick Shift</b><br>Gain +1 discards per round.`;
+		return `&lt;b>Stick Shift&lt;/b>&lt;br>Gain +1 discards per round.`;
 	}
 }
 Joker.registerJoker("stick_shift", StickShift);
@@ -235,7 +263,7 @@ class PiggyBank extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Piggy Bank</b><br>Increase interest cap by 1.`;
+		return `&lt;b>Piggy Bank&lt;/b>&lt;br>Increase interest cap by 1.`;
 	}
 }
 Joker.registerJoker("piggy_bank", PiggyBank);
@@ -259,7 +287,7 @@ class EvenSteven extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Even Steven</b><br>If your score is even, gain !<t(+0.2)!>.`;
+		return `&lt;b>Even Steven&lt;/b>&lt;br>If your score is even, gain !&lt;t(+0.2)!>.`;
 	}
 }
 Joker.registerJoker("even_steven", EvenSteven);
@@ -283,7 +311,7 @@ class OddRod extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Odd Rod</b><br>If your score is odd, gain !<t(+0.2)!>.`;
+		return `&lt;b>Odd Rod&lt;/b>&lt;br>If your score is odd, gain !&lt;t(+0.2)!>.`;
 	}
 }
 Joker.registerJoker("odd_rod", OddRod);
@@ -305,14 +333,14 @@ class MirrorMask extends Joker {
 				const value = Reflect.get(target, prop, receiver);
 
 				// Make sure the property is a function and valid joker method
-				if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
+				if (typeof value === 'function' &amp;&amp; Joker.jokerMethods.includes(prop)) {
 
 					// Return a new function that forwards the call
 					return function (...args) {
 						const params = args[0]; // First argument should be the params object
 						const leftJoker = Joker.getJokerAt(params, -1);
 
-						if (leftJoker && typeof leftJoker[prop] === 'function') {
+						if (leftJoker &amp;&amp; typeof leftJoker[prop] === 'function') {
 							// Forward the call to the joker
 							return leftJoker[prop](...args);
 						}
@@ -330,7 +358,7 @@ class MirrorMask extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Mirror Mask</b><br>Copies the effect of the Joker to its left.`;
+		return `&lt;b>Mirror Mask&lt;/b>&lt;br>Copies the effect of the Joker to its left.`;
 	}
 }
 Joker.registerJoker("mirror_mask", MirrorMask);
@@ -362,7 +390,7 @@ Joker.registerJoker("stacked_deck", StackedDeck);
 /**
  * @classdesc Card Counter, counts unique cards scored this round.
  * @augments Joker
- * @property {Set<string>} seen - A set to track unique cards scored.
+ * @property {Set&lt;string>} seen - A set to track unique cards scored.
  */
 class CardCounter extends Joker {
 	/** @class */
@@ -389,7 +417,7 @@ class CardCounter extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Card Counter</b><br>Gain !<t(+0.1)!> for each unique card scored this round.<br>Current unique cards: ${this.seen.size}`;
+		return `&lt;b>Card Counter&lt;/b>&lt;br>Gain !&lt;t(+0.1)!> for each unique card scored this round.&lt;br>Current unique cards: ${this.seen.size}`;
 	}
 }
 Joker.registerJoker("card_counter", CardCounter);
@@ -414,7 +442,7 @@ class FaceValue extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Face Value</b><br>When you score a face card (A, J, Q, K), gain !<c(+1)!>.`;
+		return `&lt;b>Face Value&lt;/b>&lt;br>When you score a face card (A, J, Q, K), gain !&lt;c(+1)!>.`;
 	}
 }
 Joker.registerJoker("face_value", FaceValue);
@@ -431,14 +459,14 @@ class TwentyOneder extends Joker {
 
 	/** @inheritdoc */
 	onScoringEnd(params) {
-		if (params.score == 21 && calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
+		if (params.score == 21 &amp;&amp; calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
 			params.scoringHandler.addMult(params, 0.5);
 		}
 	}
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Twenty-Oneder</b><br>If your score is exactly 21, gain !<t(+0.5)!>.`;
+		return `&lt;b>Twenty-Oneder&lt;/b>&lt;br>If your score is exactly 21, gain !&lt;t(+0.5)!>.`;
 	}
 }
 Joker.registerJoker("twenty_oneder", TwentyOneder);
@@ -459,7 +487,7 @@ class Blueprint extends Joker {
 				const value = Reflect.get(target, prop, receiver);
 
 				// Make sure the property is a function and valid joker method
-				if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
+				if (typeof value === 'function' &amp;&amp; Joker.jokerMethods.includes(prop)) {
 
 					// Return a new function that forwards the call
 					return function (...args) {
@@ -467,7 +495,7 @@ class Blueprint extends Joker {
 						let offset = -1;
 						let leftJoker = Joker.getJokerAt(params, offset);
 
-						while (leftJoker && typeof leftJoker[prop] === 'function') {
+						while (leftJoker &amp;&amp; typeof leftJoker[prop] === 'function') {
 							leftJoker[prop](...args);
 							offset--;
 							leftJoker = Joker.getJokerAt(params, offset);
@@ -486,7 +514,7 @@ class Blueprint extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Blueprint</b><br>Copy and apply the effects of all Jokers to the left.`;
+		return `&lt;b>Blueprint&lt;/b>&lt;br>Copy and apply the effects of all Jokers to the left.`;
 	}
 }
 Joker.registerJoker("blueprint", Blueprint);
@@ -523,7 +551,7 @@ class Martingale extends Joker {
 	/** @inheritdoc */
 	getDescription() {
 		const multiplier = this.lastRoundsZero > 0 ? (4 / this.lastRoundsZero).toFixed(1) : "4.0";
-		return `<b>Martingale</b><br>If your score is 0, gain !<t(+${multiplier})!>. Decreases with consecutive zero scores.<br>Current consecutive zeros: ${this.lastRoundsZero}`;
+		return `&lt;b>Martingale&lt;/b>&lt;br>If your score is 0, gain !&lt;t(+${multiplier})!>. Decreases with consecutive zero scores.&lt;br>Current consecutive zeros: ${this.lastRoundsZero}`;
 	}
 }
 Joker.registerJoker("martingale", Martingale);
@@ -540,7 +568,7 @@ class WildcardJoker extends Joker {
 
 	/** @inheritdoc */
 	onScoringEnd(params) {
-		if (params.score < 21) {
+		if (params.score &lt; 21) {
 			const remaining = 21 - params.score;
 			const addValue = Math.floor(Math.random() * (remaining + 1));
 			params.scoringHandler.addChips(params, addValue);
@@ -549,7 +577,7 @@ class WildcardJoker extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Wildcard Joker</b><br>If your score is less than 21, add a random value to your score.`;
+		return `&lt;b>Wildcard Joker&lt;/b>&lt;br>If your score is less than 21, add a random value to your score.`;
 	}
 }
 Joker.registerJoker("wildcard_joker", WildcardJoker);
@@ -573,7 +601,7 @@ class Overclock extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Overclock</b><br>If you play more than 5 cards, gain !<t(+0.5)!> for each additional card.`;
+		return `&lt;b>Overclock&lt;/b>&lt;br>If you play more than 5 cards, gain !&lt;t(+0.5)!> for each additional card.`;
 	}
 }
 Joker.registerJoker("overclock", Overclock);
@@ -601,7 +629,7 @@ class EventHorizon extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Event Horizon</b><br>Each round scores chips × multiplier².`;
+		return `&lt;b>Event Horizon&lt;/b>&lt;br>Each round scores chips × multiplier².`;
 	}
 }
 Joker.registerJoker("event_horizon", EventHorizon);
@@ -626,7 +654,7 @@ class GlitchKing extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Glitch King</b><br>If your score exceeds 2,147,483,647, apply a random multiplier between 0.5x and 3.0x.`;
+		return `&lt;b>Glitch King&lt;/b>&lt;br>If your score exceeds 2,147,483,647, apply a random multiplier between 0.5x and 3.0x.`;
 	}
 }
 Joker.registerJoker("glitch_king", GlitchKing);
@@ -659,7 +687,7 @@ class Snowballer extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Snowballer</b><br>When you draw a card, add !<t(+0.1)!> to this Joker.<br>Current bonus: !<t(+${this.snowball.toFixed(1)})!>`;
+		return `&lt;b>Snowballer&lt;/b>&lt;br>When you draw a card, add !&lt;t(+0.1)!> to this Joker.&lt;br>Current bonus: !&lt;t(+${this.snowball.toFixed(1)})!>`;
 	}
 }
 Joker.registerJoker("snowballer", Snowballer);
@@ -683,9 +711,31 @@ class Hiccup extends Joker {
 
 	/** @inheritdoc */
 	getDescription() {
-		return `<b>Hiccup</b><br>If you played more than 7 cards, gain !<c(+1)!>.`;
+		return `&lt;b>Hiccup&lt;/b>&lt;br>If you played more than 7 cards, gain !&lt;c(+1)!>.`;
 	}
 }
 Joker.registerJoker("hiccup", Hiccup);
 
-// TODO: Penny Pincher
+// TODO: Penny Pincher</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#addSave">addSave</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#deleteSave">deleteSave</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getAllSaves">getAllSaves</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSave">getSave</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#overwriteSave">overwriteSave</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 /**
- * @typedef {import('./Card.js').Card} Card
- * @typedef {import('./Deck.js').Deck} Deck
- * @typedef {import('./Hand.js').Hand} Hand
- * @typedef {import('./gameHandler.js').GameState} GameState
+ * @typedef {module:scripts/backend/Card.Card} Card
+ * @typedef {module:scripts/backend/Deck.Deck} Deck
+ * @typedef {module:scripts/backend/Hand.Hand} Hand
+ * @typedef {module:scripts/backend/gameHandler.GameState} GameState
  */
 
 /**

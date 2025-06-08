@@ -1,5 +1,5 @@
 /**
- * @typedef {import("../backend/Card.js").Card} Card
+ * @typedef {module:scripts/backend/Card} Card
  */
 
 import { formatJokerDescription } from "../backend/Jokers.js";

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: CardElement</title>
+    <title>JSDoc: Class: CardCounter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: CardElement</h1>
+    <h1 class="page-title">Class: CardCounter</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>CardElement<span class="signature">(card, draggable<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>CardCounter<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Custom web component representing a card.</div>
+            <div class="class-description">Card Counter, counts unique cards scored this round.</div>
         
     
 </header>
@@ -45,127 +45,19 @@
     
 
     
-    <h4 class="name" id="CardElement"><span class="type-signature"></span>new CardElement<span class="signature">(card, draggable<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CardCounter"><span class="type-signature"></span>new CardCounter<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
 
-<div class="description">
-    Initializes the CardElement and sets up its structure and event listeners.
-</div>
 
 
 
 
 
 
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>card</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Card">Card</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The backend Card object associated with this element.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>draggable</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last">Whether the card is draggable. Defaults to true.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -198,13 +90,13 @@
 
         <tr>
             
-                <td class="name"><code>_container</code></td>
+                <td class="name"><code>seen</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Set.&lt;string></span>
 
 
             
@@ -214,375 +106,7 @@
 
             
 
-            <td class="description last">The main container for the card.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_cardInner</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The inner container for the card's 3D flip effect.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_cardFront</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The front face of the card.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_cardBack</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The back face of the card.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_tooltip</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The tooltip element for displaying additional information.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_dragging</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Indicates if the card is currently being dragged.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_offset</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The offset of the card from the mouse cursor during drag.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_wasDragged</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Indicates if the card was dragged before flipping.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_dragStartX</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The X coordinate where the drag started.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_dragStartY</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Y coordinate where the drag started.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_DRAG_THRESHOLD</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The pixel threshold to consider a drag action.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_lastClientX</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The last X coordinate of the mouse during drag.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_tiltFactor</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The factor by which the card tilts based on mouse movement.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_dragPreparationState</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Stores the initial state of the card before dragging starts.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_preDragTransform</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The original transform style of the card before dragging.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_card</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Mirror of the backend Card object associated with this element.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>_draggable</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Indicates if the card is draggable.</td>
+            <td class="description last">A set to track unique cards scored.</td>
         </tr>
 
     
@@ -621,7 +145,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line28">line 28</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line367">line 367</a>
     </li></ul></dd>
     
 
@@ -655,16 +179,20 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Joker.html">Joker</a></li>
+    </ul>
+
 
     
 
     
-        <h3 class="subsection-title">Classes</h3>
 
-        <dl>
-            <dt><a href="CardElement.html">CardElement</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
@@ -684,7 +212,7 @@
     
 
     
-    <h4 class="name" id="_onDragEnd"><span class="type-signature"></span>_onDragEnd<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getDescription"><span class="type-signature"></span>getDescription<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -692,7 +220,122 @@
 
 
 <div class="description">
-    Ends the drag operation and resets the card's position.
+    Returns a formatted description of this joker
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#getDescription">Joker#getDescription</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    HTML-formatted description
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onBlindStart"><span class="type-signature"></span>onBlindStart<span class="signature">(params)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Called when the blind phase starts.
 </div>
 
 
@@ -728,13 +371,13 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">MouseEvent</span>
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
 
 
             
@@ -744,7 +387,7 @@
 
             
 
-            <td class="description last">The mouseup event that ends the drag.</td>
+            <td class="description last">The parameters for the joker event.</td>
         </tr>
 
     
@@ -764,6 +407,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onBlindStart">Joker#onBlindStart</a>
+    </li></ul></dd>
     
 
     
@@ -785,7 +433,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line376">line 376</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -821,12 +469,16 @@
     
 
     
-    <h4 class="name" id="_onDragMove"><span class="type-signature"></span>_onDragMove<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onCardScore"><span class="type-signature"></span>onCardScore<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    Called when a card is scored.
+</div>
 
 
 
@@ -861,13 +513,13 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">MouseEvent</span>
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
 
 
             
@@ -877,7 +529,7 @@
 
             
 
-            <td class="description last">The mousemove event.</td>
+            <td class="description last">The parameters for the joker event.</td>
         </tr>
 
     
@@ -897,6 +549,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onCardScore">Joker#onCardScore</a>
+    </li></ul></dd>
     
 
     
@@ -918,7 +575,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line308">line 308</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -954,12 +611,16 @@
     
 
     
-    <h4 class="name" id="_onDragStart"><span class="type-signature"></span>_onDragStart<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onDraw"><span class="type-signature"></span>onDraw<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    Called when a card is drawn.
+</div>
 
 
 
@@ -994,13 +655,13 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">MouseEvent</span>
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
 
 
             
@@ -1010,7 +671,7 @@
 
             
 
-            <td class="description last">The mousedown event.</td>
+            <td class="description last">The parameters for the joker event.</td>
         </tr>
 
     
@@ -1031,6 +692,11 @@
     
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onDraw">Joker#onDraw</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1051,7 +717,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line274">line 274</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -1087,7 +753,7 @@
     
 
     
-    <h4 class="name" id="_onMouseEnterTooltip"><span class="type-signature"></span>_onMouseEnterTooltip<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onJokerEnter"><span class="type-signature"></span>onJokerEnter<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1095,7 +761,7 @@
 
 
 <div class="description">
-    Shows the tooltip.
+    Called when a joker is added to play.
 </div>
 
 
@@ -1104,6 +770,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for the joker event.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1118,6 +833,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onJokerEnter">Joker#onJokerEnter</a>
+    </li></ul></dd>
     
 
     
@@ -1139,7 +859,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line258">line 258</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -1175,7 +895,7 @@
     
 
     
-    <h4 class="name" id="_onMouseLeaveTooltip"><span class="type-signature"></span>_onMouseLeaveTooltip<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onJokerLeave"><span class="type-signature"></span>onJokerLeave<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1183,7 +903,7 @@
 
 
 <div class="description">
-    Hides the tooltip.
+    Called when a joker is removed from play.
 </div>
 
 
@@ -1192,6 +912,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for the joker event.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1206,6 +975,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onJokerLeave">Joker#onJokerLeave</a>
+    </li></ul></dd>
     
 
     
@@ -1227,7 +1001,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line267">line 267</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -1263,7 +1037,7 @@
     
 
     
-    <h4 class="name" id="cleanupCard"><span class="type-signature"></span>cleanupCard<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onRoundStart"><span class="type-signature"></span>onRoundStart<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1271,7 +1045,7 @@
 
 
 <div class="description">
-    Called when the element is removed from the DOM.
+    Called when a round starts.
 </div>
 
 
@@ -1280,6 +1054,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for the joker event.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1294,6 +1117,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onRoundStart">Joker#onRoundStart</a>
+    </li></ul></dd>
     
 
     
@@ -1315,7 +1143,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line195">line 195</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -1351,7 +1179,7 @@
     
 
     
-    <h4 class="name" id="connectedCallback"><span class="type-signature"></span>connectedCallback<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onScoringEnd"><span class="type-signature"></span>onScoringEnd<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1359,7 +1187,7 @@
 
 
 <div class="description">
-    Called when the element is added to the DOM.
+    Called when the scoring phase ends.
 </div>
 
 
@@ -1368,6 +1196,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for the joker event.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1382,6 +1259,11 @@
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onScoringEnd">Joker#onScoringEnd</a>
+    </li></ul></dd>
     
 
     
@@ -1403,7 +1285,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line188">line 188</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line146">line 146</a>
     </li></ul></dd>
     
 
@@ -1439,7 +1321,7 @@
     
 
     
-    <h4 class="name" id="flip"><span class="type-signature"></span>flip<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="onScoringStart"><span class="type-signature"></span>onScoringStart<span class="signature">(params)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1447,7 +1329,7 @@
 
 
 <div class="description">
-    Flips the card to show the opposite side.
+    Called when the scoring phase starts.
 </div>
 
 
@@ -1456,6 +1338,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#JokerParams">JokerParams</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for the joker event.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1471,27 +1402,9 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line251">line 251</a>
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Joker.html#onScoringStart">Joker#onScoringStart</a>
     </li></ul></dd>
     
 
@@ -1500,71 +1413,6 @@
     
 
     
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateCardFace"><span class="type-signature"></span>updateCardFace<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates the card's front and back faces based on its attributes.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
 
@@ -1579,7 +1427,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line215">line 215</a>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line141">line 141</a>
     </li></ul></dd>
     
 

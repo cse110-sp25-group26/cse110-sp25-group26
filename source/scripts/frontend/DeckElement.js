@@ -1,6 +1,6 @@
 import { CardElement } from "./CardElement.js";
 /**
- * @typedef {import("../backend/Card.js").Card} Card
+ * @typedef {module:scripts/backend/Card} Card
  */
 
 /**
