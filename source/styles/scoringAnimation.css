@@ -1,0 +1,57 @@
+/* Card Animation */
+@keyframes reveal-pulse {
+    0% {
+        transform: rotate(0) scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 1);
+    }
+    25% {
+        transform: rotate(3deg) scale(1.05);
+        box-shadow: 0 0 15px var(--highlight-color);
+    }
+    50% {
+        transform: rotate(-2deg) scale(1.09);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 1);
+    }
+}
+
+/* Text Effect */
+@keyframes score-rise {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+        text-shadow: 0 0 8px currentColor;
+    }
+    100% {
+        transform: translateY(-50px);
+        opacity: 0;
+        text-shadow: 0 0 20px currentColor;
+    }
+}
+
+.scoring-reveal {
+    animation: reveal-pulse 1s ease;
+    --highlight-color: gold; /* default color */
+}
+
+/* Different scoring scnearios */
+.scoring-reveal.positive { --highlight-color: green; }
+.scoring-reveal.negative { --highlight-color: red; }
+
+.score-text {
+    position: absolute;
+    z-index: 20;
+    font-size: 28px;
+    font-weight: 900;
+    font-family: Impact, sans-serif;
+    text-align: center;
+    width: 100%;
+    animation: score-rise 1.3s ease-out forwards;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.score-text.top { bottom: 110%; }
+.score-text.bottom { top: 110%; }
