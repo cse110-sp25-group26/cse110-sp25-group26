@@ -1,4 +1,4 @@
-import { gameHandler } from "./gameHandler.js";
+import { calculateBlackjackScore, getHandType } from "./utils.js";
 
 /**
  * @classdesc ScoringHandler
@@ -6,19 +6,19 @@ import { gameHandler } from "./gameHandler.js";
  * @property {object} handler - The associated gameHandler object.
  */
 export class scoringHandler {
-    /**
-     * @class scoringHandler
-     * @description Initializes the scoring handler to interact with the game handler.
-     * @param {object} handler - The gameHandler object. 
-     */
-    constructor(handler) {
-        this.handler = handler;
-    }
+	/**
+	 * @class scoringHandler
+	 * @description Initializes the scoring handler to interact with the game handler.
+	 * @param {object} handler - The gameHandler object. 
+	 */
+	constructor(handler) {
+		this.handler = handler;
+	}
 
-    /**
-     * @function scoreHand
-     * @description Scores the played hand for the gameHandler.
-     */
+	/**
+	 * @function scoreHand
+	 * @description Scores the played hand for the gameHandler.
+	 */
 	scoreHand() {
 		// If the hand is empty, log and return
 		if (this.handler.state.hands.played.cards.length === 0) {
@@ -33,7 +33,7 @@ export class scoringHandler {
 		const handType = getHandType(this.handler.state.hands.played.cards);
 		this.handler.uiInterface.updateScorekeeper({ handType: handType });
 
-		for (let i = 0; i < this.handler.state.hands.played.cards.length; ) {
+		for (let i = 0; i < this.handler.state.hands.played.cards.length;) {
 			const card = this.handler.state.hands.played.cards[i];
 
 			let cardValue = card.getValue();

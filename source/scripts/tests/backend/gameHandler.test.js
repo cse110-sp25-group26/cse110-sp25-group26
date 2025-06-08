@@ -274,7 +274,7 @@ describe('gameHandler', () => {
 			new Card("clubs", "A")
 		];
 		handler.state.roundScore = 0;
-		handler.scoreHand();
+		handler.scoringHandler.scoreHand();
 
 		// Score should be 5 * 11 = 55
 		expect(handler.state.roundScore).toBe(55);
@@ -288,7 +288,7 @@ describe('gameHandler', () => {
 			new Card("clubs", "A")
 		];
 		handler.state.roundScore = 0;
-		handler.scoreHand();
+		handler.scoringHandler.scoreHand();
 		// Score should be 2 + 3 + 4 + 10 + 11 = 30
 		expect(handler.state.roundScore).toBe(30);
 	});

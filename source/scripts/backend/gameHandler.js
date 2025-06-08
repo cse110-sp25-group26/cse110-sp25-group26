@@ -1,7 +1,6 @@
 import { Deck } from "./Deck.js";
 import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
-import { calculateBlackjackScore, getHandType } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
 import { scoringHandler } from "./scoringHandler.js";
 
