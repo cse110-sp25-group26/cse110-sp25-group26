@@ -24,6 +24,15 @@ export class Joker extends Card {
 		return Array.from(Joker.jokerTypes.keys());
 	}
 
+	static getJokerAt(params, delta) {
+		const jokerIdx = params.jokerIdx + delta;
+		if (jokerIdx < 0 || jokerIdx >= params.gameHandler.state.hands.joker.cards.length) {
+			return null;
+		}
+		return params.gameHandler.state.hands.joker.cards[jokerIdx];
+
+	}
+
 	constructor(name) {
 		super("joker", name);
 		this.state = {};
@@ -33,16 +42,29 @@ export class Joker extends Card {
 	// card, cardIdx, jokerIdx, score, scoringHandler, gameHandler
 
 	onRoundStart(params) { }
-	onRoundEnd(params) { }
+
+	onBlindStart(params) { } // blind phase starts
 
 	onDraw(params) { }
 
 	onJokerEnter(params) { } // joker added to play
 	onJokerLeave(params) { } // joker removed from play
 
+	onScoringStart(params) { } // scoring phase starts
 	onScoringEnd(params) { }
 
 	onCardScore(params) { }
+
+	static jokerMethods = [
+		"onRoundStart",
+		"onBlindStart",
+		"onDraw",
+		"onJokerEnter",
+		"onJokerLeave",
+		"onScoringEnd",
+		"onCardScore",
+		"onScoringStart"
+	]
 }
 
 
@@ -102,14 +124,47 @@ Joker.registerJoker("odd_rod", OddRod);
 
 // TODO: Softie needs a way to detect soft aces
 
-// TODO: Mirror Mask needs a way to tell the Joker to its right. Not hard, just
-//       don't want to do it at 11PM.
+class MirrorMask extends Joker {
+  constructor() {
+    super("mirror_mask");
+    
+    // Create a proxy to intercept all method calls
+    return new Proxy(this, {
+      get(target, prop, receiver) {
+        // Get the original property/method
+        const value = Reflect.get(target, prop, receiver);
+        
+        // Make sure the property is a function and valid joker method
+        if (typeof value === 'function' && Joker.jokerMethods.includes(prop)) {
+          
+          // Return a new function that forwards the call
+          return function(...args) {
+            const params = args[0]; // First argument should be the params object
+			const leftJoker = Joker.getJokerAt(params, -1);
+            
+            if (leftJoker && typeof leftJoker[prop] === 'function') {
+              // Forward the call to the joker
+              return leftJoker[prop](...args);
+            }
+            
+            // Fallback to the original if not found
+            return value.apply(target, args);
+          };
+        }
+        
+        // Not a function or not a joker method, return the original value
+        return value;
+      }
+    });
+  }
+}
+Joker.registerJoker("mirror_mask", MirrorMask);
 
 // TODO: Bust Insurance needs a way to check for and cancel a Bust
 
-class CardCounter extends Joker {
+class StackedDeck extends Joker {
 	constructor() {
-		super("card_counter");
+		super("stacked_deck");
 	}
 
 	onRoundStart(params) {
@@ -118,6 +173,26 @@ class CardCounter extends Joker {
 			params.gameHandler.state.hands.main.addCard(card);
 			params.gameHandler.uiInterface.createUIel(card);
 			params.gameHandler.moveMultiple([card], "deck", "handMain", 0);
+		}
+	}
+}
+Joker.registerJoker("stacked_deck", StackedDeck);
+
+class CardCounter extends Joker {
+	constructor() {
+		super("card_counter");
+		this.seen = new Set();
+	}
+
+	onBlindStart(params) {
+		this.seen.clear();
+	}
+
+	onCardScore(params) {
+		const card = params.card;
+		if (!this.seen.has(card.type + ' of ' + card.suit)) {
+			this.seen.add(card.type + ' of ' + card.suit);
+			params.scoringHandler.addMult(params, 0.1);
 		}
 	}
 }
@@ -136,3 +211,96 @@ class FaceValue extends Joker {
 	}
 }
 Joker.registerJoker("face_value", FaceValue);
+
+class TwentyOneder extends Joker {
+	constructor() {
+		super("twenty_oneder");
+	}
+
+	onCardScore(params) {
+		if (params.score == 21) {
+			params.scoringHandler.addMult(params, 0.5);
+		}
+	}
+}
+Joker.registerJoker("twenty_oneder", TwentyOneder);
+
+// TODO: Blueprint is like Mirror Mask but I don't want to mess with that right now
+
+class Martingale extends Joker {
+	constructor() {
+		super("martingale");
+		this.lastRoundsZero = 0;
+	}
+
+	onBlindStart(params) {
+		this.lastRoundZero = 0;
+	}
+
+	onScoringStart(params) {
+		if (params.score == 0) {
+			this.lastRoundsZero += 1;
+			params.scoringHandler.addMult(params, 4 / (this.lastRoundsZero));
+		} else {
+			this.lastRoundsZero = 0;
+		}
+	}
+}
+Joker.registerJoker("martingale", Martingale);
+
+// TODO: Wildcard Joker
+
+// TODO: Overclock
+
+// TODO: Phantom Hand
+
+// TODO: Infinity Mirror
+
+// TODO: Noir Banker
+
+class EventHorizon extends Joker {
+	constructor() {
+		super("event_horizon");
+	}
+
+	onScoringEnd(params) {
+		params.scoringHandler.addMult(params, params.gameHandler.state.handMult);
+	}
+}
+Joker.registerJoker("event_horizon", EventHorizon);
+
+class GlitchKing extends Joker {
+	constructor() {
+		super("glitch_king");
+	}
+
+	onScoringEnd(params) {
+		if (params.score > 2147483647) {
+			const multiplier = 0.5 + Math.random() * 2.5;
+			params.gameHandler.state.handScore *= multiplier;
+		}
+	}
+}
+Joker.registerJoker("glitch_king", GlitchKing);
+
+class Snowballer extends Joker {
+	constructor() {
+		super("snowballer");
+		this.snowball = 0;
+	}
+
+	onDraw(params) {
+		this.snowball += 0.1;
+	}
+
+	onScoringEnd(params) {
+		if (this.snowball > 0) {
+			params.scoringHandler.addMult(params, this.snowball);
+		}
+	}
+}
+Joker.registerJoker("snowballer", Snowballer);
+
+// TODO: Hiccup
+
+// TODO: Penny Pincher

@@ -27,6 +27,16 @@ export class scoringHandler {
 		}
 		
 		const jokers = this.handler.state.hands.joker.cards;
+		for (const joker of jokers) {
+			if (joker.onScoringStart) {
+				joker.onScoringStart({
+					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
+		}
 
 		this.handler.state.handScore = 0;
 		this.handler.state.handMult = 1;
@@ -45,18 +55,6 @@ export class scoringHandler {
 			// TODO: Check for applicable jokers to this card
 			// ->UI: Call back to UI to play joker animation (likely also score animation)
 
-			for (const joker of jokers) {
-				if (joker.onCardScore) {
-					joker.onCardScore({
-						card: card,
-						cardIdx: i,
-						jokerIdx: jokers.indexOf(joker),
-						scoringHandler: this,
-						gameHandler: this.handler,
-					});
-				}
-			}
-
 			this.handler.state.handScore += cardValue;
 			this.handler.uiInterface.updateScorekeeper({
 				handScore: this.handler.state.handScore,
@@ -71,6 +69,19 @@ export class scoringHandler {
 				["#00FFFF"]
 			);
 
+			for (const joker of jokers) {
+				if (joker.onCardScore) {
+					joker.onCardScore({
+						card: card,
+						cardIdx: i,
+						jokerIdx: jokers.indexOf(joker),
+						jokerCard: joker,
+						scoringHandler: this,
+						gameHandler: this.handler,
+					});
+				}
+			}
+
 			// TODO: Conditions for other increments
 			i += 1;
 		}
@@ -79,6 +90,7 @@ export class scoringHandler {
 			if (joker.onScoringEnd) {
 				joker.onScoringEnd({
 					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
 					score: this.handler.state.handScore,
 					scoringHandler: this,
 					gameHandler: this.handler,
@@ -138,5 +150,69 @@ export class scoringHandler {
 		});
 
 		this.handler.state.hands.played.cards = [];
+	}
+
+	/**
+	 * @function onDraw
+	 * @description Called when a card is drawn from the deck.
+	 *              This can be used to trigger any scoring-related effects.
+	 */
+	onDraw(card) {
+		const jokers = this.handler.state.hands.joker.cards;
+		for (const joker of jokers) {
+			if (joker.onDraw) {
+				joker.onDraw({
+					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
+					card: card,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
+		}
+	}
+
+	/**
+	 * @function addChips
+	 * @description Adds chips to the current score, applying any other Joker
+	 *              effects that may change the value or affect other
+	 *              scoring parameters.
+	 * @param {object} params - The parameters for adding chips.
+	 * @param {number} chips - The number of chips to add.
+	 */
+	addChips(params, chips) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handScore += chips;
+		this.handler.uiInterface.updateScorekeeper({
+			handScore: this.handler.state.handScore,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`+${chips} Chips`],
+			["#00FFFF"]
+		);
+		console.log(`Added ${chips} chips to score. New score: ${this.handler.state.handScore}`);
+	}
+
+	/**
+	 * @function addMult
+	 * @description Adds a multiplier to the current score, applying any other Joker
+	 *              effects that may change the value or affect other
+	 *              scoring parameters.
+	 * @param {object} params - The parameters for adding a multiplier.
+	 * @param {number} mult - The multiplier to add.
+	 */
+	addMult(params, mult) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handMult += mult;
+		this.handler.uiInterface.updateScorekeeper({
+			handMult: this.handler.state.handMult,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`+${(mult * 100).toFixed(0)}% Mult`],
+			["#FFFF00"]
+		);
+		console.log(`Added ${mult * 100}% multiplier to score. New multiplier: ${this.handler.state.handMult}`);
 	}
 }

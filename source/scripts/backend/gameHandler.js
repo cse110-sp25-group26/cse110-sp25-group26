@@ -125,7 +125,7 @@ export class gameHandler {
 				this.defaultCards.push(new Card(suit, type));
 			}
 		}
-		this.state.deck = new Deck(this.defaultCards);
+		this.state.deck = new Deck(this.defaultCards, this);
 
 		this.uiInterface.newGame(false); // UI sets up, might call allowPlay if !reset
 
