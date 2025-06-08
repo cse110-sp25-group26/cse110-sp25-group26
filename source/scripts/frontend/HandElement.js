@@ -21,7 +21,7 @@ export class HandElement extends HTMLElement {
 		// card animation movement test
 		const animationLink = document.createElement('link');
 		animationLink.setAttribute('rel', 'stylesheet');
-		animationLink.setAttribute('href', '/source/scripts/frontend/card-animations.css');
+		animationLink.setAttribute('href', 'scripts/frontend/card-animations.css');
 		this.shadowRoot.appendChild(animationLink);
 		
 		// Attach external CSS
@@ -29,7 +29,7 @@ export class HandElement extends HTMLElement {
 		styleLink.setAttribute("rel", "stylesheet");
 		styleLink.setAttribute(
 			"href",
-			`/source/styles/hand.css?v=${Date.now()}`
+			`styles/hand.css?v=${Date.now()}`
 		);
 		this.shadowRoot.appendChild(styleLink);
 

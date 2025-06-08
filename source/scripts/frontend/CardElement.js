@@ -76,7 +76,7 @@ export class CardElement extends HTMLElement {
 		// Card back image
 		this._cardBack.innerHTML = "";
 		const backImg = document.createElement("img");
-		backImg.src = `/source/res/img/card/back.png?v=${Date.now()}`;
+		backImg.src = `res/img/card/back.png?v=${Date.now()}`;
 		backImg.alt = "Card back";
 		backImg.style.width = "100%";
 		backImg.style.height = "100%";
@@ -100,7 +100,7 @@ export class CardElement extends HTMLElement {
 		styleLink.setAttribute("rel", "stylesheet");
 		styleLink.setAttribute(
 			"href",
-			`/source/styles/card.css?v=${Date.now()}`
+			`styles/card.css?v=${Date.now()}`
 		);
 		this.shadowRoot.appendChild(styleLink);
 	}
@@ -237,11 +237,11 @@ export class CardElement extends HTMLElement {
 		if (this._card.suit === "joker") {
 			const filename = `${typeName}.png`;
 			this._frontImg.alt = this._card.type;
-			this._frontImg.src = `/source/res/img/card/joker/${filename}?v=${Date.now()}`;
+			this._frontImg.src = `res/img/card/joker/${filename}?v=${Date.now()}`;
 		} else {
 			const filename = `${typeName}_${suitName}.png`;
 			this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
-			this._frontImg.src = `/source/res/img/card/${filename}?v=${Date.now()}`;
+			this._frontImg.src = `res/img/card/${filename}?v=${Date.now()}`;
 		}
 	}
 
