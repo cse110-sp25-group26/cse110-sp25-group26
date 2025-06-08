@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/GameStorage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/GameStorage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {module:scripts/backend/Card.Card} Card
+ * @typedef {module:scripts/backend/Deck.Deck} Deck
+ * @typedef {module:scripts/backend/Hand.Hand} Hand
+ * @typedef {module:scripts/backend/gameHandler.GameState} GameState
+ */
+
+/**
+ * @typedef {object} GameSave
+ * @property {Date} lastSaved - The time this save data was last written to.
+ * @property {GameState} gameState - The game state necessary to reload the game.
+ */
+
+/**
+ * @typedef {object} SavesData
+ * @property {GameSave[]} saves - List of game saves.
+ * @property {Map&lt;string,any>} lifetimeStats - Statistics about the player's lifetime performance.
+ * @property {string[]} unlockedJokers - List of jokers that have been unlocked.
+ * @property {string} version - Version of the game data format.
+ */
+
+/**
+ * @classdesc Manages game data persistence using LocalStorage.
+ */
+export class GameStorage {
+	/**
+	 * @class GameStorage
+	 * @description Initializes the GameStorage system and ensures the storage format is correct.
+	 */
+	constructor() {
+		/** @private */
+		this.storageKey = 'gameData';
+
+		/** @private */
+		this.currentVersion = '1.0.0';
+
+		/** @private */
+		this.defaultStats = {
+			gamesStarted: 0,
+			gamesCompleted: 0,
+			highestAnteReached: 0,
+			highestRoundScore: 0,
+			totalHandsPlayed: 0,
+			totalJokersUsed: 0,
+			uniqueJokersFound: 0,
+			firstGameDate: null
+		};
+
+		this.initializeStorage();
+	}
+
+	/**
+	 * @function storageExists
+	 * @description Checks if localStorage already contains game data.
+	 * @returns {boolean} True if storage exists, false otherwise.
+	 */
+	storageExists() {
+		const data = localStorage.getItem(this.storageKey);
+		return data !== null;
+	}
+
+	/**
+	 * @function initializeStorage
+	 * @description Initializes the default game storage if no existing save is found.
+	 */
+	initializeStorage() {
+		if (!this.storageExists()) {
+			const defaultData = {
+				saves: [],
+				lifetimeStats: { ...this.defaultStats },
+				unlockedJokers: [],
+				uniqueJokersDiscovered: [],
+				lastSaved: new Date().toISOString(),
+				version: this.currentVersion
+			};
+			this.writeToStorage(defaultData);
+		}
+	}
+
+	/**
+	 * @function readFromStorage
+	 * @description Reads and parses the game data from localStorage.
+	 * @returns {object|null} Parsed data object, or null on error.
+	 */
+	readFromStorage() {
+		const data = localStorage.getItem(this.storageKey);
+		try {
+			return data ? JSON.parse(data) : null;
+		} catch (err) {
+			console.error("Failed to parse gameData", err);
+			return null;
+		}
+	}
+
+	/**
+	 * @function writeToStorage
+	 * @description Saves the game data to localStorage.
+	 * @param {object} data - The full data object to write.
+	 */
+	writeToStorage(data) {
+		try {
+			localStorage.setItem(this.storageKey, JSON.stringify(data));
+			console.log("Game data saved.");
+		} catch (err) {
+			console.error("Failed to write gameData", err);
+		}
+	}
+
+	/**
+	 * @function addSave
+	 * @description Adds a new game save to the saves list.
+	 * @param {GameState} saveData - The game save to add.
+	 */
+	addSave(saveData) {
+		const data = this.readFromStorage();
+
+		let gameSave = {
+			lastSaved: new Date(),
+			gameState: saveData,
+		};
+
+		data.saves.push(gameSave);
+		this.writeToStorage(data);
+	}
+
+	/**
+	 * @function overwriteSave
+	 * @description Replaces an existing save at the specified index.
+	 * @param {number} index - Index to replace.
+	 * @param {GameState} saveData - The new save data.
+	 * @returns {boolean} True if successful.
+	 */
+	overwriteSave(index, saveData) {
+		const data = this.readFromStorage();
+		index = Number(index);
+
+		let gameSave = {
+			lastSaved: new Date(),
+			gameState: saveData,
+		};
+
+		if (!Number.isInteger(index) || index &lt; 0 || index >= data.saves.length) return false;
+		data.saves[parseInt(index, 10)] = gameSave;
+		this.writeToStorage(data);
+		return true;
+	}
+
+	/**
+	 * @function deleteSave
+	 * @description Deletes a save from the specified index.
+	 * @param {number} index - Index of the save to remove.
+	 * @returns {boolean} True if deletion succeeded.
+	 */
+	deleteSave(index) {
+		const data = this.readFromStorage();
+		if (index &lt; 0 || index >= data.saves.length) return false;
+		data.saves.splice(index, 1);
+		this.writeToStorage(data);
+		return true;
+	}
+
+	/**
+	 * @function getAllSaves
+	 * @description Gets all saved games.
+	 * @returns {GameSave[]} Array of saved games.
+	 */
+	getAllSaves() {
+		return this.readFromStorage()?.saves || [];
+	}
+
+	/**
+	 * @function getSave
+	 * @description Gets a specific save by index.
+	 * @param {number} index - The index of the save to fetch.
+	 * @returns {GameSave|null} The saved game for this index, or null if none.
+	 */
+	getSave(index) {
+		const data = this.readFromStorage();
+		if (!data) return null;
+
+		index = Number(index);
+		if (!Number.isInteger(index) || index &lt; 0 || index >= data.saves?.length) return null;
+
+		return data.saves[index] || null;
+	}
+
+	/**
+	 * @function getStats
+	 * @description Gets lifetime statistics.
+	 * @returns {Map&lt;string,any>} The stats object.
+	 */
+	getStats() {
+		return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
+	}
+
+
+	/**
+	 * @function updateStat
+	 * @description Increments a stat by a given amount (default 1).
+	 * @param {string} statKey - Name of the stat to update.
+	 * @param {number} [delta=1] - Amount to add.
+	 */
+	updateStat(statKey, delta = 1) {
+		const data = this.readFromStorage();
+		if (!(statKey in data.lifetimeStats)) data.lifetimeStats[String(statKey)] = 0;
+
+		data.lifetimeStats[String(statKey)] += delta;
+
+		this.writeToStorage(data);
+	}
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#addSave">addSave</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#deleteSave">deleteSave</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getAllSaves">getAllSaves</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSave">getSave</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#overwriteSave">overwriteSave</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

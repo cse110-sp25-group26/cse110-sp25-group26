@@ -27,12 +27,14 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @typedef {import("../backend/Card.js").Card} Card
+ * @typedef {module:scripts/backend/Card} Card
  */
+
+import { formatJokerDescription } from "../backend/Jokers.js";
 
 /**
  * @classdesc Custom web component representing a card.
- * 
+ *
  * @property {HTMLElement} _container - The main container for the card.
  * @property {HTMLElement} _cardInner - The inner container for the card's 3D flip effect.
  * @property {HTMLElement} _cardFront - The front face of the card.
@@ -55,13 +57,13 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @class
 	 * @description Initializes the CardElement and sets up its structure and event listeners.
-	 * 
+	 *
 	 * @param {Card} card - The backend Card object associated with this element.
 	 * @param {boolean} [draggable=true] - Whether the card is draggable. Defaults to true.
 	 */
 	constructor(card, draggable = true) {
 		super();
-		this.attachShadow({ mode: 'open' });
+		this.attachShadow({ mode: "open" });
 
 		this._card = card;
 		this._draggable = draggable;
@@ -69,7 +71,6 @@ export class CardElement extends HTMLElement {
 		this._createDOM();
 		this._setupDragState();
 		this._setupEventListeners();
-
 	}
 
 	/**
@@ -80,39 +81,39 @@ export class CardElement extends HTMLElement {
 	 */
 	_createDOM() {
 		// Card container
-		this._container = document.createElement('div');
-		this._container.classList.add('card');
+		this._container = document.createElement("div");
+		this._container.classList.add("card");
 		this._container.tabIndex = 0;
 
 		// Card inner for 3D flip
-		this._cardInner = document.createElement('div');
-		this._cardInner.classList.add('card-inner');
+		this._cardInner = document.createElement("div");
+		this._cardInner.classList.add("card-inner");
 
 		// Card front
-		this._cardFront = document.createElement('div');
-		this._cardFront.classList.add('card-front');
-		this._frontImg = document.createElement('img');
-		this._frontImg.style.width = '100%';
-		this._frontImg.style.height = '100%';
+		this._cardFront = document.createElement("div");
+		this._cardFront.classList.add("card-front");
+		this._frontImg = document.createElement("img");
+		this._frontImg.style.width = "100%";
+		this._frontImg.style.height = "100%";
 		this._cardFront.appendChild(this._frontImg);
 
 		// Card back
-		this._cardBack = document.createElement('div');
-		this._cardBack.classList.add('card-back');
+		this._cardBack = document.createElement("div");
+		this._cardBack.classList.add("card-back");
 
 		// Card back image
-		this._cardBack.innerHTML = '';
-		const backImg = document.createElement('img');
-		backImg.src = '/source/res/img/back.png';
-		backImg.alt = 'Card back';
-		backImg.style.width = '100%';
-		backImg.style.height = '100%';
+		this._cardBack.innerHTML = "";
+		const backImg = document.createElement("img");
+		backImg.src = `/source/res/img/card/back.png?v=${Date.now()}`;
+		backImg.alt = "Card back";
+		backImg.style.width = "100%";
+		backImg.style.height = "100%";
 		this._cardBack.appendChild(backImg);
 
 		// Tooltip
-		this._tooltip = document.createElement('div');
-		this._tooltip.classList.add('tooltip');
-		this._tooltip.style.display = 'none';
+		this._tooltip = document.createElement("div");
+		this._tooltip.classList.add("tooltip");
+		this._tooltip.style.display = "none";
 		this._tooltip.textContent = this.calculateTooltipText();
 
 		// Assemble elements
@@ -123,9 +124,12 @@ export class CardElement extends HTMLElement {
 		this.shadowRoot.appendChild(this._container);
 
 		// Attach external CSS
-		const styleLink = document.createElement('link');
-		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/card.css');
+		const styleLink = document.createElement("link");
+		styleLink.setAttribute("rel", "stylesheet");
+		styleLink.setAttribute(
+			"href",
+			`/source/styles/card.css?v=${Date.now()}`
+		);
 		this.shadowRoot.appendChild(styleLink);
 	}
 
@@ -161,20 +165,26 @@ export class CardElement extends HTMLElement {
 		this._onMouseLeaveTooltip = this._onMouseLeaveTooltip.bind(this);
 
 		// Event listeners
-		this._container.addEventListener('mousedown', this._onDragStart);
-		document.addEventListener('mousemove', this._onDragMove);
-		document.addEventListener('mouseup', this._onDragEnd);
+		this._container.addEventListener("mousedown", this._onDragStart);
+		document.addEventListener("mousemove", this._onDragMove);
+		document.addEventListener("mouseup", this._onDragEnd);
 
-		this._cardFront.addEventListener('dblclick', () => {
+		this._cardFront.addEventListener("dblclick", () => {
 			if (this._wasDragged) return;
 			this.flip();
 		});
-		this._cardBack.addEventListener('dblclick', () => {
+		this._cardBack.addEventListener("dblclick", () => {
 			if (this._wasDragged) return;
 			this.flip();
 		});
-		this._container.addEventListener('mouseenter', this._onMouseEnterTooltip);
-		this._container.addEventListener('mouseleave', this._onMouseLeaveTooltip);
+		this._container.addEventListener(
+			"mouseenter",
+			this._onMouseEnterTooltip
+		);
+		this._container.addEventListener(
+			"mouseleave",
+			this._onMouseLeaveTooltip
+		);
 	}
 
 	/**
@@ -183,8 +193,19 @@ export class CardElement extends HTMLElement {
 	 * @returns {string} The tooltip text for the card.
 	 */
 	calculateTooltipText() {
-		if (!this._card) return '';
-		const suit = this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
+		if (!this._card) return "";
+		
+		if (this._card.suit === "joker") {
+			// Use the joker's getDescription method if available
+			if (typeof this._card.getDescription === 'function') {
+				return formatJokerDescription(this._card.getDescription());
+			}
+			return `&lt;b>${this._card.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}&lt;/b>`;
+		}
+		
+		// Regular card tooltip
+		const suit =
+			this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
 		const type = this._card.type.toUpperCase();
 		return `${type} of ${suit}`;
 	}
@@ -201,44 +222,78 @@ export class CardElement extends HTMLElement {
 	 */
 	cleanupCard() {
 		// Clear all event listeners
-		this._container.removeEventListener('mousedown', this._onDragStart);
-		document.removeEventListener('mousemove', this._onDragMove);
-		document.removeEventListener('mouseup', this._onDragEnd);
-		this._cardFront.removeEventListener('dblclick', this.flip);
-		this._cardBack.removeEventListener('dblclick', this.flip);
-		this._container.removeEventListener('mouseenter', this._onMouseEnterTooltip);
-		this._container.removeEventListener('mouseleave', this._onMouseLeaveTooltip);
+		this._container.removeEventListener("mousedown", this._onDragStart);
+		document.removeEventListener("mousemove", this._onDragMove);
+		document.removeEventListener("mouseup", this._onDragEnd);
+		this._cardFront.removeEventListener("dblclick", this.flip);
+		this._cardBack.removeEventListener("dblclick", this.flip);
+		this._container.removeEventListener(
+			"mouseenter",
+			this._onMouseEnterTooltip
+		);
+		this._container.removeEventListener(
+			"mouseleave",
+			this._onMouseLeaveTooltip
+		);
 	}
 
 	/**
 	 * @description Updates the card's front and back faces based on its attributes.
 	 */
 	updateCardFace() {
+		// Map backend suit names to image file names (plural to singular)
+		const suitMap = {
+			hearts: "heart",
+			diamonds: "diamond",
+			clubs: "club",
+			spades: "spade",
+		};
+
+		// Map backend type names to image file names
+		const typeMap = {
+			J: "jack",
+			Q: "queen",
+			K: "king",
+			A: "ace",
+		};
+
+		const suitName = suitMap[this._card.suit] || this._card.suit;
+		const typeName =
+			typeMap[this._card.type] || this._card.type.toLowerCase();
+
 		// Update existing front image
-		const filename = `card_${this._card.type.toLowerCase()}_${this._card.suit.toLowerCase()}.png`;
-		this._frontImg.src = `/source/res/img/${filename}`;
-		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+		if (this._card.suit === "joker") {
+			const filename = `${typeName}.png`;
+			this._frontImg.alt = this._card.type;
+			this._frontImg.src = `/source/res/img/card/joker/${filename}?v=${Date.now()}`;
+		} else {
+			const filename = `${typeName}_${suitName}.png`;
+			this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+			this._frontImg.src = `/source/res/img/card/${filename}?v=${Date.now()}`;
+		}
 	}
 
 	/**
 	 * @description Flips the card to show the opposite side.
 	 */
 	flip() {
-		this._container.classList.toggle('flipped');
+		this._container.classList.toggle("flipped");
 	}
 
 	/**
 	 * @description Shows the tooltip.
 	 */
 	_onMouseEnterTooltip() {
-		this._tooltip.style.display = 'block';
+		this._tooltip.style.display = "block";
+		// Use innerHTML instead of textContent to support HTML in tooltips
+		this._tooltip.innerHTML = this.calculateTooltipText();
 	}
 
 	/**
 	 * @description Hides the tooltip.
 	 */
 	_onMouseLeaveTooltip() {
-		this._tooltip.style.display = 'none';
+		this._tooltip.style.display = "none";
 	}
 
 	/**
@@ -257,17 +312,22 @@ export class CardElement extends HTMLElement {
 		// Store initial state for when drag actually starts
 		this._dragPreparationState = {
 			rect: this.getBoundingClientRect(),
-			parentRect: this.offsetParent?.getBoundingClientRect() || { left: 0, top: 0 }
+			parentRect: this.offsetParent?.getBoundingClientRect() || {
+				left: 0,
+				top: 0,
+			},
 		};
 
 		// Keep track of the original transform for restoration
 		this._preDragTransform = this.style.transform;
 
-		this.dispatchEvent(new CustomEvent('custom-drag-start', {
-			bubbles: true,
-			composed: true,
-			detail: { card: this }
-		}));
+		this.dispatchEvent(
+			new CustomEvent("custom-drag-start", {
+				bubbles: true,
+				composed: true,
+				detail: { card: this },
+			})
+		);
 	}
 
 	/**
@@ -289,23 +349,29 @@ export class CardElement extends HTMLElement {
 				this._offset.x = rect.width / 2;
 				this._offset.y = rect.height / 2;
 
-				this.style.position = 'absolute';
+				this.style.position = "absolute";
 				this.style.width = `${rect.width}px`;
 				this.style.height = `${rect.height}px`;
-				this.style.zIndex = '999999';
-				this.style.transformOrigin = 'center center';
-				this.style.transform = 'none'; // Remove any existing transform
+				this.style.zIndex = "999999";
+				this.style.transformOrigin = "center center";
+				this.style.transform = "none"; // Remove any existing transform
 
 				// Position the card so its center is at the current mouse cursor.
-				this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
-				this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
+				this.style.left = `${
+					e.clientX - this._offset.x - parentRect.left
+				}px`;
+				this.style.top = `${
+					e.clientY - this._offset.y - parentRect.top
+				}px`;
 			}
 		}
 
 		if (this._wasDragged) {
 			// Continue moving the card if drag has started
 			const parentRect = this._dragPreparationState.parentRect; // Use stored parentRect
-			this.style.left = `${e.clientX - this._offset.x - parentRect.left}px`;
+			this.style.left = `${
+				e.clientX - this._offset.x - parentRect.left
+			}px`;
 			this.style.top = `${e.clientY - this._offset.y - parentRect.top}px`;
 
 			// Calculate and apply tilt based on X velocity
@@ -317,11 +383,17 @@ export class CardElement extends HTMLElement {
 
 			this._lastClientX = e.clientX;
 
-			this.dispatchEvent(new CustomEvent('custom-drag-move', {
-				bubbles: true,
-				composed: true,
-				detail: { card: this, clientX: e.clientX, clientY: e.clientY }
-			}));
+			this.dispatchEvent(
+				new CustomEvent("custom-drag-move", {
+					bubbles: true,
+					composed: true,
+					detail: {
+						card: this,
+						clientX: e.clientX,
+						clientY: e.clientY,
+					},
+				})
+			);
 		}
 	}
 
@@ -335,24 +407,30 @@ export class CardElement extends HTMLElement {
 
 		if (this._wasDragged) {
 			// Reset styles only if the card was actually dragged and styles were changed
-			this.style.position = '';
-			this.style.zIndex = '';
-			this.style.left = '';
-			this.style.top = '';
-			this.style.width = '';
-			this.style.height = '';
-			this.style.transformOrigin = '';
+			this.style.position = "";
+			this.style.zIndex = "";
+			this.style.left = "";
+			this.style.top = "";
+			this.style.width = "";
+			this.style.height = "";
+			this.style.transformOrigin = "";
 
 			if (this._preDragTransform !== undefined) {
 				this.style.transform = this._preDragTransform;
 				this._preDragTransform = undefined;
 			}
 
-			this.dispatchEvent(new CustomEvent('card-dropped', {
-				bubbles: true,
-				composed: true,
-				detail: { card: this, clientX: e.clientX, clientY: e.clientY }
-			}));
+			this.dispatchEvent(
+				new CustomEvent("card-dropped", {
+					bubbles: true,
+					composed: true,
+					detail: {
+						card: this,
+						clientX: e.clientX,
+						clientY: e.clientY,
+					},
+				})
+			);
 		}
 
 		this._dragPreparationState = null; // Clean up
@@ -361,7 +439,7 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @function moveTo
 	 * @description Moves the card to a specified position with a smooth transition.
-	 * 
+	 *
 	 * @param {number} x - The x-coordinate to move the card to.
 	 * @param {number} y - The y-coordinate to move the card to.
 	 * @param {number} [duration=600] - The duration of the transition in milliseconds. Defaults to 600ms.
@@ -369,34 +447,40 @@ export class CardElement extends HTMLElement {
 	 * @returns {Promise&lt;void>} A promise that resolves when the move is complete.
 	 */
 	async moveTo(x, y, duration = 600, callback) {
-		if (!this.style.position || this.style.position === 'static') {
-			this.style.position = 'absolute';
+		if (!this.style.position || this.style.position === "static") {
+			this.style.position = "absolute";
 		}
 		// Cancel previous animation listener if any
 		if (this._transitionEndHandler) {
-			this.removeEventListener('transitionend', this._transitionEndHandler);
+			this.removeEventListener(
+				"transitionend",
+				this._transitionEndHandler
+			);
 		}
-		this.style.transition = 'none';
+		this.style.transition = "none";
 		// Force fetch to apply the new styles immediately
 		void this.offsetWidth;
 
 		// Ensure the card is on top during transition
 		const originalZIndex = this.style.zIndex;
-		this.style.zIndex = '10000';
+		this.style.zIndex = "10000";
 
 		this.style.left = `${x}px`;
 		this.style.top = `${y}px`;
 
-		return new Promise(resolve => {
+		return new Promise((resolve) => {
 			this._transitionEndHandler = () => {
-				this.removeEventListener('transitionend', this._transitionEndHandler);
+				this.removeEventListener(
+					"transitionend",
+					this._transitionEndHandler
+				);
 				this.style.zIndex = originalZIndex; // Restore original z-index
 				if (callback) {
 					callback(this);
 				}
 				resolve();
 			};
-			this.addEventListener('transitionend', this._transitionEndHandler);
+			this.addEventListener("transitionend", this._transitionEndHandler);
 			this.style.transition = `left ${duration}ms ease-in, top ${duration}ms ease-in`;
 		});
 	}
@@ -404,7 +488,7 @@ export class CardElement extends HTMLElement {
 	/**
 	 * @function moveMultiple
 	 * @description Moves multiple cards to specified positions with a staggered delay.
-	 * 
+	 *
 	 * @param {CardElement[]} cards - An array of CardElement instances to move.
 	 * @param {Array&lt;{x: number, y: number}>} positions - An array of objects containing x and y coordinates for each card.
 	 * @param {number} [duration=600] - The duration of the transition for each card in milliseconds. Defaults to 600ms.
@@ -419,18 +503,22 @@ export class CardElement extends HTMLElement {
 			const { x, y } = pos;
 
 			const delay = 400 * i;
-			promises.push(new Promise(r => {
-				setTimeout(() => {
-					// Pass the callback to each individual moveTo call
-					card.moveTo(x, y, duration, callback).then(r);
-				}, delay);
-			}));
+			promises.push(
+				new Promise((r) => {
+					setTimeout(() => {
+						// Pass the callback to each individual moveTo call
+						card.moveTo(x, y, duration, callback).then(r);
+					}, delay);
+				})
+			);
 		});
 		await Promise.all(promises);
 	}
 }
 
-customElements.define('card-element', CardElement);</code></pre>
+customElements.define("card-element", CardElement);
+
+</code></pre>
         </article>
     </section>
 
@@ -440,7 +528,7 @@ customElements.define('card-element', CardElement);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#addSave">addSave</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#deleteSave">deleteSave</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getAllSaves">getAllSaves</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSave">getSave</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#overwriteSave">overwriteSave</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -1,6 +1,8 @@
 /**
- * @typedef {object} GameState (see gameHandler.js)
- * @property {null} placeholder - See gameHandler.js for details.
+ * @typedef {module:scripts/backend/Card.Card} Card
+ * @typedef {module:scripts/backend/Deck.Deck} Deck
+ * @typedef {module:scripts/backend/Hand.Hand} Hand
+ * @typedef {module:scripts/backend/gameHandler.GameState} GameState
  */
 
 /**
@@ -145,7 +147,7 @@ export class GameStorage {
 
 	/**
 	 * @function deleteSave
-	 * @description Deletes a save from the specified index.
+	 * @description Deletes a save from the specified index.z
 	 * @param {number} index - Index of the save to remove.
 	 * @returns {boolean} True if deletion succeeded.
 	 */

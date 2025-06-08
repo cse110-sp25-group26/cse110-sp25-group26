@@ -1,4 +1,8 @@
-import { Card } from "../backend/Card.js";
+/**
+ * @typedef {module:scripts/backend/Card} Card
+ */
+
+import { formatJokerDescription } from "../backend/Jokers.js";
 
 /**
  * @classdesc Custom web component representing a card.
@@ -72,7 +76,7 @@ export class CardElement extends HTMLElement {
 		// Card back image
 		this._cardBack.innerHTML = "";
 		const backImg = document.createElement("img");
-		backImg.src = `/source/res/img/back.png?v=${Date.now()}`;
+		backImg.src = `res/img/card/back.png?v=${Date.now()}`;
 		backImg.alt = "Card back";
 		backImg.style.width = "100%";
 		backImg.style.height = "100%";
@@ -96,7 +100,7 @@ export class CardElement extends HTMLElement {
 		styleLink.setAttribute("rel", "stylesheet");
 		styleLink.setAttribute(
 			"href",
-			`/source/styles/card.css?v=${Date.now()}`
+			`styles/card.css?v=${Date.now()}`
 		);
 		this.shadowRoot.appendChild(styleLink);
 	}
@@ -162,6 +166,16 @@ export class CardElement extends HTMLElement {
 	 */
 	calculateTooltipText() {
 		if (!this._card) return "";
+		
+		if (this._card.suit === "joker") {
+			// Use the joker's getDescription method if available
+			if (typeof this._card.getDescription === 'function') {
+				return formatJokerDescription(this._card.getDescription());
+			}
+			return `<b>${this._card.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b>`;
+		}
+		
+		// Regular card tooltip
 		const suit =
 			this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
 		const type = this._card.type.toUpperCase();
@@ -220,11 +234,15 @@ export class CardElement extends HTMLElement {
 			typeMap[this._card.type] || this._card.type.toLowerCase();
 
 		// Update existing front image
-		const filename = `card_${typeName}_${suitName}.png`;
-		this._frontImg.src = `/source/res/img/${filename}?v=${Date.now()}`;
-		this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
-
-		console.log(`Loading card image: ${filename}`);
+		if (this._card.suit === "joker") {
+			const filename = `${typeName}.png`;
+			this._frontImg.alt = this._card.type;
+			this._frontImg.src = `res/img/card/joker/${filename}?v=${Date.now()}`;
+		} else {
+			const filename = `${typeName}_${suitName}.png`;
+			this._frontImg.alt = `${this._card.type} of ${this._card.suit}`;
+			this._frontImg.src = `res/img/card/${filename}?v=${Date.now()}`;
+		}
 	}
 
 	/**
@@ -239,6 +257,8 @@ export class CardElement extends HTMLElement {
 	 */
 	_onMouseEnterTooltip() {
 		this._tooltip.style.display = "block";
+		// Use innerHTML instead of textContent to support HTML in tooltips
+		this._tooltip.innerHTML = this.calculateTooltipText();
 	}
 
 	/**
