@@ -18,6 +18,12 @@ export class HandElement extends HTMLElement {
 		this._container.classList.add("hand");
 		this.shadowRoot.appendChild(this._container);
 
+		// card animation movement test
+		const animationLink = document.createElement('link');
+		animationLink.setAttribute('rel', 'stylesheet');
+		animationLink.setAttribute('href', '/source/scripts/frontend/card-animations.css');
+		this.shadowRoot.appendChild(animationLink);
+		
 		// Attach external CSS
 		const styleLink = document.createElement("link");
 		styleLink.setAttribute("rel", "stylesheet");
@@ -167,6 +173,57 @@ export class HandElement extends HTMLElement {
 			})
 		);
 		this._updateLayout();
+	}
+	
+	/**
+	 * @function addCardwithAnimation
+	 * @description adding the card to player hand
+	 * @param {CardElement} cardElement - The selected card element.
+	 */
+	addCardwithAnimation(cardElement) {
+		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+		this.cards.push(cardElement);
+		this._container.appendChild(cardElement);
+
+		// For movement animation
+		const deckBox = document.getElementById('card-deck')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+		if (deckBox && handBox) {
+			const offsetX = deckBox.left - handBox.left;
+			const offsetY = deckBox.top - handBox.top;
+			cardElement.style.setProperty('--from-x', `${offsetX}px`);
+			cardElement.style.setProperty('--from-y', `${offsetY}px`);
+			cardElement._container?.classList.add('card-fly-in');
+		}
+
+		this._updateLayout();
+	}
+
+	/**
+	 * @function removeSelectedCardswithAnimation
+	 * @description removing card from player hand to trash 
+	 */
+	removeSelectedCardswithAnimation() {
+		const selectedCards = this.getSelectedCards();
+		const trashBox = document.getElementById('discard-pile')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+
+		selectedCards.forEach(card => {
+			if (trashBox && handBox) {
+				const offsetX = trashBox.left - handBox.left;
+				const offsetY = trashBox.top - handBox.top;
+				card.style.setProperty('--to-x', `${offsetX}px`);
+				card.style.setProperty('--to-y', `${offsetY}px`);
+				card._container?.classList.add('card-fly-out');
+
+				// 
+				setTimeout(() => {
+					this.removeCard(card);
+				}, 500);
+			} else {
+				this.removeCard(card); // fallback
+			}
+		});
 	}
 }
 
