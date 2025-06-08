@@ -1,6 +1,19 @@
 import { Card } from "./Card.js";
 import { calculateBlackjackScore } from "./utils.js";
 
+/**
+ * Formats special sequences in joker descriptions:
+ * \x1bc(+X) for chips - displays in bold blue
+ * \x1bt(+X) for multiplier - displays in bold red
+ * @param {string} text - The text with special sequences
+ * @return {string} Formatted HTML text
+ */
+export function formatJokerDescription(text) {
+    return text
+        .replace(/\x1bc\(([^)]+)\)/g, '<span style="color:blue;font-weight:bold">$1 chips</span>')
+        .replace(/\x1bt\(([^)]+)\)/g, '<span style="color:red;font-weight:bold">$1x mult</span>');
+}
+
 // TODO: Documentation. Running out of time.
 
 /**
@@ -37,6 +50,15 @@ export class Joker extends Card {
 	constructor(name) {
 		super("joker", name);
 		this.state = {};
+	}
+	
+	/**
+	 * Returns a formatted description of this joker
+	 * @returns {string} HTML-formatted description
+	 */
+	getDescription() {
+		// Default description, individual jokers should override this
+		return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>No description available.`;
 	}
 
 	// each takes an object with optionally accessed:
@@ -77,6 +99,10 @@ class LuckyRabbit extends Joker {
 	onDraw(params) {
 		params.scoringHandler.addChips(params, 2);
 	}
+	
+	getDescription() {
+		return `<b>Lucky Rabbit</b><br>When you draw a card, gain \x1bc(+2).`;
+	}
 }
 Joker.registerJoker("lucky_rabbit", LuckyRabbit);
 
@@ -91,6 +117,10 @@ class StickShift extends Joker {
 
 	onJokerLeave(params) {
 		params.gameHandler.state.discardCount -= 1;
+	}
+	
+	getDescription() {
+		return `<b>Stick Shift</b><br>Gain +1 discards per round.`;
 	}
 }
 Joker.registerJoker("stick_shift", StickShift);
@@ -107,6 +137,10 @@ class PiggyBank extends Joker {
 	onJokerLeave(params) {
 		params.gameHandler.state.interestCap -= 1;
 	}
+	
+	getDescription() {
+		return `<b>Piggy Bank</b><br>Increase interest cap by 1.`;
+	}
 }
 Joker.registerJoker("piggy_bank", PiggyBank);
 
@@ -120,6 +154,10 @@ class EvenSteven extends Joker {
 			params.scoringHandler.addMult(params, 0.2);
 		}
 	}
+	
+	getDescription() {
+		return `<b>Even Steven</b><br>If your score is even, gain \x1bt(+0.2).`;
+	}
 }
 Joker.registerJoker("even_steven", EvenSteven);
 
@@ -132,6 +170,10 @@ class OddRod extends Joker {
 		if (params.score % 2 == 1) {
 			params.scoringHandler.addMult(params, 0.2);
 		}
+	}
+	
+	getDescription() {
+		return `<b>Odd Rod</b><br>If your score is odd, gain \x1bt(+0.2).`;
 	}
 }
 Joker.registerJoker("odd_rod", OddRod);
@@ -212,6 +254,10 @@ class CardCounter extends Joker {
 			params.scoringHandler.addMult(params, 0.1);
 		}
 	}
+	
+	getDescription() {
+		return `<b>Card Counter</b><br>Gain \x1bt(+0.1) for each unique card scored this round.<br>Current unique cards: ${this.seen.size}`;
+	}
 }
 Joker.registerJoker("card_counter", CardCounter);
 
@@ -226,6 +272,10 @@ class FaceValue extends Joker {
 			params.scoringHandler.addChips(params, 1);
 		}
 	}
+	
+	getDescription() {
+		return `<b>Face Value</b><br>When you score a face card (A, J, Q, K), gain \x1bc(+1).`;
+	}
 }
 Joker.registerJoker("face_value", FaceValue);
 
@@ -238,6 +288,10 @@ class TwentyOneder extends Joker {
 		if (params.score == 21 && calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
 			params.scoringHandler.addMult(params, 0.5);
 		}
+	}
+	
+	getDescription() {
+		return `<b>Twenty-Oneder</b><br>If your score is exactly 21, gain \x1bt(+0.5).`;
 	}
 }
 Joker.registerJoker("twenty_oneder", TwentyOneder);
@@ -278,6 +332,10 @@ class Blueprint extends Joker {
 			}
 		});
 	}
+	
+	getDescription() {
+		return `<b>Blueprint</b><br>Copy and apply the effects of all Jokers to the left.`;
+	}
 }
 Joker.registerJoker("blueprint", Blueprint);
 
@@ -299,6 +357,11 @@ class Martingale extends Joker {
 			this.lastRoundsZero = 0;
 		}
 	}
+	
+	getDescription() {
+		const multiplier = this.lastRoundsZero > 0 ? (4 / this.lastRoundsZero).toFixed(1) : "4.0";
+		return `<b>Martingale</b><br>If your score is 0, gain \x1bt(+${multiplier}). Decreases with consecutive zero scores.<br>Current consecutive zeros: ${this.lastRoundsZero}`;
+	}
 }
 Joker.registerJoker("martingale", Martingale);
 
@@ -314,6 +377,10 @@ class WildcardJoker extends Joker {
 			params.scoringHandler.addChips(params, addValue);
 		}
 	}
+	
+	getDescription() {
+		return `<b>Wildcard Joker</b><br>If your score is less than 21, add a random value between 0 and the difference.`;
+	}
 }
 Joker.registerJoker("wildcard_joker", WildcardJoker);
 
@@ -326,6 +393,10 @@ class Overclock extends Joker {
 		if (params.gameHandler.state.hands.played.cards.length > 5) {
 			params.scoringHandler.addMult(params, (params.gameHandler.state.hands.played.cards.length - 5) * 0.5);
 		}
+	}
+	
+	getDescription() {
+		return `<b>Overclock</b><br>If you play more than 5 cards, gain \x1bt(+0.5) for each additional card.`;
 	}
 }
 Joker.registerJoker("overclock", Overclock);
@@ -344,6 +415,10 @@ class EventHorizon extends Joker {
 	onScoringEnd(params) {
 		params.scoringHandler.addMult(params, params.gameHandler.state.handMult);
 	}
+	
+	getDescription() {
+		return `<b>Event Horizon</b><br>Add your multiplier again to itself.`;
+	}
 }
 Joker.registerJoker("event_horizon", EventHorizon);
 
@@ -357,6 +432,10 @@ class GlitchKing extends Joker {
 			const multiplier = 0.5 + Math.random() * 2.5;
 			params.gameHandler.state.handScore *= multiplier;
 		}
+	}
+	
+	getDescription() {
+		return `<b>Glitch King</b><br>If your score exceeds 2,147,483,647, apply a random multiplier between 0.5x and 3.0x.`;
 	}
 }
 Joker.registerJoker("glitch_king", GlitchKing);
@@ -376,6 +455,10 @@ class Snowballer extends Joker {
 			params.scoringHandler.addMult(params, this.snowball);
 		}
 	}
+	
+	getDescription() {
+		return `<b>Snowballer</b><br>When you draw a card, add \x1bt(+0.1) to this Joker.<br>Current bonus: \x1bt(+${this.snowball.toFixed(1)})`;
+	}
 }
 Joker.registerJoker("snowballer", Snowballer);
 
@@ -388,6 +471,10 @@ class Hiccup extends Joker {
 		if (params.gameHandler.state.hands.played.cards.length > 7) {
 			params.scoringHandler.addChips(params, 1);
 		}
+	}
+	
+	getDescription() {
+		return `<b>Hiccup</b><br>If you played more than 7 cards, gain \x1bc(+1).`;
 	}
 }
 Joker.registerJoker("hiccup", Hiccup);

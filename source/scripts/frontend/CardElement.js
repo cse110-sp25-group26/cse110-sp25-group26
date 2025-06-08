@@ -2,6 +2,8 @@
  * @typedef {import("../backend/Card.js").Card} Card
  */
 
+import { formatJokerDescription } from "../backend/Jokers.js";
+
 /**
  * @classdesc Custom web component representing a card.
  *
@@ -164,6 +166,16 @@ export class CardElement extends HTMLElement {
 	 */
 	calculateTooltipText() {
 		if (!this._card) return "";
+		
+		if (this._card.suit === "joker") {
+			// Use the joker's getDescription method if available
+			if (typeof this._card.getDescription === 'function') {
+				return formatJokerDescription(this._card.getDescription());
+			}
+			return `<b>${this._card.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b>`;
+		}
+		
+		// Regular card tooltip
 		const suit =
 			this._card.suit.charAt(0).toUpperCase() + this._card.suit.slice(1);
 		const type = this._card.type.toUpperCase();
@@ -245,6 +257,8 @@ export class CardElement extends HTMLElement {
 	 */
 	_onMouseEnterTooltip() {
 		this._tooltip.style.display = "block";
+		// Use innerHTML instead of textContent to support HTML in tooltips
+		this._tooltip.innerHTML = this.calculateTooltipText();
 	}
 
 	/**
