@@ -3,6 +3,7 @@ import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
 import { calculateBlackjackScore, getHandType } from "./utils.js";
 import { UIInterface } from "./UIInterface.js";
+import { scoringHandler } from "./scoringHandler.js";
 
 /**
  * @typedef {object} HandHolder
@@ -14,26 +15,26 @@ import { UIInterface } from "./UIInterface.js";
 
 /**
  * @typedef {object} GameState
- * @property {Deck}           deck             – the deck of cards
- * @property {HandHolder}     hands            – the player's hands
- * @property {number}         currAnte         – current ante value
- * @property {number}         currBlind        – current blind value
- * @property {number}         totalHands   	   – how many hands may be played this blind
- * @property {number}         handsPerBlind    – (config) hands per blind
- * @property {number}         blindsPerAnte    – (fixed) blinds per ante
- * @property {number}         totalAntes       – (fixed) total antes in the game
- * @property {number}         money            – player's available money
- * @property {number}         discardCount     – how many cards can be discarded
- * @property {number[]}       blindRequirements – thresholds for each blind
- * @property {number}         roundScore       – score for the current round
- * @property {number}         handsPlayed      – total hands played so far
- * @property {number}         discardsUsed     – how many discards have been used
- * @property {number}         handScore	  	   – score for the current hand
- * @property {number}         handMult 	  	   – multiplier for the current hand
- * @property {boolean}        endlessMode      – whether the game is in endless mode
- * @property {UIInterface}	  uiInterface      - interface provided by the UI to interact with the game
- * @property {string}         currentBlindName – name of the current blind level
- */
+ * @property {Deck}           deck            	- the deck of cards
+ * @property {HandHolder}     hands           	- the player's hands
+ * @property {number}         currAnte        	- current ante value
+ * @property {number}         currBlind       	- current blind value
+ * @property {number}         totalHands   	  	- how many hands may be played this blind
+ * @property {number}         handsPerBlind   	- (config) hands per blind
+ * @property {number}         blindsPerAnte   	- (fixed) blinds per ante
+ * @property {number}         totalAntes      	- (fixed) total antes in the game
+ * @property {number}         money           	- player's available money
+ * @property {number}         discardCount    	- how many cards can be discarded
+ * @property {number[]}       blindRequirements	- thresholds for each blind
+ * @property {number}         roundScore      	- score for the current round
+ * @property {number}         handsPlayed     	- total hands played so far
+ * @property {number}         discardsUsed    	- how many discards have been used
+ * @property {number}         handScore	  	  	- score for the current hand
+ * @property {number}         handMult 	  	  	- multiplier for the current hand
+ * @property {boolean}        endlessMode     	- whether the game is in endless mode
+ * @property {UIInterface}	  uiInterface     	- interface provided by the UI to interact with the game
+ * @property {string}         currentBlindName	- name of the current blind level
+ *	
 
 /**
  * @classdesc Handles game logic and interactions.
@@ -42,6 +43,7 @@ import { UIInterface } from "./UIInterface.js";
  * @property {string[]} suits - The suits of the cards.
  * @property {string[]} types - The types of the cards.
  * @property {Card[]} defaultCards - The default set of cards in the game.
+ * @property {object} scoringHandler - The scoring handler for this gameHandler.
  */
 export class gameHandler {
 	/**
@@ -51,6 +53,7 @@ export class gameHandler {
 	 */
 	constructor(uiInterface) {
 		this.uiInterface = uiInterface;
+		this.scoringHandler = new scoringHandler(this);
 		this.resetGame();
 		uiInterface.gameHandler = this;
 	}
@@ -284,7 +287,7 @@ export class gameHandler {
 			0
 		);
 
-		this.scoreHand();
+		this.scoringHandler.scoreHand();
 
 		if (
 			this.state.handsPlayed >= this.state.totalHands ||
@@ -327,107 +330,6 @@ export class gameHandler {
 			this.dealCards();
 			this.uiInterface.allowPlay();
 		}
-	}
-
-	/**
-	 * @function scoreHand
-	 * @description Scores the played hand, updates the round score, and sets up for the next round.
-	 */
-	scoreHand() {
-		// If the hand is empty, log and return
-		if (this.state.hands.played.cards.length === 0) {
-			console.log("No cards played. No score.");
-			return;
-		}
-
-		this.state.handScore = 0;
-		this.state.handMult = 1;
-
-		// Determine hand type for display
-		const handType = getHandType(this.state.hands.played.cards);
-		this.uiInterface.updateScorekeeper({ handType: handType });
-
-		for (let i = 0; i < this.state.hands.played.cards.length; ) {
-			const card = this.state.hands.played.cards[i];
-
-			let cardValue = card.getValue();
-
-			// TODO: Check for attributes on the card, update base chip value accordingly
-
-			// TODO: Check for applicable jokers to this card
-			// ->UI: Call back to UI to play joker animation (likely also score animation)
-
-			this.state.handScore += cardValue;
-			this.uiInterface.updateScorekeeper({
-				handScore: this.state.handScore,
-			});
-
-			console.log(
-				`Card ${card.type} of ${card.suit} scored: ${cardValue}`
-			);
-			this.uiInterface.scoreCard(
-				card,
-				[`+${cardValue} Chips`],
-				["#00FF00"]
-			);
-
-			// TODO: Conditions for other increments
-			i += 1;
-		}
-
-		// Verify that the played hand has a valid blackjack score
-		const score = calculateBlackjackScore(this.state.hands.played.cards);
-		if (score > 21) {
-			console.log("Score exceeds 21. Hand is bust.");
-
-			this.state.handScore = 0;
-			this.state.handMult = 1;
-
-			// TODO_UI: Call back to UI to display bust, update scorekeeper
-			this.uiInterface.updateScorekeeper({
-				handScore: 0,
-				handMult: 1,
-			});
-			this.uiInterface.displayBust();
-		} else {
-			const totalAdded = this.state.handScore * this.state.handMult;
-			this.state.roundScore += totalAdded;
-
-			// Show visual feedback for successful scoring
-			if (this.uiInterface.displayHandScored) {
-				this.uiInterface.displayHandScored(
-					this.state.handScore,
-					this.state.handMult,
-					totalAdded
-				);
-			}
-
-			this.state.handScore = 0;
-			this.state.handMult = 1;
-
-			this.uiInterface.updateScorekeeper({
-				roundScore: this.state.roundScore,
-				handScore: 0,
-				handMult: 1,
-			});
-
-			this.uiInterface.moveMultiple(
-				this.state.hands.played.cards,
-				"handPlayed",
-				"offscreen",
-				0
-			);
-			for (const card of this.state.hands.played.cards) {
-				this.uiInterface.removeUIel(card);
-			}
-		}
-
-		this.state.handsPlayed++;
-		this.uiInterface.updateScorekeeper({
-			handsRemaining: this.state.totalHands - this.state.handsPlayed,
-		});
-
-		this.state.hands.played.cards = [];
 	}
 
 	/**
