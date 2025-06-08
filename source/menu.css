@@ -190,7 +190,6 @@ body {
     width: 100%;
     border-radius: 0.5rem;
     border: 4px solid #991b1b;
-    /* Tailwind red-800 */
     box-sizing: border-box;
 }
 

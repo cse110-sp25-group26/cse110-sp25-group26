@@ -110,19 +110,6 @@
 
 				// Create the game handler with our WebUI
 				const game = new gameHandler(webUI);
-
-				// The game handler automatically:
-				// 1. Creates a standard 52-card deck
-				// 2. Deals 5 cards to the player's hand
-				// 3. Sets up the initial game state
-				// 4. Updates the scorekeeper
-				// 5. Enables the play/discard buttons
-
-				console.log("Game initialized successfully!");
-				console.log("- Select cards by clicking them");
-				console.log("- Use 'Play Selected' to score your hand");
-				console.log("- Use 'Discard Selected' to replace unwanted cards");
-				console.log("- Goal: Reach", game.state.blindRequirements[0], "points to advance!");
 			}
 
 			// Initialize the game when DOM is ready
