@@ -74,7 +74,7 @@ export class CardElement extends HTMLElement {
 		// Card back image
 		this._cardBack.innerHTML = "";
 		const backImg = document.createElement("img");
-		backImg.src = `/source/res/img/back.png?v=${Date.now()}`;
+		backImg.src = `/source/res/img/card/back.png?v=${Date.now()}`;
 		backImg.alt = "Card back";
 		backImg.style.width = "100%";
 		backImg.style.height = "100%";

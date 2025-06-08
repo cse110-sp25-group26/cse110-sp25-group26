@@ -20,6 +20,10 @@ export class Joker extends Card {
 		Joker.jokerTypes.set(name, jokerClass);
 	}
 
+	static getJokerTypes() {
+		return Array.from(Joker.jokerTypes.keys());
+	}
+
 	constructor(name) {
 		super("joker", name);
 		this.state = {};
@@ -126,7 +130,9 @@ class FaceValue extends Joker {
 
 	onCardScore(params) {
 		const type = params.card.type;
-		console.error("IDK WHAT THESE ARE LOL: " + type);
+		if (type == "A" || type == "J" || type == "Q" || type == "K") {
+			params.scoringHandler.addChips(params, 1);
+		}
 	}
 }
 Joker.registerJoker("face_value", FaceValue);

@@ -3,6 +3,7 @@ import { Hand } from "./Hand.js";
 import { Card } from "./Card.js";
 import { UIInterface } from "./UIInterface.js";
 import { scoringHandler } from "./scoringHandler.js";
+import { Joker } from "./Jokers.js";
 
 /**
  * @typedef {object} HandHolder
@@ -317,6 +318,28 @@ export class gameHandler {
 			// TODO_UI: Call back to the UI to display the shop
 			//          Requires Shop class to be implemented (not done yet)
 			console.log("Should run the shop now.");
+
+			// DEBUG: Add a random Joker to the Joker hand for testing
+			const jokerTypes = Joker.getJokerTypes();
+			const randomJokerType = jokerTypes[
+				Math.floor(Math.random() * jokerTypes.length)
+			];
+			const joker = Joker.newJoker(randomJokerType);
+			this.state.hands.joker.addCard(joker);
+			this.uiInterface.createUIel(joker);
+			this.uiInterface.moveMultiple(
+				[joker],
+				"deck",
+				"handJoker",
+				0
+			);
+			joker.onJokerEnter({
+				gameHandler: this,
+				uiInterface: this.uiInterface,
+				scoringHandler: this.scoringHandler,
+			});
+			// END DEBUG
+			// TODO: Remove the above debug code when the shop is implemented
 
 			// TODO: Should this go in the shop class?
 			if (this.nextBlind()) {

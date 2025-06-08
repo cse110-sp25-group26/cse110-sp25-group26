@@ -25,6 +25,8 @@ export class scoringHandler {
 			console.log("No cards played. No score.");
 			return;
 		}
+		
+		const jokers = this.handler.state.hands.joker.cards;
 
 		this.handler.state.handScore = 0;
 		this.handler.state.handMult = 1;
@@ -43,6 +45,18 @@ export class scoringHandler {
 			// TODO: Check for applicable jokers to this card
 			// ->UI: Call back to UI to play joker animation (likely also score animation)
 
+			for (const joker of jokers) {
+				if (joker.onCardScore) {
+					joker.onCardScore({
+						card: card,
+						cardIdx: i,
+						jokerIdx: jokers.indexOf(joker),
+						scoringHandler: this,
+						gameHandler: this.handler,
+					});
+				}
+			}
+
 			this.handler.state.handScore += cardValue;
 			this.handler.uiInterface.updateScorekeeper({
 				handScore: this.handler.state.handScore,
@@ -59,6 +73,17 @@ export class scoringHandler {
 
 			// TODO: Conditions for other increments
 			i += 1;
+		}
+
+		for (const joker of jokers) {
+			if (joker.onScoringEnd) {
+				joker.onScoringEnd({
+					jokerIdx: jokers.indexOf(joker),
+					score: this.handler.state.handScore,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
 		}
 
 		// Verify that the played hand has a valid blackjack score
@@ -95,16 +120,16 @@ export class scoringHandler {
 				handScore: 0,
 				handMult: 1,
 			});
+		}
 
-			this.handler.uiInterface.moveMultiple(
-				this.handler.state.hands.played.cards,
-				"handPlayed",
-				"offscreen",
-				0
-			);
-			for (const card of this.handler.state.hands.played.cards) {
-				this.handler.uiInterface.removeUIel(card);
-			}
+		this.handler.uiInterface.moveMultiple(
+			this.handler.state.hands.played.cards,
+			"handPlayed",
+			"offscreen",
+			0
+		);
+		for (const card of this.handler.state.hands.played.cards) {
+			this.handler.uiInterface.removeUIel(card);
 		}
 
 		this.handler.state.handsPlayed++;
