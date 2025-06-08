@@ -1,8 +1,6 @@
 /**
- * @typedef {import('./Card.js').Card} Card
- * @typedef {import('./Deck.js').Deck} Deck
- * @typedef {import('./Hand.js').Hand} Hand
- * @typedef {import('./gameHandler.js').GameState} GameState
+ * @typedef {object} GameState (see gameHandler.js)
+ * @property {null} placeholder - See gameHandler.js for details.
  */
 
 /**

@@ -1,6 +1,4 @@
-/**
- * @typedef {import("../backend/Card.js").Card} Card
- */
+import { Card } from "../backend/Card.js";
 
 /**
  * @classdesc Custom web component representing a card.

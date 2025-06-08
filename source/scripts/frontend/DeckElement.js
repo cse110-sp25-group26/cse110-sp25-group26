@@ -1,7 +1,5 @@
 import { CardElement } from "./CardElement.js";
-/**
- * @typedef {import("../backend/Card.js").Card} Card
- */
+import { Card } from "../backend/Card.js";
 
 /**
  * @classdesc UI component representing the Deck.
