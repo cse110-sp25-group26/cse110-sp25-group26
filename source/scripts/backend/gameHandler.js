@@ -35,7 +35,7 @@ import { Joker } from "./Jokers.js";
  * @property {UIInterface}	  uiInterface     	- interface provided by the UI to interact with the game
  * @property {string}         currentBlindName	- name of the current blind level
  * @property {number}		  interestCap       - Maximum amount that may be reached by interest
- *	
+ */
 
 /**
  * @classdesc Handles game logic and interactions.
