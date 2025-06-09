@@ -102,7 +102,7 @@ export class Joker extends Card {
 		// Default description, individual jokers should override this
 		try {
 			return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
-		} catch (e) {
+		} catch () {
 			if (this.constructor.name) {
 				return `<b>${this.constructor.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
 			}
