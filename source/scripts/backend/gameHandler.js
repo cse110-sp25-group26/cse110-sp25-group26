@@ -4,6 +4,7 @@ import { Card } from "./Card.js";
 import { UIInterface } from "./UIInterface.js";
 import { scoringHandler } from "./scoringHandler.js";
 import { Joker } from "./Jokers.js";
+import { GameStorage } from "./GameStorage.js";
 
 /**
  * @typedef {object} HandHolder
@@ -45,6 +46,7 @@ import { Joker } from "./Jokers.js";
  * @property {string[]} types - The types of the cards.
  * @property {Card[]} defaultCards - The default set of cards in the game.
  * @property {object} scoringHandler - The scoring handler for this gameHandler.
+ * @property {GameStorage} gameStorage - The storage handler for statistics.
  */
 export class gameHandler {
 	/**
@@ -55,6 +57,7 @@ export class gameHandler {
 	constructor(uiInterface) {
 		this.uiInterface = uiInterface;
 		this.scoringHandler = new scoringHandler(this);
+		this.gameStorage = new GameStorage();
 		this.resetGame();
 		uiInterface.gameHandler = this;
 	}
@@ -92,7 +95,6 @@ export class gameHandler {
 			discardCount: 4,
 
 			// Blind requirements
-			// TODO: Determine the algorithm and update these values accordingly per ante
 			blindRequirements: [40, 60, 80],
 			blindRewards: [4, 6, 8],
 
@@ -291,6 +293,9 @@ export class gameHandler {
 			0
 		);
 
+		// Track stats - increment hands played
+		this.gameStorage.updateStat("totalHandsPlayed", 1);
+
 		this.scoringHandler.scoreHand();
 
 		if (
@@ -315,6 +320,13 @@ export class gameHandler {
 				this.state.blindRequirements[this.state.currBlind - 1]
 			) {
 				console.log("Not enough score to advance to the next blind.");
+
+				// Track highest ante reached even on loss
+				this.gameStorage.setStat(
+					"highestAnteReached",
+					this.state.currAnte
+				);
+
 				this.uiInterface.displayLoss(
 					`Failed to meet blind requirement of ${
 						this.state.blindRequirements[this.state.currBlind - 1]
@@ -329,19 +341,14 @@ export class gameHandler {
 
 			// DEBUG: Add a random Joker to the Joker hand for testing
 			const jokerTypes = Joker.getJokerTypes();
-			const randomJokerType = jokerTypes[
-				Math.floor(Math.random() * jokerTypes.length)
-			];
+			const randomJokerType =
+				jokerTypes[Math.floor(Math.random() * jokerTypes.length)];
 			const joker = Joker.newJoker(randomJokerType);
 			this.state.hands.joker.addCard(joker);
+
 			this.uiInterface.createUIel(joker);
-			this.uiInterface.moveMultiple(
-				[joker],
-				"deck",
-				"handJoker",
-				0
-			);
-			joker.UIel.setTooltipPosition('below');
+			this.uiInterface.moveMultiple([joker], "deck", "handJoker", 0);
+			joker.UIel.setTooltipPosition("below");
 			joker.onJokerEnter({
 				gameHandler: this,
 				uiInterface: this.uiInterface,
@@ -373,7 +380,6 @@ export class gameHandler {
 
 		const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
 
-		// TODO: Calculate more extras
 		const extras = [];
 		// Add a unit for each hand remaining
 		if (this.state.totalHands - this.state.handsPlayed > 0) {
@@ -412,8 +418,7 @@ export class gameHandler {
 			this.state.handsPlayed = 0;
 			this.state.discardsUsed = 0;
 
-			// TODO: Add a proper formula for calculating the next blind requirements and rewards.
-			// This temporary one just multiplies by 1.5
+			// Multiply requirements and rewards by 1.5 for the next ante
 			this.state.blindRequirements = this.state.blindRequirements.map(
 				(req) => Math.ceil(req * 1.5)
 			);
@@ -425,6 +430,13 @@ export class gameHandler {
 				this.state.currAnte > this.state.totalAntes &&
 				!this.state.endlessMode
 			) {
+				// Track game completion stats
+				this.gameStorage.updateStat("gamesCompleted", 1);
+				this.gameStorage.setStat(
+					"highestAnteReached",
+					this.state.currAnte
+				);
+
 				this.uiInterface.displayWin();
 				let enterEndlessMode = this.uiInterface.promptEndlessMode();
 
@@ -468,7 +480,7 @@ export class gameHandler {
 			this.state.currentBlindName = "Big Blind";
 		} else if (this.state.currBlind == 3) {
 			// TODO: Calculate boss blind and name
-			this.state.currentBlindName = "Random Blind";
+			this.state.currentBlindName = "Boss Blind";
 		}
 
 		this.uiInterface.updateScorekeeper({

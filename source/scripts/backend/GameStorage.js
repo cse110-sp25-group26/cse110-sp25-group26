@@ -6,21 +6,13 @@
  */
 
 /**
- * @typedef {object} GameSave
- * @property {Date} lastSaved - The time this save data was last written to.
- * @property {GameState} gameState - The game state necessary to reload the game.
- */
-
-/**
- * @typedef {object} SavesData
- * @property {GameSave[]} saves - List of game saves.
- * @property {Map<string,any>} lifetimeStats - Statistics about the player's lifetime performance.
- * @property {string[]} unlockedJokers - List of jokers that have been unlocked.
+ * @typedef {object} StatsData
+ * @property {object} lifetimeStats - Statistics about the player's lifetime performance.
  * @property {string} version - Version of the game data format.
  */
 
 /**
- * @classdesc Manages game data persistence using LocalStorage.
+ * @classdesc Manages game statistics persistence using LocalStorage.
  */
 export class GameStorage {
 	/**
@@ -29,10 +21,10 @@ export class GameStorage {
 	 */
 	constructor() {
 		/** @private */
-		this.storageKey = 'gameData';
+		this.storageKey = "gameStats";
 
 		/** @private */
-		this.currentVersion = '1.0.0';
+		this.currentVersion = "1.0.0";
 
 		/** @private */
 		this.defaultStats = {
@@ -43,7 +35,7 @@ export class GameStorage {
 			totalHandsPlayed: 0,
 			totalJokersUsed: 0,
 			uniqueJokersFound: 0,
-			firstGameDate: null
+			firstGameDate: null,
 		};
 
 		this.initializeStorage();
@@ -61,17 +53,14 @@ export class GameStorage {
 
 	/**
 	 * @function initializeStorage
-	 * @description Initializes the default game storage if no existing save is found.
+	 * @description Initializes the default game storage if no existing data is found.
 	 */
 	initializeStorage() {
 		if (!this.storageExists()) {
 			const defaultData = {
-				saves: [],
 				lifetimeStats: { ...this.defaultStats },
-				unlockedJokers: [],
-				uniqueJokersDiscovered: [],
 				lastSaved: new Date().toISOString(),
-				version: this.currentVersion
+				version: this.currentVersion,
 			};
 			this.writeToStorage(defaultData);
 		}
@@ -87,7 +76,7 @@ export class GameStorage {
 		try {
 			return data ? JSON.parse(data) : null;
 		} catch (err) {
-			console.error("Failed to parse gameData", err);
+			console.error("Failed to parse gameStats", err);
 			return null;
 		}
 	}
@@ -100,99 +89,22 @@ export class GameStorage {
 	writeToStorage(data) {
 		try {
 			localStorage.setItem(this.storageKey, JSON.stringify(data));
-			console.log("Game data saved.");
+			console.log("Game stats saved.");
 		} catch (err) {
-			console.error("Failed to write gameData", err);
+			console.error("Failed to write gameStats", err);
 		}
-	}
-
-	/**
-	 * @function addSave
-	 * @description Adds a new game save to the saves list.
-	 * @param {GameState} saveData - The game save to add.
-	 */
-	addSave(saveData) {
-		const data = this.readFromStorage();
-
-		let gameSave = {
-			lastSaved: new Date(),
-			gameState: saveData,
-		};
-
-		data.saves.push(gameSave);
-		this.writeToStorage(data);
-	}
-
-	/**
-	 * @function overwriteSave
-	 * @description Replaces an existing save at the specified index.
-	 * @param {number} index - Index to replace.
-	 * @param {GameState} saveData - The new save data.
-	 * @returns {boolean} True if successful.
-	 */
-	overwriteSave(index, saveData) {
-		const data = this.readFromStorage();
-		index = Number(index);
-
-		let gameSave = {
-			lastSaved: new Date(),
-			gameState: saveData,
-		};
-
-		if (!Number.isInteger(index) || index < 0 || index >= data.saves.length) return false;
-		data.saves[parseInt(index, 10)] = gameSave;
-		this.writeToStorage(data);
-		return true;
-	}
-
-	/**
-	 * @function deleteSave
-	 * @description Deletes a save from the specified index.z
-	 * @param {number} index - Index of the save to remove.
-	 * @returns {boolean} True if deletion succeeded.
-	 */
-	deleteSave(index) {
-		const data = this.readFromStorage();
-		if (index < 0 || index >= data.saves.length) return false;
-		data.saves.splice(index, 1);
-		this.writeToStorage(data);
-		return true;
-	}
-
-	/**
-	 * @function getAllSaves
-	 * @description Gets all saved games.
-	 * @returns {GameSave[]} Array of saved games.
-	 */
-	getAllSaves() {
-		return this.readFromStorage()?.saves || [];
-	}
-
-	/**
-	 * @function getSave
-	 * @description Gets a specific save by index.
-	 * @param {number} index - The index of the save to fetch.
-	 * @returns {GameSave|null} The saved game for this index, or null if none.
-	 */
-	getSave(index) {
-		const data = this.readFromStorage();
-		if (!data) return null;
-
-		index = Number(index);
-		if (!Number.isInteger(index) || index < 0 || index >= data.saves?.length) return null;
-
-		return data.saves[index] || null;
 	}
 
 	/**
 	 * @function getStats
 	 * @description Gets lifetime statistics.
-	 * @returns {Map<string,any>} The stats object.
+	 * @returns {object} The stats object.
 	 */
 	getStats() {
-		return this.readFromStorage()?.lifetimeStats || { ...this.defaultStats };
+		return (
+			this.readFromStorage()?.lifetimeStats || { ...this.defaultStats }
+		);
 	}
-
 
 	/**
 	 * @function updateStat
@@ -202,11 +114,29 @@ export class GameStorage {
 	 */
 	updateStat(statKey, delta = 1) {
 		const data = this.readFromStorage();
-		if (!(statKey in data.lifetimeStats)) data.lifetimeStats[String(statKey)] = 0;
+		if (!(statKey in data.lifetimeStats))
+			data.lifetimeStats[String(statKey)] = 0;
 
 		data.lifetimeStats[String(statKey)] += delta;
 
 		this.writeToStorage(data);
+	}
+
+	/**
+	 * @function setStat
+	 * @description Sets a stat to a specific value if it's higher than the current value.
+	 * @param {string} statKey - Name of the stat to update.
+	 * @param {number} value - Value to set (only if higher than current).
+	 */
+	setStat(statKey, value) {
+		const data = this.readFromStorage();
+		if (!(statKey in data.lifetimeStats))
+			data.lifetimeStats[String(statKey)] = 0;
+
+		if (value > data.lifetimeStats[String(statKey)]) {
+			data.lifetimeStats[String(statKey)] = value;
+			this.writeToStorage(data);
+		}
 	}
 }
 
