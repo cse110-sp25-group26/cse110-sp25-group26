@@ -4,7 +4,6 @@ import { Card } from "./Card.js";
 import { UIInterface } from "./UIInterface.js";
 import { scoringHandler } from "./scoringHandler.js";
 import { Joker } from "./Jokers.js";
-import { GameStorage } from "./GameStorage.js";
 
 /**
  * @typedef {object} HandHolder
@@ -46,7 +45,7 @@ import { GameStorage } from "./GameStorage.js";
  * @property {string[]} types - The types of the cards.
  * @property {Card[]} defaultCards - The default set of cards in the game.
  * @property {object} scoringHandler - The scoring handler for this gameHandler.
- * @property {GameStorage} gameStorage - The storage manager for save/load functionality.
+ 
  */
 export class gameHandler {
 	/**
@@ -57,7 +56,6 @@ export class gameHandler {
 	constructor(uiInterface) {
 		this.uiInterface = uiInterface;
 		this.scoringHandler = new scoringHandler(this);
-		this.gameStorage = new GameStorage();
 		this.resetGame();
 		uiInterface.gameHandler = this;
 	}
@@ -65,18 +63,8 @@ export class gameHandler {
 	/**
 	 * @function resetGame
 	 * @description Resets the game state to its initial values.
-	 * @param {boolean} [clearSave=true] - Whether to clear the current game save.
 	 */
-	resetGame(clearSave = true) {
-		// Clear any existing save when starting a new game
-		if (clearSave) {
-			this.gameStorage.clearCurrentGame();
-		}
-
-		// Start a new session for statistics tracking
-		this.gameStorage.startSession();
-		this.gameStorage.updateStat("gamesStarted", 1);
-
+	resetGame() {
 		this.state = {
 			hands: {
 				main: new Hand(),
@@ -419,12 +407,6 @@ export class gameHandler {
 			this.state.handsPlayed = 0;
 			this.state.discardsUsed = 0;
 
-			// Update session with level completion
-			this.gameStorage.updateSession({
-				levelsCompleted: this.state.currAnte - 1,
-				sessionScore: this.state.roundScore,
-			});
-
 			// TODO: Add a proper formula for calculating the next blind requirements and rewards.
 			// This temporary one just multiplies by 1.5
 			this.state.blindRequirements = this.state.blindRequirements.map(
@@ -504,243 +486,17 @@ export class gameHandler {
 	}
 
 	/**
-	 * @function saveGame
-	 * @description Saves the current game state to storage.
-	 * @returns {boolean} True if save was successful.
-	 */
-	saveGame() {
-		const success = this.gameStorage.saveCurrentGame(this.state);
-		if (success) {
-			this.uiInterface.showMessage("Game saved successfully!");
-		} else {
-			this.uiInterface.showMessage(
-				"Failed to save game. Please try again."
-			);
-		}
-		return success;
-	}
-
-	/**
-	 * @function loadGame
-	 * @description Loads a previously saved game state.
-	 * @returns {boolean} True if load was successful.
-	 */
-	loadGame() {
-		try {
-			const savedState = this.gameStorage.loadCurrentGame();
-			if (!savedState) {
-				console.log("No saved game found.");
-				return false;
-			}
-
-			// Reconstruct the game state from saved data
-			this.reconstructGameState(savedState);
-
-			// Update UI to reflect loaded state
-			this.updateUIFromState();
-
-			// Don't start a new session - continue the existing one
-			console.log("Game loaded successfully.");
-			this.uiInterface.showMessage("Game loaded successfully!");
-			return true;
-		} catch (err) {
-			console.error("Failed to load game:", err);
-			this.uiInterface.showMessage(
-				"Failed to load game. Starting a new game instead."
-			);
-			this.resetGame();
-			return false;
-		}
-	}
-
-	/**
-	 * @function reconstructGameState
-	 * @description Reconstructs the game state from serialized data.
-	 * @param {object} savedState - The serialized game state.
-	 */
-	reconstructGameState(savedState) {
-		// Create new Hand and Deck objects with the saved data
-		this.state = { ...savedState };
-
-		// Reconstruct hands
-		this.state.hands = {
-			main: new Hand(),
-			played: new Hand(),
-			joker: new Hand(),
-			consumable: new Hand(),
-		};
-
-		// Reconstruct cards in hands
-		if (savedState.hands) {
-			for (const [handName, handData] of Object.entries(
-				savedState.hands
-			)) {
-				if (handData.cards) {
-					handData.cards.forEach((cardData) => {
-						const card = new Card(cardData.suit, cardData.type);
-						card.isSelected = cardData.isSelected || false;
-						this.state.hands[handName].addCard(card);
-					});
-				}
-			}
-		}
-
-		// Reconstruct deck
-		this.state.deck = new Deck([], this); // Start with empty deck
-
-		if (savedState.deck) {
-			// Reconstruct available cards
-			this.state.deck.availableCards = [];
-			if (savedState.deck.availableCards) {
-				savedState.deck.availableCards.forEach((cardData) => {
-					const card = new Card(cardData.suit, cardData.type);
-					this.state.deck.availableCards.push(card);
-				});
-			}
-
-			// Reconstruct used cards
-			this.state.deck.usedCards = [];
-			if (savedState.deck.usedCards) {
-				savedState.deck.usedCards.forEach((cardData) => {
-					const card = new Card(cardData.suit, cardData.type);
-					this.state.deck.usedCards.push(card);
-				});
-			}
-
-			// Reconstruct allCards from available and used cards
-			this.state.deck.allCards = [
-				...this.state.deck.availableCards,
-				...this.state.deck.usedCards,
-			];
-		} else {
-			// Fallback to default deck if no saved deck data
-			this.state.deck = new Deck(this.defaultCards, this);
-		}
-
-		// Reconstruct jokers if any
-		if (
-			savedState.hands &&
-			savedState.hands.joker &&
-			savedState.hands.joker.cards
-		) {
-			savedState.hands.joker.cards.forEach((jokerData) => {
-				if (jokerData.jokerType) {
-					try {
-						const joker = Joker.newJoker(jokerData.jokerType);
-						this.state.hands.joker.addCard(joker);
-					} catch (err) {
-						console.warn(
-							"Failed to reconstruct joker:",
-							jokerData.jokerType,
-							err
-						);
-					}
-				}
-			});
-		}
-	}
-
-	/**
-	 * @function updateUIFromState
-	 * @description Updates the UI to reflect the current game state after loading.
-	 */
-	updateUIFromState() {
-		// Create UI elements for all cards
-		this.state.hands.main.cards.forEach((card) => {
-			this.uiInterface.createUIel(card);
-		});
-		this.state.hands.joker.cards.forEach((card) => {
-			this.uiInterface.createUIel(card);
-		});
-		this.state.hands.consumable.cards.forEach((card) => {
-			this.uiInterface.createUIel(card);
-		});
-
-		// Move cards to their proper containers
-		this.uiInterface.moveMultiple(
-			this.state.hands.main.cards,
-			"deck",
-			"handMain",
-			0
-		);
-		this.uiInterface.moveMultiple(
-			this.state.hands.joker.cards,
-			"deck",
-			"handJoker",
-			0
-		);
-		this.uiInterface.moveMultiple(
-			this.state.hands.consumable.cards,
-			"deck",
-			"handConsumable",
-			0
-		);
-
-		// Update scorekeeper with current state
-		this.uiInterface.updateScorekeeper({
-			ante: this.state.currAnte,
-			blindName: this.state.currentBlindName,
-			handsRemaining: this.state.totalHands - this.state.handsPlayed,
-			discardsRemaining:
-				this.state.discardCount - this.state.discardsUsed,
-			minScore: this.state.blindRequirements[this.state.currBlind - 1],
-			roundScore: this.state.roundScore,
-			handScore: 0,
-			handMult: 1,
-			money: this.state.money,
-		});
-
-		this.uiInterface.allowPlay();
-	}
-
-	/**
 	 * @function checkGameEnd
-	 * @description Checks if the game has ended and handles game over statistics.
+	 * @description Checks if the game has ended and handles game over.
 	 * @param {boolean} isWin - Whether the game ended in a win.
 	 */
 	checkGameEnd(isWin) {
-		const sessionData = this.gameStorage.getSession();
-		if (!sessionData) return;
-
-		// Update session with final statistics
-		const finalSessionData = {
+		// Show game over screen
+		this.uiInterface.displayGameOver({
+			isWin,
+			totalScore: this.state.roundScore,
 			levelsCompleted: this.state.currAnte - 1, // Completed antes
-			sessionScore: this.state.roundScore,
-			gameInProgress: false,
-		};
-
-		this.gameStorage.updateSession(finalSessionData);
-
-		// Update lifetime statistics
-		const currentStats = this.gameStorage.getStats();
-		if (this.state.currAnte > currentStats.highestAnteReached) {
-			this.gameStorage.updateStat(
-				"highestAnteReached",
-				this.state.currAnte - currentStats.highestAnteReached
-			);
-		}
-		if (this.state.roundScore > currentStats.highestRoundScore) {
-			this.gameStorage.updateStat(
-				"highestRoundScore",
-				this.state.roundScore - currentStats.highestRoundScore
-			);
-		}
-
-		// End the session and get final play time
-		const endedSession = this.gameStorage.endSession();
-
-		// Clear the saved game since it's over
-		this.gameStorage.clearCurrentGame();
-
-		// Show game over screen with statistics
-		if (endedSession) {
-			this.uiInterface.displayGameOver({
-				isWin,
-				totalScore: finalSessionData.sessionScore,
-				levelsCompleted: finalSessionData.levelsCompleted,
-				playTime: endedSession.playTime,
-			});
-		}
+		});
 	}
 }
 

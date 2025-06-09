@@ -41,47 +41,13 @@
 			Your browser does not support the audio element.
 		</audio>
 
-		<!-- Import GameStorage if using modules -->
-		<script type="module" src="scripts/backend/GameStorage.js"></script>
-
 		<script type="module">
-			// Import GameStorage
-			import { GameStorage } from "./scripts/backend/GameStorage.js";
-
-			// Initialize GameStorage
-			let gameStorage;
-
 			// Available background music tracks
 			const musicSources = ["./res/snd/track1.mp3", "./res/snd/track2.mp3"];
 			let currentMusicIndex = 1;
 
-			// Initialize storage when page loads
-			function initializeGameStorage() {
-				gameStorage = new GameStorage();
-			}
-
 			function setContent(html) {
 				document.getElementById("app").innerHTML = html;
-			}
-
-			// Function to get current stats from storage
-			function getCurrentStats() {
-				if (!gameStorage) return getDefaultStats();
-				return gameStorage.getStats();
-			}
-
-			// Default stats if storage isn't available
-			function getDefaultStats() {
-				return {
-					gamesStarted: 0,
-					gamesCompleted: 0,
-					highestAnteReached: 0,
-					highestRoundScore: 0,
-					totalHandsPlayed: 0,
-					totalJokersUsed: 0,
-					totalPlayTime: 0,
-					averageGameLength: 0,
-				};
 			}
 
 			/**
@@ -107,189 +73,16 @@
             <img src="res/img/card/joker/mirror_mask.png" alt="Joker Right" class="joker-card joker-right" style="--rotate:10deg;">
           </div>
           <div class="main-menu-buttons">
-            <button class="fancy-btn" onclick="showStartMenu()">Start Game</button>
-            <button class="fancy-btn" onclick="showSavedGames()">Saved Games</button>
-            <button class="fancy-btn" onclick="showStats()"> Stats</button>
+            <button class="fancy-btn" onclick="startGame()">Start Game</button>
           </div>
         </div>
       `);
-			};
-
-			/**
-			 * Displays the statistics screen.
-			 */
-			window.showStats = function () {
-				const stats = getCurrentStats();
-
-				// Format play time
-				const totalPlayTimeMs = stats.totalPlayTime || 0;
-				const totalPlayTimeSeconds = Math.floor(totalPlayTimeMs / 1000);
-				const totalPlayTimeMinutes = Math.floor(totalPlayTimeSeconds / 60);
-				const totalPlayTimeHours = Math.floor(totalPlayTimeMinutes / 60);
-				const playTimeFormatted = totalPlayTimeHours > 0 ? `${totalPlayTimeHours}h ${totalPlayTimeMinutes % 60}m` : `${totalPlayTimeMinutes}m ${totalPlayTimeSeconds % 60}s`;
-
-				const avgGameLengthMs = stats.averageGameLength || 0;
-				const avgGameLengthSeconds = Math.floor(avgGameLengthMs / 1000);
-				const avgGameLengthMinutes = Math.floor(avgGameLengthSeconds / 60);
-				const avgGameLengthFormatted = avgGameLengthMinutes > 0 ? `${avgGameLengthMinutes}m ${avgGameLengthSeconds % 60}s` : `${avgGameLengthSeconds}s`;
-
-				setContent(`
-        <div class="modal-overlay">
-          <div class="stats-container">
-            <h1 class="stats-title">STATISTICS</h1>
-            
-            <div class="stats-grid">
-              <div class="stat-item">
-                <div class="stat-label">GAMES STARTED</div>
-                <div class="stat-value">${stats.gamesStarted.toLocaleString()}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">GAMES COMPLETED</div>
-                <div class="stat-value">${stats.gamesCompleted.toLocaleString()}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">HIGHEST ANTE REACHED</div>
-                <div class="stat-value">${stats.highestAnteReached}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">HIGHEST ROUND SCORE</div>
-                <div class="stat-value">${stats.highestRoundScore.toLocaleString()}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">TOTAL HANDS PLAYED</div>
-                <div class="stat-value">${stats.totalHandsPlayed.toLocaleString()}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">TOTAL JOKERS USED</div>
-                <div class="stat-value">${stats.totalJokersUsed.toLocaleString()}</div>
-              </div>
-
-              <div class="stat-item">
-                <div class="stat-label">TOTAL PLAY TIME</div>
-                <div class="stat-value">${playTimeFormatted}</div>
-              </div>
-              
-              <div class="stat-item">
-                <div class="stat-label">AVERAGE GAME LENGTH</div>
-                <div class="stat-value">${avgGameLengthFormatted}</div>
-              </div>
-            </div>
-            
-            <div class="stats-button-container">
-              <button class="stats-back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
-            </div>
-          </div>
-        </div>
-      `);
-			};
-
-			/**
-			 * Displays the saved games screen.
-			 */
-			window.showSavedGames = function () {
-				const hasSavedGame = gameStorage && gameStorage.hasCurrentGame();
-				let saveInfo = "No saved game found.";
-
-				if (hasSavedGame) {
-					try {
-						const currentGameData = localStorage.getItem("currentGame");
-						const saveData = JSON.parse(currentGameData);
-						const saveDate = new Date(saveData.lastSaved).toLocaleString();
-						const ante = saveData.gameState.currAnte;
-						const blind = saveData.gameState.currBlind;
-						const score = saveData.gameState.roundScore;
-
-						saveInfo = `
-						<strong>Current Save:</strong><br>
-						Ante ${ante}, Blind ${blind}<br>
-						Score: ${score.toLocaleString()}<br>
-						Saved: ${saveDate}
-					`;
-					} catch (err) {
-						saveInfo = "Save data found but corrupted.";
-					}
-				}
-
-				setContent(`
-        <div class="modal-overlay modal-overlay-light">
-          <div class="modal-content">
-            <h2 class="modal-title">Saved Games</h2>
-            <div class="modal-text" style="text-align: left; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
-              ${saveInfo}
-            </div>
-            ${
-				hasSavedGame
-					? `
-              <button class="fancy-btn full-width mb-075" onclick="resumeGame()">▶ Load Saved Game</button>
-              <button class="fancy-btn full-width mb-075" onclick="clearSavedGame()" style="background: linear-gradient(145deg, #dc3545, #c82333);">🗑️ Clear Saved Game</button>
-            `
-					: ""
-			}
-            <button class="fancy-btn full-width mt-1" onclick="showMainMenu()">⬅ Back</button>
-          </div>
-        </div>
-      `);
-			};
-
-			/**
-			 * Clears the saved game after confirmation.
-			 */
-			window.clearSavedGame = function () {
-				if (confirm("Are you sure you want to delete your saved game? This action cannot be undone.")) {
-					if (gameStorage) {
-						gameStorage.clearCurrentGame();
-						showSavedGames(); // Refresh the screen
-					}
-				}
-			};
-
-			/**
-			 * Displays the start menu.
-			 */
-			window.showStartMenu = function () {
-				const hasSavedGame = gameStorage && gameStorage.hasCurrentGame();
-
-				setContent(`
-        <div class="modal-overlay modal-overlay-light">
-          <div class="modal-content text-center">
-            <h2 class="modal-title">Start Game</h2>
-            <button class="fancy-btn full-width mb-075" onclick="startGame()">🆕 New Game</button>
-            <button class="fancy-btn full-width mb-075" onclick="resumeGame()" ${!hasSavedGame ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ""}>▶ Resume</button>
-            <button class="fancy-btn full-width" onclick="showMainMenu()">⬅ Back</button>
-          </div>
-        </div>
-      `);
-			};
-
-			/**
-			 * Resumes a saved game.
-			 */
-			window.resumeGame = function () {
-				if (!gameStorage || !gameStorage.hasCurrentGame()) {
-					alert("No saved game found!");
-					return;
-				}
-				startGameWithOptions({ loadSaved: true });
 			};
 
 			/**
 			 * Starts a new game by loading it into an iframe.
 			 */
 			window.startGame = function () {
-				startGameWithOptions({ loadSaved: false });
-			};
-
-			/**
-			 * Starts the game with specified options.
-			 * @param {object} options - Game start options
-			 * @param {boolean} options.loadSaved - Whether to load a saved game
-			 */
-			function startGameWithOptions(options = {}) {
 				const appDiv = document.getElementById("app");
 				appDiv.innerHTML = ""; // Clear previous content (e.g., start menu)
 				appDiv.className = ""; // Remove 'menu-content' or other classes
@@ -302,7 +95,7 @@
 				appDiv.style.overflow = "hidden"; // Prevent scrollbars on #app if iframe is exact fit
 
 				const iframe = document.createElement("iframe");
-				iframe.src = `gameplay.html${options.loadSaved ? "?load=true" : ""}`;
+				iframe.src = "gameplay.html";
 				iframe.style.width = "100%";
 				iframe.style.height = "100%"; // Iframe fills the re-styled #app
 				iframe.style.border = "none";
@@ -312,7 +105,7 @@
 
 				// Hide decorative cards as they might overlap or be distracting
 				document.querySelectorAll(".card-decor").forEach((card) => (card.style.display = "none"));
-			}
+			};
 
 			/**
 			 * Returns the array of available music sources.
@@ -351,7 +144,6 @@
 
 			// Initialize the page and set up event listeners
 			window.onload = () => {
-				initializeGameStorage();
 				const preferredIndex = localStorage.getItem("preferredMusicIndex");
 				if (preferredIndex !== null) {
 					currentMusicIndex = parseInt(preferredIndex, 10);

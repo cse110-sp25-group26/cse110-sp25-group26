@@ -40,7 +40,7 @@ export class WebUI extends UIInterface {
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
 		this.discardButton = document.getElementById("discard-selected-cards");
-		this.saveButton = document.getElementById("save-game");
+
 		this.infoButton = document.getElementById("info");
 		this.optionsButton = document.getElementById("options");
 
@@ -77,9 +77,7 @@ export class WebUI extends UIInterface {
 				this.onDiscardSelected()
 			);
 		}
-		if (this.saveButton) {
-			this.saveButton.addEventListener("click", () => this.saveGame());
-		}
+
 		if (this.infoButton) {
 			this.infoButton.addEventListener("click", () => this.showInfo());
 		}
@@ -258,23 +256,23 @@ export class WebUI extends UIInterface {
 	 */
 	getContainer(containerName) {
 		switch (containerName) {
-		case "handMain":
-			return this.playerHandContainer;
-		case "handPlayed":
-			return this.playedCardsContainer;
-		case "handJoker":
-			return this.jokersContainer;
-		case "handConsumable":
-			return this.consumablesContainer;
-		case "deck":
-			return null; // Cards going to deck are removed from UI
-		case "discard_pile":
-			return null; // Cards going to discard are removed from UI
-		case "offscreen":
-			return null; // Cards going offscreen are removed from UI
-		default:
-			console.warn(`Unknown container: ${containerName}`);
-			return null;
+			case "handMain":
+				return this.playerHandContainer;
+			case "handPlayed":
+				return this.playedCardsContainer;
+			case "handJoker":
+				return this.jokersContainer;
+			case "handConsumable":
+				return this.consumablesContainer;
+			case "deck":
+				return null; // Cards going to deck are removed from UI
+			case "discard_pile":
+				return null; // Cards going to discard are removed from UI
+			case "offscreen":
+				return null; // Cards going offscreen are removed from UI
+			default:
+				console.warn(`Unknown container: ${containerName}`);
+				return null;
 		}
 	}
 
@@ -497,12 +495,18 @@ export class WebUI extends UIInterface {
 		// Clear all card elements
 		this.cardElements.clear();
 
-		// Clear containers
+		// Clear all containers
 		if (this.playerHandContainer && this.playerHandContainer.clearCards) {
 			this.playerHandContainer.clearCards();
 		}
 		if (this.playedCardsContainer && this.playedCardsContainer.clearCards) {
 			this.playedCardsContainer.clearCards();
+		}
+		if (this.jokersContainer && this.jokersContainer.clearCards) {
+			this.jokersContainer.clearCards();
+		}
+		if (this.consumablesContainer && this.consumablesContainer.clearCards) {
+			this.consumablesContainer.clearCards();
 		}
 
 		// Reset status
@@ -538,16 +542,6 @@ export class WebUI extends UIInterface {
 		this.canPlay = false;
 		if (this.playButton) this.playButton.disabled = true;
 		if (this.discardButton) this.discardButton.disabled = true;
-	}
-
-	/**
-	 * @function saveGame
-	 * @description Triggers the save game functionality
-	 */
-	saveGame() {
-		if (this.gameHandler) {
-			this.gameHandler.saveGame();
-		}
 	}
 
 	/**
@@ -616,25 +610,13 @@ export class WebUI extends UIInterface {
 						<label style="display: block; margin-bottom: 10px;">Background Music:</label>
 						<select id="music-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
 							<option value="0" ${
-	currentMusicIndex === 0 ? "selected" : ""
-}>Track 1 (Default)</option>
+								currentMusicIndex === 0 ? "selected" : ""
+							}>Track 1 (Default)</option>
 							<option value="1" ${currentMusicIndex === 1 ? "selected" : ""}>Track 2</option>
 						</select>
 					</div>
 					
-					<h3 style="color: #d4af37; margin-bottom: 15px;">💾 Save Management</h3>
-					<div style="margin-bottom: 20px;">
-						<button id="save-current-game" style="
-							background: linear-gradient(45deg, #27ae60, #2ecc71);
-							color: white; border: none; padding: 10px 20px; 
-							border-radius: 6px; cursor: pointer; margin-right: 10px;
-						">💾 Save Current Game</button>
-						<button id="clear-save-data" style="
-							background: linear-gradient(45deg, #e74c3c, #c0392b);
-							color: white; border: none; padding: 10px 20px; 
-							border-radius: 6px; cursor: pointer;
-						">🗑️ Clear Save Data</button>
-					</div>
+
 					
 					<h3 style="color: #d4af37; margin-bottom: 15px;">🏠 Navigation</h3>
 					<button id="return-to-menu" style="
@@ -661,9 +643,7 @@ export class WebUI extends UIInterface {
 		// Add event listeners for the option buttons
 		setTimeout(() => {
 			const musicSelect = document.getElementById("music-select");
-			const saveCurrentGame =
-				document.getElementById("save-current-game");
-			const clearSaveData = document.getElementById("clear-save-data");
+
 			const returnToMenu = document.getElementById("return-to-menu");
 
 			if (musicSelect) {
@@ -679,32 +659,11 @@ export class WebUI extends UIInterface {
 				});
 			}
 
-			if (saveCurrentGame) {
-				saveCurrentGame.addEventListener("click", () => {
-					this.saveGame();
-				});
-			}
-
-			if (clearSaveData) {
-				clearSaveData.addEventListener("click", () => {
-					if (
-						confirm(
-							"Are you sure you want to clear all save data? This cannot be undone."
-						)
-					) {
-						if (this.gameHandler && this.gameHandler.gameStorage) {
-							this.gameHandler.gameStorage.clearCurrentGame();
-							this.showMessage("Save data cleared successfully!");
-						}
-					}
-				});
-			}
-
 			if (returnToMenu) {
 				returnToMenu.addEventListener("click", () => {
 					if (
 						confirm(
-							"Return to main menu? Any unsaved progress will be lost."
+							"Return to main menu? Your current game will be lost."
 						)
 					) {
 						this.exitGame();
@@ -888,8 +847,8 @@ export class WebUI extends UIInterface {
 
 		content.innerHTML = `
 			<h1 style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: ${
-	isWin ? "#27ae60" : "#e74c3c"
-};">
+				isWin ? "#27ae60" : "#e74c3c"
+			};">
 				${isWin ? "🎉 VICTORY! 🎉" : "💀 GAME OVER 💀"}
 			</h1>
 			<div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; margin: 20px 0;">

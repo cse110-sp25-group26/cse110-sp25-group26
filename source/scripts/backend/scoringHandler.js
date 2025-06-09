@@ -149,9 +149,6 @@ export class scoringHandler {
 
 		this.handler.state.handsPlayed++;
 
-		// Update session tracking for hands played
-		this.handler.gameStorage.updateStat("totalHandsPlayed", 1);
-
 		this.handler.uiInterface.updateScorekeeper({
 			handsRemaining:
 				this.handler.state.totalHands - this.handler.state.handsPlayed,
@@ -231,3 +228,4 @@ export class scoringHandler {
 		);
 	}
 }
+
