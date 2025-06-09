@@ -300,8 +300,6 @@ class OddRod extends Joker {
 }
 Joker.registerJoker("odd_rod", OddRod);
 
-// TODO: Softie needs a way to detect soft aces
-
 /**
  * @classdesc Mirror Mask, copies the effect of the Joker to its left.
  * @augments Joker
@@ -346,8 +344,6 @@ class MirrorMask extends Joker {
 	}
 }
 Joker.registerJoker("mirror_mask", MirrorMask);
-
-// TODO: Bust Insurance needs a way to check for and cancel a Bust
 
 /**
  * @classdesc Stacked Deck, draws a card at the start of each round.
@@ -597,12 +593,6 @@ class Overclock extends Joker {
 }
 Joker.registerJoker("overclock", Overclock);
 
-// TODO: Phantom Hand
-
-// TODO: Infinity Mirror
-
-// TODO: Noir Banker
-
 /**
  * @classdesc Event Horizon, multiplies the current multiplier by itself.
  * @augments Joker
@@ -710,5 +700,3 @@ class Hiccup extends Joker {
 	}
 }
 Joker.registerJoker("hiccup", Hiccup);
-
-// TODO: Penny Pincher

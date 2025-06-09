@@ -95,7 +95,6 @@ export class gameHandler {
 			discardCount: 4,
 
 			// Blind requirements
-			// TODO: Determine the algorithm and update these values accordingly per ante
 			blindRequirements: [40, 60, 80],
 			blindRewards: [4, 6, 8],
 
@@ -347,9 +346,6 @@ export class gameHandler {
 			const joker = Joker.newJoker(randomJokerType);
 			this.state.hands.joker.addCard(joker);
 
-			// Track joker usage stats
-			this.gameStorage.updateStat("totalJokersUsed", 1);
-
 			this.uiInterface.createUIel(joker);
 			this.uiInterface.moveMultiple([joker], "deck", "handJoker", 0);
 			joker.UIel.setTooltipPosition("below");
@@ -384,7 +380,6 @@ export class gameHandler {
 
 		const baseMoney = this.state.blindRewards[this.state.currBlind - 1];
 
-		// TODO: Calculate more extras
 		const extras = [];
 		// Add a unit for each hand remaining
 		if (this.state.totalHands - this.state.handsPlayed > 0) {
@@ -423,8 +418,7 @@ export class gameHandler {
 			this.state.handsPlayed = 0;
 			this.state.discardsUsed = 0;
 
-			// TODO: Add a proper formula for calculating the next blind requirements and rewards.
-			// This temporary one just multiplies by 1.5
+			// Multiply requirements and rewards by 1.5 for the next ante
 			this.state.blindRequirements = this.state.blindRequirements.map(
 				(req) => Math.ceil(req * 1.5)
 			);
@@ -486,7 +480,7 @@ export class gameHandler {
 			this.state.currentBlindName = "Big Blind";
 		} else if (this.state.currBlind == 3) {
 			// TODO: Calculate boss blind and name
-			this.state.currentBlindName = "Random Blind";
+			this.state.currentBlindName = "Boss Blind";
 		}
 
 		this.uiInterface.updateScorekeeper({

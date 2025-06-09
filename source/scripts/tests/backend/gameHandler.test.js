@@ -295,8 +295,6 @@ describe("gameHandler", () => {
 		expect(hasOverlap).toBe(false);
 	});
 
-	// TODO: Scoring tests
-
 	test("scoreHand calculates score correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
