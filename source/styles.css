@@ -180,6 +180,34 @@ body {
   box-shadow: 0 0 20px rgba(212, 175, 55, 1);
 }
 
+/* Options Modal Styles */
+#options-menu-modal {
+  display: none; /* Hidden by default */
+}
+
+#options-menu-modal .modal-content {
+  background-color: #f0e6d2;
+  border: 2px solid #5a4f41;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+#options-menu-modal .modal-title {
+  font-family: 'Cardo', serif;
+  font-size: 2.5rem;
+  color: #5a4f41;
+}
+
+#options-menu-modal .options-grid {
+  margin-bottom: 1.5rem;
+}
+
+#options-menu-modal label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: #5a4f41;
+}
+
 /* Mobile responsive styles */
 @media (max-width: 768px) {
   .stats-title {
