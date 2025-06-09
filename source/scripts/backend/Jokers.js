@@ -100,7 +100,14 @@ export class Joker extends Card {
 	 */
 	getDescription() {
 		// Default description, individual jokers should override this
-		return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>No description available.`;
+		try {
+			return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
+		} catch {
+			if (this.constructor.name) {
+				return `<b>${this.constructor.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
+			}
+			return `<b>Joker</b><br>Loading description...`;
+		}
 	}
 
 	/* eslint-disable no-unused-vars */
@@ -109,7 +116,7 @@ export class Joker extends Card {
 	 * @param {JokerParams} params - The parameters for the joker event.
 	 */
 	onRoundStart(params) { }
-	
+
 
 	/**
 	 * Called when the blind phase starts.
@@ -176,6 +183,7 @@ class LuckyRabbit extends Joker {
 
 	/** @inheritdoc */
 	onDraw(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 		params.scoringHandler.addChips(params, 2);
 	}
 
@@ -198,6 +206,7 @@ class StickShift extends Joker {
 
 	/** @inheritdoc */
 	onJokerEnter(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 		params.gameHandler.state.discardCount += 1;
 	}
 
@@ -225,6 +234,7 @@ class PiggyBank extends Joker {
 
 	/** @inheritdoc */
 	onJokerEnter(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 		params.gameHandler.state.interestCap += 1;
 	}
 
@@ -253,6 +263,7 @@ class EvenSteven extends Joker {
 	/** @inheritdoc */
 	onScoringEnd(params) {
 		if (params.score % 2 == 0) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, 0.2);
 		}
 	}
@@ -277,6 +288,7 @@ class OddRod extends Joker {
 	/** @inheritdoc */
 	onScoringEnd(params) {
 		if (params.score % 2 == 1) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, 0.2);
 		}
 	}
@@ -287,8 +299,6 @@ class OddRod extends Joker {
 	}
 }
 Joker.registerJoker("odd_rod", OddRod);
-
-// TODO: Softie needs a way to detect soft aces
 
 /**
  * @classdesc Mirror Mask, copies the effect of the Joker to its left.
@@ -335,8 +345,6 @@ class MirrorMask extends Joker {
 }
 Joker.registerJoker("mirror_mask", MirrorMask);
 
-// TODO: Bust Insurance needs a way to check for and cancel a Bust
-
 /**
  * @classdesc Stacked Deck, draws a card at the start of each round.
  * @augments Joker
@@ -351,6 +359,7 @@ class StackedDeck extends Joker {
 	onRoundStart(params) {
 		const card = params.gameHandler.state.deck.drawCard();
 		if (card) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.gameHandler.state.hands.main.addCard(card);
 			params.gameHandler.uiInterface.createUIel(card);
 			params.gameHandler.moveMultiple([card], "deck", "handMain", 0);
@@ -383,6 +392,7 @@ class CardCounter extends Joker {
 		const card = params.card;
 		if (!this.seen.has(card.type + ' of ' + card.suit)) {
 			this.seen.add(card.type + ' of ' + card.suit);
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, 0.1);
 		}
 	}
@@ -408,6 +418,7 @@ class FaceValue extends Joker {
 	onCardScore(params) {
 		const type = params.card.type;
 		if (type == "A" || type == "J" || type == "Q" || type == "K") {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addChips(params, 1);
 		}
 	}
@@ -432,6 +443,7 @@ class TwentyOneder extends Joker {
 	/** @inheritdoc */
 	onScoringEnd(params) {
 		if (params.score == 21 && calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, 0.5);
 		}
 	}
@@ -492,15 +504,15 @@ class Blueprint extends Joker {
 Joker.registerJoker("blueprint", Blueprint);
 
 /**
- * @classdesc Martingale, increases multiplier for consecutive zero scores.
+ * @classdesc Martingale, increases multiplier for consecutive low scores.
  * @augments Joker
- * @property {number} lastRoundsZero - The count of consecutive rounds with a score of zero.
+ * @property {number} lastRoundsZero - The count of consecutive rounds with a score below 5.
  */
 class Martingale extends Joker {
 	/** @class */
 	constructor() {
 		super("martingale");
-		this.lastRoundsZero = 0;
+		this.lastRoundsLow = 0;
 	}
 
 	/* eslint-disable no-unused-vars */
@@ -512,18 +524,22 @@ class Martingale extends Joker {
 
 	/** @inheritdoc */
 	onScoringStart(params) {
-		if (params.score == 0) {
-			this.lastRoundsZero += 1;
-			params.scoringHandler.addMult(params, 4 / (this.lastRoundsZero));
+		params.scoringHandler.addMult(params, 4 / (this.lastRoundsLow));
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score < 5) {
+			this.lastRoundsLow += 1;
 		} else {
-			this.lastRoundsZero = 0;
+			this.lastRoundsLow = 0;
 		}
 	}
 
 	/** @inheritdoc */
 	getDescription() {
-		const multiplier = this.lastRoundsZero > 0 ? (4 / this.lastRoundsZero).toFixed(1) : "4.0";
-		return `<b>Martingale</b><br>If your score is 0, gain !<t(+${multiplier})!>. Decreases with consecutive zero scores.<br>Current consecutive zeros: ${this.lastRoundsZero}`;
+		const multiplier = this.lastRoundsLow > 0 ? (4 / this.lastRoundsLow).toFixed(1) : "4.0";
+		return `<b>Martingale</b><br>If your score is below 5, gain !<t(+${multiplier})!>. Decreases with consecutive low scores.<br>Current consecutive low scores: ${this.lastRoundsLow}`;
 	}
 }
 Joker.registerJoker("martingale", Martingale);
@@ -543,6 +559,7 @@ class WildcardJoker extends Joker {
 		if (params.score < 21) {
 			const remaining = 21 - params.score;
 			const addValue = Math.floor(Math.random() * (remaining + 1));
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addChips(params, addValue);
 		}
 	}
@@ -567,6 +584,7 @@ class Overclock extends Joker {
 	/** @inheritdoc */
 	onScoringStart(params) {
 		if (params.gameHandler.state.hands.played.cards.length > 5) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, (params.gameHandler.state.hands.played.cards.length - 5) * 0.5);
 		}
 	}
@@ -577,12 +595,6 @@ class Overclock extends Joker {
 	}
 }
 Joker.registerJoker("overclock", Overclock);
-
-// TODO: Phantom Hand
-
-// TODO: Infinity Mirror
-
-// TODO: Noir Banker
 
 /**
  * @classdesc Event Horizon, multiplies the current multiplier by itself.
@@ -596,6 +608,7 @@ class EventHorizon extends Joker {
 
 	/** @inheritdoc */
 	onScoringEnd(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 		params.scoringHandler.mulMult(params, params.gameHandler.state.handMult);
 	}
 
@@ -620,6 +633,7 @@ class GlitchKing extends Joker {
 	onScoringEnd(params) {
 		if (params.score > 2147483647) {
 			const multiplier = 0.5 + Math.random() * 2.5;
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.mulMult(params, multiplier);
 		}
 	}
@@ -653,6 +667,7 @@ class Snowballer extends Joker {
 	/** @inheritdoc */
 	onScoringEnd(params) {
 		if (this.snowball > 0) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addMult(params, this.snowball);
 		}
 	}
@@ -677,6 +692,7 @@ class Hiccup extends Joker {
 	/** @inheritdoc */
 	onScoringStart(params) {
 		if (params.gameHandler.state.hands.played.cards.length > 7) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
 			params.scoringHandler.addChips(params, 1);
 		}
 	}
@@ -687,5 +703,3 @@ class Hiccup extends Joker {
 	}
 }
 Joker.registerJoker("hiccup", Hiccup);
-
-// TODO: Penny Pincher

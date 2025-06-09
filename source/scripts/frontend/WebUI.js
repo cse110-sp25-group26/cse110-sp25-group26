@@ -40,6 +40,20 @@ export class WebUI extends UIInterface {
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
 		this.discardButton = document.getElementById("discard-selected-cards");
+		this.optionsButton = document.getElementById("options");
+
+		// Modals
+		this.optionsModal = document.getElementById("options-modal");
+		this.closeOptionsButton = document.getElementById("close-options");
+		this.volumeSlider = document.getElementById("volume-slider");
+		this.muteButton = document.getElementById("game-mute-btn");
+		this.mainMenuButton = document.getElementById("main-menu-btn");
+
+		// Game Over Modal
+		this.gameOverModal = document.getElementById("game-over-modal");
+		this.gameOverMessage = document.getElementById("game-over-message");
+		this.playAgainButton = document.getElementById("play-again-btn");
+		this.gameOverMenuButton = document.getElementById("game-over-menu-btn");
 
 		// Scorekeeper elements
 		this.goalScoreEl = document.getElementById("goal-score");
@@ -74,6 +88,50 @@ export class WebUI extends UIInterface {
 				this.onDiscardSelected()
 			);
 		}
+		if (this.optionsButton) {
+			this.optionsButton.addEventListener("click", () =>
+				this.showOptionsModal()
+			);
+		}
+		if (this.closeOptionsButton) {
+			this.closeOptionsButton.addEventListener("click", () =>
+				this.hideOptionsModal()
+			);
+		}
+		if (this.volumeSlider) {
+			this.volumeSlider.addEventListener("input", (e) =>
+				this.onVolumeChange(e)
+			);
+		}
+		if (this.muteButton) {
+			this.muteButton.addEventListener("click", () => this.onToggleMute());
+		}
+		if (this.mainMenuButton) {
+			this.mainMenuButton.addEventListener("click", () => this.exitGame());
+		}
+		if (this.playAgainButton) {
+			this.playAgainButton.addEventListener("click", () => this.gameHandler.resetGame());
+		}
+		if (this.gameOverMenuButton) {
+			this.gameOverMenuButton.addEventListener("click", () => this.exitGame());
+		}
+
+		// Listen for volume changes from the parent window
+		window.addEventListener('message', (event) => {
+			if (event.data && event.data.type === 'volumechange') {
+				const volume = event.data.volume;
+				if (this.volumeSlider) {
+					this.volumeSlider.value = volume;
+				}
+				if (this.muteButton) {
+					if (volume === 0) {
+						this.muteButton.classList.add("muted");
+					} else {
+						this.muteButton.classList.remove("muted");
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -435,8 +493,15 @@ export class WebUI extends UIInterface {
 	 * @param {string} message - The loss message
 	 */
 	displayLoss(message) {
-		alert(`Game Over!\n\n${message}`);
-		// Could show a proper modal here instead
+		if (this.gameOverModal && this.gameOverMessage) {
+			this.gameOverMessage.textContent = message;
+			this.gameOverModal.querySelector('.modal-title').textContent = "Better Luck Next Time!";
+			this.gameOverModal.style.display = "flex";
+			this.disallowPlay();
+		} else {
+			// Fallback to alert if modal isn't found
+			alert(`Game Over!\n\n${message}`);
+		}
 	}
 
 	/**
@@ -488,11 +553,22 @@ export class WebUI extends UIInterface {
 		if (this.playedCardsContainer && this.playedCardsContainer.clearCards) {
 			this.playedCardsContainer.clearCards();
 		}
+		if (this.jokersContainer && this.jokersContainer.clearCards) {
+			this.jokersContainer.clearCards();
+		}
+		if (this.consumablesContainer && this.consumablesContainer.clearCards) {
+			this.consumablesContainer.clearCards();
+		}
 
 		// Reset status
 		if (this.roundStatusEl) {
 			this.roundStatusEl.textContent = "Game Started";
 			this.roundStatusEl.style.color = "";
+		}
+
+		// Hide game over modal if it's visible
+		if (this.gameOverModal) {
+			this.gameOverModal.style.display = "none";
 		}
 	}
 
@@ -501,7 +577,12 @@ export class WebUI extends UIInterface {
 	 * @description Exit to main menu
 	 */
 	exitGame() {
-		window.location.href = "index.html";
+		if (window.parent && typeof window.parent.showMainMenu === 'function') {
+			window.parent.showMainMenu();
+		} else {
+			// Fallback for when not in an iframe
+			window.location.href = "index.html";
+		}
 	}
 
 	/**
@@ -522,6 +603,53 @@ export class WebUI extends UIInterface {
 		this.canPlay = false;
 		if (this.playButton) this.playButton.disabled = true;
 		if (this.discardButton) this.discardButton.disabled = true;
+	}
+
+	/**
+	 * @function showOptionsModal
+	 * @description Displays the options modal
+	 */
+	showOptionsModal() {
+		if (this.optionsModal) {
+			// Immediately update state when opening
+			if (window.parent && typeof window.parent.getMusicVolume === "function") {
+				const currentVolume = window.parent.getMusicVolume();
+				if (this.volumeSlider) this.volumeSlider.value = currentVolume;
+				if (this.muteButton) {
+					if (currentVolume === 0) this.muteButton.classList.add("muted");
+					else this.muteButton.classList.remove("muted");
+				}
+			}
+			this.optionsModal.style.display = "flex";
+		}
+	}
+
+	/**
+	 * @function hideOptionsModal
+	 * @description Hides the options modal
+	 */
+	hideOptionsModal() {
+		if (this.optionsModal) {
+			this.optionsModal.style.display = "none";
+		}
+	}
+
+	/**
+	 * @function onVolumeChange
+	 * @description Handles volume slider changes
+	 * @param {Event} e - The input event
+	 */
+	onVolumeChange(e) {
+		const volume = parseFloat(e.target.value);
+		window.parent.postMessage({ type: 'setvolume', volume: volume }, '*');
+	}
+
+	/**
+	 * @function onToggleMute
+	 * @description Handles the Mute button click
+	 */
+	onToggleMute() {
+		window.parent.postMessage({ type: 'togglemute' }, '*');
 	}
 }
 
