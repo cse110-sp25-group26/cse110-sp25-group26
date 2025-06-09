@@ -140,15 +140,7 @@ export class CardElement extends HTMLElement {
 		this._container.addEventListener("mousedown", this._onDragStart);
 		document.addEventListener("mousemove", this._onDragMove);
 		document.addEventListener("mouseup", this._onDragEnd);
-
-		this._cardFront.addEventListener("dblclick", () => {
-			if (this._wasDragged) return;
-			this.flip();
-		});
-		this._cardBack.addEventListener("dblclick", () => {
-			if (this._wasDragged) return;
-			this.flip();
-		});
+		
 		this._container.addEventListener(
 			"mouseenter",
 			this._onMouseEnterTooltip
