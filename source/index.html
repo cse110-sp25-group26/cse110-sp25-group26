@@ -148,7 +148,6 @@
           </div>
           <div class="main-menu-buttons">
             <button class="fancy-btn" onclick="showStartMenu()">Start Game</button>
-            <button class="fancy-btn" onclick="showSavedGames()">Saved Games</button>
             <button class="fancy-btn" onclick="showStats()"> Stats</button>
             <button class="fancy-btn" onclick="showOptionsMenu()">Options</button>
           </div>
@@ -202,21 +201,6 @@
             <div class="stats-button-container">
               <button class="stats-back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
             </div>
-          </div>
-        </div>
-      `);
-		}
-
-		/**
-		 * Displays the saved games screen.
-		 */
-		function showSavedGames() {
-			setContent(`
-        <div class="modal-overlay modal-overlay-light">
-          <div class="modal-content">
-            <h2 class="modal-title">Saved Games</h2>
-            <p class="modal-text">Saved game management will be implemented in task #47.</p>
-            <button class="fancy-btn full-width mt-1" onclick="showMainMenu()">⬅ Back</button>
           </div>
         </div>
       `);
