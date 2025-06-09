@@ -341,6 +341,7 @@ export class gameHandler {
 				"handJoker",
 				0
 			);
+			joker.UIel.setTooltipPosition('below');
 			joker.onJokerEnter({
 				gameHandler: this,
 				uiInterface: this.uiInterface,

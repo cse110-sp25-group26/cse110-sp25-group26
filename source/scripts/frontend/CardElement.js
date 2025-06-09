@@ -24,6 +24,7 @@ import { formatJokerDescription } from "../backend/Jokers.js";
  * @property {string} _preDragTransform - The original transform style of the card before dragging.
  * @property {string} _card - Mirror of the backend Card object associated with this element.
  * @property {boolean} _draggable - Indicates if the card is draggable.
+ * @property {string} _tooltipPosition - The position of the tooltip, either 'above' or 'below' the card.
  */
 export class CardElement extends HTMLElement {
 	/**
@@ -39,6 +40,7 @@ export class CardElement extends HTMLElement {
 
 		this._card = card;
 		this._draggable = draggable;
+		this._tooltipPosition = 'above'; // Default tooltip position
 
 		this._createDOM();
 		this._setupDragState();
@@ -249,8 +251,21 @@ export class CardElement extends HTMLElement {
 	 */
 	_onMouseEnterTooltip() {
 		this._tooltip.style.display = "block";
-		// Use innerHTML instead of textContent to support HTML in tooltips
 		this._tooltip.innerHTML = this.calculateTooltipText();
+
+		// Reset margins and positioning properties
+		this._tooltip.style.marginTop = "";
+		this._tooltip.style.marginBottom = "";
+		this._tooltip.style.top = "auto";
+		this._tooltip.style.bottom = "auto";
+
+		if (this._tooltipPosition === 'below') {
+			this._tooltip.style.top = "100%";
+			this._tooltip.style.marginTop = "5px"; // Margin below the card
+		} else {
+			this._tooltip.style.bottom = "100%";
+			this._tooltip.style.marginBottom = "5px"; // Margin above the card
+		}
 	}
 
 	/**
@@ -398,6 +413,19 @@ export class CardElement extends HTMLElement {
 		}
 
 		this._dragPreparationState = null; // Clean up
+	}
+
+	/**
+	 * Sets the position of the tooltip.
+	 * @param {('above'|'below')} position - The desired position of the tooltip.
+	 */
+	setTooltipPosition(position) {
+		if (position === 'above' || position === 'below') {
+			this._tooltipPosition = position;
+		} else {
+			console.warn(`Invalid tooltip position: ${position}. Defaulting to 'above'.`);
+			this._tooltipPosition = 'above';
+		}
 	}
 
 	/**

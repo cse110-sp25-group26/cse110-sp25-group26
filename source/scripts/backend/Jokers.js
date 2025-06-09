@@ -100,7 +100,14 @@ export class Joker extends Card {
 	 */
 	getDescription() {
 		// Default description, individual jokers should override this
-		return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>No description available.`;
+		try {
+			return `<b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
+		} catch {
+			if (this.constructor.name) {
+				return `<b>${this.constructor.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</b><br>${this.description || "No description available."}`;
+			}
+			return `<b>Joker</b><br>Loading description...`;
+		}
 	}
 
 	/* eslint-disable no-unused-vars */
