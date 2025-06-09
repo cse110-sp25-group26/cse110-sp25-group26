@@ -553,6 +553,12 @@ export class WebUI extends UIInterface {
 		if (this.playedCardsContainer && this.playedCardsContainer.clearCards) {
 			this.playedCardsContainer.clearCards();
 		}
+		if (this.jokersContainer && this.jokersContainer.clearCards) {
+			this.jokersContainer.clearCards();
+		}
+		if (this.consumablesContainer && this.consumablesContainer.clearCards) {
+			this.consumablesContainer.clearCards();
+		}
 
 		// Reset status
 		if (this.roundStatusEl) {
