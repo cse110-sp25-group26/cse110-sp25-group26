@@ -258,21 +258,21 @@ export class WebUI extends UIInterface {
 	 */
 	getContainer(containerName) {
 		switch (containerName) {
-			case "handMain":
-				return this.playerHandContainer;
-			case "handPlayed":
-				return this.playedCardsContainer;
-			case "handJoker":
-				return this.jokersContainer;
-			case "deck":
-				return null; // Cards going to deck are removed from UI
-			case "discard_pile":
-				return null; // Cards going to discard are removed from UI
-			case "offscreen":
-				return null; // Cards going offscreen are removed from UI
-			default:
-				console.warn(`Unknown container: ${containerName}`);
-				return null;
+		case "handMain":
+			return this.playerHandContainer;
+		case "handPlayed":
+			return this.playedCardsContainer;
+		case "handJoker":
+			return this.jokersContainer;
+		case "deck":
+			return null; // Cards going to deck are removed from UI
+		case "discard_pile":
+			return null; // Cards going to discard are removed from UI
+		case "offscreen":
+			return null; // Cards going offscreen are removed from UI
+		default:
+			console.warn(`Unknown container: ${containerName}`);
+			return null;
 		}
 	}
 
@@ -594,13 +594,14 @@ export class WebUI extends UIInterface {
 		let currentMusicIndex = 0;
 		try {
 			if (window.parent && window.parent.getAvailableMusic) {
-				const musicSources = window.parent.getAvailableMusic();
+				// Get available music sources for future use
+				window.parent.getAvailableMusic();
 				currentMusicIndex = parseInt(
 					localStorage.getItem("preferredMusicIndex") || "0",
 					10
 				);
 			}
-		} catch (e) {
+		} catch {
 			// Fallback if parent access fails
 		}
 
@@ -613,8 +614,8 @@ export class WebUI extends UIInterface {
 						<label style="display: block; margin-bottom: 10px;">Background Music:</label>
 						<select id="music-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
 							<option value="0" ${
-								currentMusicIndex === 0 ? "selected" : ""
-							}>Track 1 (Default)</option>
+	currentMusicIndex === 0 ? "selected" : ""
+}>Track 1 (Default)</option>
 							<option value="1" ${currentMusicIndex === 1 ? "selected" : ""}>Track 2</option>
 						</select>
 					</div>
@@ -885,8 +886,8 @@ export class WebUI extends UIInterface {
 
 		content.innerHTML = `
 			<h1 style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: ${
-				isWin ? "#27ae60" : "#e74c3c"
-			};">
+	isWin ? "#27ae60" : "#e74c3c"
+};">
 				${isWin ? "🎉 VICTORY! 🎉" : "💀 GAME OVER 💀"}
 			</h1>
 			<div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; margin: 20px 0;">

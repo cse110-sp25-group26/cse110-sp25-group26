@@ -284,7 +284,7 @@ export class GameStorage {
 		try {
 			const data = localStorage.getItem(this.currentGameKey);
 			return data !== null;
-		} catch (err) {
+		} catch {
 			return false;
 		}
 	}

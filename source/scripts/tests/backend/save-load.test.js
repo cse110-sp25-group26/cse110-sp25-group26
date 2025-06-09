@@ -9,42 +9,108 @@ import { gameHandler } from "../../backend/gameHandler.js";
  * Mock UI Interface for testing
  */
 class MockUI {
+	/**
+	 * @class
+	 * @description Creates a mock UI interface for testing
+	 */
 	constructor() {
 		this.messages = [];
 		this.gameHandler = null;
 	}
 
+	/**
+	 * @function showMessage
+	 * @description Displays a message to the user
+	 * @param {string} message - The message to display
+	 */
 	showMessage(message) {
 		this.messages.push(message);
 		console.log("UI Message:", message);
 	}
 
-	// Stub methods for testing
+	/**
+	 * @function newGame
+	 * @description Mock method for starting a new game
+	 */
 	newGame() {}
+
+	/**
+	 * @function updateScorekeeper
+	 * @description Mock method for updating scorekeeper display
+	 */
 	updateScorekeeper() {}
+
+	/**
+	 * @function allowPlay
+	 * @description Mock method for allowing player actions
+	 */
 	allowPlay() {}
+
+	/**
+	 * @function disallowPlay
+	 * @description Mock method for disallowing player actions
+	 */
 	disallowPlay() {}
+
+	/**
+	 * @function createUIel
+	 * @description Mock method for creating UI elements
+	 */
 	createUIel() {}
+
+	/**
+	 * @function removeUIel
+	 * @description Mock method for removing UI elements
+	 */
 	removeUIel() {}
+
+	/**
+	 * @function moveMultiple
+	 * @description Mock method for moving multiple cards
+	 */
 	moveMultiple() {}
+
+	/**
+	 * @function displayLoss
+	 * @description Mock method for displaying game loss
+	 */
 	displayLoss() {}
+
+	/**
+	 * @function displayWin
+	 * @description Mock method for displaying game win
+	 */
 	displayWin() {}
+
+	/**
+	 * @function displayMoney
+	 * @description Mock method for displaying money earned
+	 */
 	displayMoney() {}
+
+	/**
+	 * @function promptEndlessMode
+	 * @description Mock method for prompting endless mode
+	 * @returns {boolean} False for testing
+	 */
 	promptEndlessMode() {
 		return false;
 	}
+
+	/**
+	 * @function exitGame
+	 * @description Mock method for exiting the game
+	 */
 	exitGame() {}
+
+	/**
+	 * @function displayGameOver
+	 * @description Mock method for displaying game over screen
+	 */
 	displayGameOver() {}
 }
 
-import {
-	jest,
-	beforeEach,
-	afterEach,
-	expect,
-	test,
-	describe,
-} from "@jest/globals";
+import { beforeEach, afterEach, expect, test, describe } from "@jest/globals";
 
 describe("Save/Load Feature Tests", () => {
 	let storage;
