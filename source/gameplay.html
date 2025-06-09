@@ -96,6 +96,18 @@
 			</div>
 		</div>
 
+		<!-- Game Over Modal -->
+		<div id="game-over-modal" class="modal-overlay" style="display: none;">
+			<div class="modal-content">
+				<h2 class="modal-title">Game Over</h2>
+				<p id="game-over-message" class="modal-text"></p>
+				<div class="game-over-buttons">
+					<button class="fancy-btn" id="play-again-btn">Play Again</button>
+					<button class="fancy-btn" id="game-over-menu-btn">Main Menu</button>
+				</div>
+			</div>
+		</div>
+
 		<script type="module">
 			import { HandElement } from "./scripts/frontend/HandElement.js";
 			import { DeckElement } from "./scripts/frontend/DeckElement.js";

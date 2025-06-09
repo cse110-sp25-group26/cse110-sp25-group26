@@ -449,3 +449,15 @@ body {
 .mute-btn.muted .speaker-muted-icon {
 	display: block;
 }
+
+.game-over-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+
+#game-over-message {
+	color: #5a4f41;
+	font-size: 1.2rem;
+}

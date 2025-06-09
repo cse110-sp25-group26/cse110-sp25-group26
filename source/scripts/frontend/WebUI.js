@@ -49,6 +49,12 @@ export class WebUI extends UIInterface {
 		this.muteButton = document.getElementById("game-mute-btn");
 		this.mainMenuButton = document.getElementById("main-menu-btn");
 
+		// Game Over Modal
+		this.gameOverModal = document.getElementById("game-over-modal");
+		this.gameOverMessage = document.getElementById("game-over-message");
+		this.playAgainButton = document.getElementById("play-again-btn");
+		this.gameOverMenuButton = document.getElementById("game-over-menu-btn");
+
 		// Scorekeeper elements
 		this.goalScoreEl = document.getElementById("goal-score");
 		this.roundScoreEl = document.getElementById("round-score");
@@ -102,6 +108,12 @@ export class WebUI extends UIInterface {
 		}
 		if (this.mainMenuButton) {
 			this.mainMenuButton.addEventListener("click", () => this.exitGame());
+		}
+		if (this.playAgainButton) {
+			this.playAgainButton.addEventListener("click", () => this.gameHandler.resetGame());
+		}
+		if (this.gameOverMenuButton) {
+			this.gameOverMenuButton.addEventListener("click", () => this.exitGame());
 		}
 
 		// Listen for volume changes from the parent window
@@ -481,8 +493,15 @@ export class WebUI extends UIInterface {
 	 * @param {string} message - The loss message
 	 */
 	displayLoss(message) {
-		alert(`Game Over!\n\n${message}`);
-		// Could show a proper modal here instead
+		if (this.gameOverModal && this.gameOverMessage) {
+			this.gameOverMessage.textContent = message;
+			this.gameOverModal.querySelector('.modal-title').textContent = "Better Luck Next Time!";
+			this.gameOverModal.style.display = "flex";
+			this.disallowPlay();
+		} else {
+			// Fallback to alert if modal isn't found
+			alert(`Game Over!\n\n${message}`);
+		}
 	}
 
 	/**
@@ -539,6 +558,11 @@ export class WebUI extends UIInterface {
 		if (this.roundStatusEl) {
 			this.roundStatusEl.textContent = "Game Started";
 			this.roundStatusEl.style.color = "";
+		}
+
+		// Hide game over modal if it's visible
+		if (this.gameOverModal) {
+			this.gameOverModal.style.display = "none";
 		}
 	}
 
