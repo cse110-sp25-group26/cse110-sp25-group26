@@ -90,6 +90,12 @@
 							</svg>
 						</div>
 					</div>
+					
+					<label for="game-music-select">Music Track</label>
+					<select id="game-music-select" class="music-select">
+						<option value="0">BGM 1</option>
+						<option value="1">BGM 2</option>
+					</select>
 				</div>
 				<button class="fancy-btn full-width mt-1" id="main-menu-btn">Main Menu</button>
 				<button class="fancy-btn full-width mt-1" id="close-options">⬅ Back</button>
@@ -131,6 +137,41 @@
 				const storedVolume = localStorage.getItem('balatjack-volume');
 				return storedVolume !== null ? parseFloat(storedVolume) : 1.0; // Default to 1.0
 			}
+			
+			/**
+			 * Save music selection to localStorage
+			 * @param {number} index - Index of selected music
+			 */
+			function saveMusicSelectionToStorage(index) {
+				localStorage.setItem('balatjack-music', index);
+			}
+			
+			/**
+			 * Get music selection from localStorage
+			 * @returns {number} Index of selected music
+			 */
+			function getMusicSelectionFromStorage() {
+				const storedMusic = localStorage.getItem('balatjack-music');
+				return storedMusic !== null ? parseInt(storedMusic) : 2;
+			}
+			
+			/**
+			 * Set the music track in the parent window
+			 * @param {number} index - Index of the music track to play
+			 */
+			function setMusicTrack(index) {
+				// Save to localStorage
+				saveMusicSelectionToStorage(index);
+				
+				// Tell parent window to change track
+				window.parent.postMessage({ type: 'setMusicSource', index: index }, '*');
+				
+				// Update dropdown if it exists
+				const musicSelect = document.getElementById("game-music-select");
+				if (musicSelect) {
+					musicSelect.value = index;
+				}
+			}
 
 			// Initialize volume controls
 			function initializeVolumeControls() {
@@ -165,8 +206,21 @@
 					});
 				}
 				
+				// Initialize music selection dropdown
+				const musicSelect = document.getElementById('game-music-select');
+				if (musicSelect) {
+					// Set initial value from localStorage
+					const storedMusicIndex = getMusicSelectionFromStorage();
+					musicSelect.value = storedMusicIndex;
+					
+					// Add event listener for music selection change
+					musicSelect.addEventListener('change', function(e) {
+						setMusicTrack(parseInt(e.target.value));
+					});
+				}
+				
 				// Listen for volume changes from parent window
-				window.addEventListener('message', function(event) {
+				window.addEventListener("message", (event) => {
 					if (event.data && event.data.type === 'volumechange') {
 						if (volumeSlider) {
 							volumeSlider.value = event.data.volume;
@@ -200,6 +254,13 @@
 					const volumeSlider = document.getElementById('volume-slider');
 					if (volumeSlider) {
 						volumeSlider.value = storedVolume;
+					}
+					
+					// Get music selection from localStorage
+					const musicSelect = document.getElementById('game-music-select');
+					if (musicSelect) {
+						const storedMusicIndex = getMusicSelectionFromStorage();
+						musicSelect.value = storedMusicIndex;
 					}
 					
 					// Update mute button state

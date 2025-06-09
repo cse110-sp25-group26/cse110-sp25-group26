@@ -461,3 +461,21 @@ body {
 	color: #5a4f41;
 	font-size: 1.2rem;
 }
+
+.music-select {
+	width: 100%;
+	padding: 0.5rem;
+	border-radius: 4px;
+	background-color: #f0e6d2;
+	border: 1px solid #5a4f41;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.1rem;
+	cursor: pointer;
+	color: #5a4f41;
+}
+
+.music-select:focus {
+	outline: none;
+	border-color: #c8a379;
+	box-shadow: 0 0 5px rgba(200, 163, 121, 0.5);
+}

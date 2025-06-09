@@ -291,3 +291,20 @@ body {
 .mute-btn.muted .speaker-muted-icon {
 	display: block;
 }
+
+.music-select {
+	width: 100%;
+	padding: 0.5rem;
+	border-radius: 4px;
+	background-color: #fff;
+	border: 1px solid #5a4f41;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.1rem;
+	cursor: pointer;
+}
+
+.music-select:focus {
+	outline: none;
+	border-color: #d4af37;
+	box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}

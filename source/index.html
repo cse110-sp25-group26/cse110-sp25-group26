@@ -55,7 +55,7 @@
 			"./res/snd/track1.mp3",
 			"./res/snd/track2.wav"
 		];
-		let currentMusicIndex = 1;
+		let currentMusicIndex = 0;
 		let lastVolumeBeforeMute = 1;
 
 		/**
@@ -73,6 +73,23 @@
 		function getVolumeFromStorage() {
 			const storedVolume = localStorage.getItem('balatjack-volume');
 			return storedVolume !== null ? parseFloat(storedVolume) : 1.0; // Default to 1.0
+		}
+
+		/**
+		 * Save music selection to localStorage
+		 * @param {number} index - Index of selected music in musicSources array
+		 */
+		function saveMusicSelectionToStorage(index) {
+			localStorage.setItem('balatjack-music', index);
+		}
+
+		/**
+		 * Get music selection from localStorage
+		 * @returns {number} Index of selected music
+		 */
+		function getMusicSelectionFromStorage() {
+			const storedMusic = localStorage.getItem('balatjack-music');
+			return storedMusic !== null ? parseInt(storedMusic) : 0;
 		}
 
 		// Initialize storage when page loads
@@ -269,6 +286,15 @@
 				audio.src = musicSources[index];
 				audio.load();
 				audio.play().catch((error) => console.error("Audio playback failed for new source:", error));
+				
+				// Save selection to localStorage
+				saveMusicSelectionToStorage(index);
+				
+				// Update dropdown if it exists
+				const musicSelect = document.getElementById("menu-music-select");
+				if (musicSelect) {
+					musicSelect.value = index;
+				}
 			}
 		}
 
@@ -356,6 +382,14 @@
 				if (volumeSlider) {
 					volumeSlider.value = storedVolume;
 				}
+				
+				// Load music selection from localStorage
+				const musicSelect = document.getElementById("menu-music-select");
+				if (musicSelect) {
+					const storedMusicIndex = getMusicSelectionFromStorage();
+					musicSelect.value = storedMusicIndex;
+				}
+				
 				// Apply the stored volume
 				setMusicVolume(storedVolume);
 				modal.style.display = "flex";
@@ -381,12 +415,24 @@
 			// Load and apply volume from localStorage
 			const storedVolume = getVolumeFromStorage();
 			setMusicVolume(storedVolume);
+			
+			// Load and apply music selection from localStorage
+			const storedMusicIndex = getMusicSelectionFromStorage();
+			setMusicSource(storedMusicIndex);
 
 			// Set up options modal volume slider
 			const volumeSlider = document.getElementById("menu-volume-slider");
 			if (volumeSlider) {
 				volumeSlider.addEventListener("input", (e) => {
 					setMusicVolume(e.target.value);
+				});
+			}
+			
+			// Set up options modal music select
+			const musicSelect = document.getElementById("menu-music-select");
+			if (musicSelect) {
+				musicSelect.addEventListener("change", (e) => {
+					setMusicSource(parseInt(e.target.value));
 				});
 			}
 
@@ -401,6 +447,8 @@
 					toggleMute();
 				} else if (event.data && event.data.type === 'setvolume') {
 					setMusicVolume(event.data.volume);
+				} else if (event.data && event.data.type === 'setMusicSource') {
+					setMusicSource(event.data.index);
 				}
 			});
 
@@ -435,6 +483,12 @@
 						</svg>
 					</div>
 				</div>
+				
+				<label for="menu-music-select">Music Track</label>
+				<select id="menu-music-select" class="music-select">
+					<option value="0">BGM 1</option>
+					<option value="1">BGM 2</option>
+				</select>
 			</div>
 			<button class="fancy-btn full-width mt-1" onclick="hideOptionsMenu()">⬅ Back</button>
 		</div>
