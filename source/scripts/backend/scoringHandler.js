@@ -237,5 +237,29 @@ export class scoringHandler {
 			}`
 		);
 	}
+
+	/**
+	 * @function mulMult
+	 * @description Multiplies the current score by a multiplier, applying any other Joker
+	 *              effects that may change the value or affect other
+	 * 				scoring parameters.
+	 * @param {object} params - The parameters for multiplying the score.
+	 * @param {number} mult - The multiplier to apply.
+	 */
+	mulMult(params, mult) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handMult *= mult;
+		this.handler.uiInterface.updateScorekeeper({
+			handMult: this.handler.state.handMult,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`x${mult} Mult`],
+			["#FFFF00"]
+		);
+		console.log(
+			`Multiplied score by ${mult}. New multiplier: ${this.handler.state.handMult}`
+		);
+	}
 }
 
