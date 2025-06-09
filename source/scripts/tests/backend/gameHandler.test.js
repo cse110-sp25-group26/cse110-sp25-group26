@@ -2,10 +2,39 @@
  * @description Unit tests for the GameHandler class.
  */
 
-import { gameHandler } from '../../backend/gameHandler.js';
-import { Card } from '../../backend/Card.js';
-import { jest, beforeAll, afterAll, expect, test, describe } from '@jest/globals';
-import { UIInterface } from '../../backend/UIInterface.js';
+import { gameHandler } from "../../backend/gameHandler.js";
+import { Card } from "../../backend/Card.js";
+import {
+	jest,
+	beforeAll,
+	afterAll,
+	expect,
+	test,
+	describe,
+} from "@jest/globals";
+import { UIInterface } from "../../backend/UIInterface.js";
+
+// Mock localStorage
+const localStorageMock = (() => {
+	let store = {};
+	return {
+		getItem(key) {
+			return store[key] || null;
+		},
+		setItem(key, value) {
+			store[key] = value.toString();
+		},
+		removeItem(key) {
+			delete store[key];
+		},
+		clear() {
+			store = {};
+		},
+	};
+})();
+
+// Mock all localStorage for the browser
+global.localStorage = localStorageMock;
 
 const originalLog = console.log;
 const originalError = console.error;
@@ -64,7 +93,6 @@ class MockUIInterface extends UIInterface {
 	 */
 	scoreCard() {}
 
-
 	/**
 	 * @typedef {object} ScorekeeperData
 	 * @property {string} name - The name of the scorekeeper entry.
@@ -100,7 +128,9 @@ class MockUIInterface extends UIInterface {
 	 * @description Stub method for prompting endless mode.
 	 * @returns {boolean} - Stub return value.
 	 */
-	promptEndlessMode() { return false;}
+	promptEndlessMode() {
+		return false;
+	}
 
 	/**
 	 * @function disallowPlay
@@ -115,7 +145,7 @@ class MockUIInterface extends UIInterface {
 	allowPlay() {}
 }
 
-describe('gameHandler', () => {
+describe("gameHandler", () => {
 	beforeAll(() => {
 		// Temporarily disable console logs and errors
 		console.log = jest.fn();
@@ -128,7 +158,7 @@ describe('gameHandler', () => {
 		console.error = originalError;
 	});
 
-	test('dealCards fills the hand correctly', () => {
+	test("dealCards fills the hand correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -136,13 +166,17 @@ describe('gameHandler', () => {
 		handler.dealCards();
 
 		// Check if the main hand has the correct number of cards
-		expect(handler.state.hands.main.cards.length).toBe(handler.state.handSize);
+		expect(handler.state.hands.main.cards.length).toBe(
+			handler.state.handSize
+		);
 
 		// Check if the deck has the correct number of available cards
-		expect(handler.state.deck.availableCards.length).toBe(52 - handler.state.handSize);
+		expect(handler.state.deck.availableCards.length).toBe(
+			52 - handler.state.handSize
+		);
 	});
 
-	test('dealCards handles empty deck correctly', () => {
+	test("dealCards handles empty deck correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -158,7 +192,7 @@ describe('gameHandler', () => {
 		expect(handler.state.hands.main.cards.length).toBe(0);
 	});
 
-	test('selectCard toggles card selection correctly', () => {
+	test("selectCard toggles card selection correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -176,7 +210,7 @@ describe('gameHandler', () => {
 		expect(handler.state.hands.main.cards[0].isSelected).toBe(false);
 	});
 
-	test('selectCard handles invalid index correctly', () => {
+	test("selectCard handles invalid index correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -188,7 +222,7 @@ describe('gameHandler', () => {
 		expect(selectedCard).toBe(false);
 	});
 
-	test('discardCards handles no cards selected correctly', () => {
+	test("discardCards handles no cards selected correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -202,7 +236,7 @@ describe('gameHandler', () => {
 		expect(handler.state.hands.main.cards.length).toBe(5);
 	});
 
-	test('discardCards handles maximum discards reached correctly', () => {
+	test("discardCards handles maximum discards reached correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -227,7 +261,7 @@ describe('gameHandler', () => {
 		expect(handler.state.hands.main.cards).toEqual(originalCards);
 	});
 
-	test('discarding all cards empties the hand and deals new cards', () => {
+	test("discarding all cards empties the hand and deals new cards", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -250,9 +284,11 @@ describe('gameHandler', () => {
 
 		// Verify new cards are different from original cards
 		const newCards = handler.state.hands.main.cards;
-		const hasOverlap = newCards.some(newCard =>
-			originalCards.some(oldCard =>
-				oldCard.suit === newCard.suit && oldCard.type === newCard.type
+		const hasOverlap = newCards.some((newCard) =>
+			originalCards.some(
+				(oldCard) =>
+					oldCard.suit === newCard.suit &&
+					oldCard.type === newCard.type
 			)
 		);
 
@@ -261,7 +297,7 @@ describe('gameHandler', () => {
 
 	// TODO: Scoring tests
 
-	test('scoreHand calculates score correctly', () => {
+	test("scoreHand calculates score correctly", () => {
 		// Create a new gameHandler instance
 		const handler = new gameHandler(new MockUIInterface());
 
@@ -271,7 +307,7 @@ describe('gameHandler', () => {
 			new Card("hearts", "A"),
 			new Card("spades", "A"),
 			new Card("diamonds", "A"),
-			new Card("clubs", "A")
+			new Card("clubs", "A"),
 		];
 		handler.state.roundScore = 0;
 		handler.scoringHandler.scoreHand();
@@ -285,7 +321,7 @@ describe('gameHandler', () => {
 			new Card("hearts", "3"),
 			new Card("spades", "4"),
 			new Card("diamonds", "J"),
-			new Card("clubs", "A")
+			new Card("clubs", "A"),
 		];
 		handler.state.roundScore = 0;
 		handler.scoringHandler.scoreHand();
@@ -293,8 +329,8 @@ describe('gameHandler', () => {
 		expect(handler.state.roundScore).toBe(30);
 	});
 
-	describe('Integration Tests', () => {
-		test('Discarding cards modifies internal values as expected', () => {
+	describe("Integration Tests", () => {
+		test("Discarding cards modifies internal values as expected", () => {
 			// Make a gameHandler
 			const handler = new gameHandler(new MockUIInterface());
 
@@ -308,7 +344,10 @@ describe('gameHandler', () => {
 			const originalCards = [...handler.state.hands.main.cards];
 
 			// Select the first card
-			const selectedCard = handler.selectCard(handler.state.hands.main, 0);
+			const selectedCard = handler.selectCard(
+				handler.state.hands.main,
+				0
+			);
 			expect(selectedCard).toBe(true);
 			expect(handler.state.hands.main.cards[0].isSelected).toBe(true);
 
@@ -326,13 +365,23 @@ describe('gameHandler', () => {
 			expect(handler.state.hands.main.cards.length).toBe(5);
 
 			// Make sure the first card is no longer in the main hand
-			expect(handler.state.hands.main.cards.find(card => card.suit === firstCardType[0] && card.type === firstCardType[1])).toBeUndefined();
+			expect(
+				handler.state.hands.main.cards.find(
+					(card) =>
+						card.suit === firstCardType[0] &&
+						card.type === firstCardType[1]
+				)
+			).toBeUndefined();
 
 			// Verify non-selected cards remain unchanged
 			for (const nonSelectedCard of nonSelectedCards) {
-				expect(handler.state.hands.main.cards.some(card =>
-					card.suit === nonSelectedCard.suit && card.type === nonSelectedCard.type
-				)).toBe(true);
+				expect(
+					handler.state.hands.main.cards.some(
+						(card) =>
+							card.suit === nonSelectedCard.suit &&
+							card.type === nonSelectedCard.type
+					)
+				).toBe(true);
 			}
 
 			// Make sure the deck has 52 cards in allCards, 47 in availableCards, and 4 in usedCards
@@ -354,9 +403,11 @@ describe('gameHandler', () => {
 			expect(handler.state.hands.main.cards.length).toBe(5);
 
 			// Verify no overlap between old and new cards (completely new hand)
-			const hasOverlap = handler.state.hands.main.cards.some(newCard =>
-				beforeFullDiscardCards.some(oldCard =>
-					oldCard.suit === newCard.suit && oldCard.type === newCard.type
+			const hasOverlap = handler.state.hands.main.cards.some((newCard) =>
+				beforeFullDiscardCards.some(
+					(oldCard) =>
+						oldCard.suit === newCard.suit &&
+						oldCard.type === newCard.type
 				)
 			);
 			expect(hasOverlap).toBe(false);
@@ -377,12 +428,15 @@ describe('gameHandler', () => {
 			expect(handler.state.discardsUsed).toBe(2);
 
 			// Verify hand didn't change at all when no cards were selected
-			expect(handler.state.hands.main.cards).toEqual(beforeNoSelectionCards);
+			expect(handler.state.hands.main.cards).toEqual(
+				beforeNoSelectionCards
+			);
 
 			// Select a card
 			handler.selectCard(handler.state.hands.main, 0);
 			const thirdDiscardSelectedCard = handler.state.hands.main.cards[0];
-			const thirdDiscardNonSelectedCards = handler.state.hands.main.cards.filter((_, i) => i !== 0);
+			const thirdDiscardNonSelectedCards =
+				handler.state.hands.main.cards.filter((_, i) => i !== 0);
 
 			// Discard the selected card
 			handler.discardCards();
@@ -394,15 +448,23 @@ describe('gameHandler', () => {
 			expect(handler.state.hands.main.cards.length).toBe(5);
 
 			// Verify selected card was replaced
-			expect(handler.state.hands.main.cards.find(card =>
-				card.suit === thirdDiscardSelectedCard.suit && card.type === thirdDiscardSelectedCard.type
-			)).toBeUndefined();
+			expect(
+				handler.state.hands.main.cards.find(
+					(card) =>
+						card.suit === thirdDiscardSelectedCard.suit &&
+						card.type === thirdDiscardSelectedCard.type
+				)
+			).toBeUndefined();
 
 			// Verify non-selected cards remain unchanged
 			for (const nonSelectedCard of thirdDiscardNonSelectedCards) {
-				expect(handler.state.hands.main.cards.some(card =>
-					card.suit === nonSelectedCard.suit && card.type === nonSelectedCard.type
-				)).toBe(true);
+				expect(
+					handler.state.hands.main.cards.some(
+						(card) =>
+							card.suit === nonSelectedCard.suit &&
+							card.type === nonSelectedCard.type
+					)
+				).toBe(true);
 			}
 
 			// Discard all cards
@@ -425,7 +487,9 @@ describe('gameHandler', () => {
 			expect(handler.state.hands.main.cards.length).toBe(5); // no discard
 
 			// Verify the hand contains EXACTLY the same card objects (no changes at all)
-			expect(handler.state.hands.main.cards).toEqual(maxDiscardReachedCards);
+			expect(handler.state.hands.main.cards).toEqual(
+				maxDiscardReachedCards
+			);
 
 			// Final deck state
 			expect(handler.state.deck.availableCards.length).toBe(35);
