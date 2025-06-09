@@ -68,7 +68,7 @@
 			 */
 			function getVolumeFromStorage() {
 				const storedVolume = localStorage.getItem("balatjack-volume");
-				return storedVolume !== null ? parseFloat(storedVolume) : 1.0; // Default to 1.0
+				return storedVolume !== null ? parseFloat(storedVolume) : 0.5; // Default to 0.5
 			}
 
 			/**

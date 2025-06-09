@@ -2,6 +2,10 @@
 
 BalatJack is a lightweight, browser-based twist on Blackjack that we're building as the final project for CSE110 at UC San Diego. The focus: well-made code, a fun game, and a well-structured development process that keeps quality high despite a tight schedule.
 
+The game is simple - select some cards, play them, and earn some Chips - but don't go over 21! Each successful Blind Requirement reached, you'll get a random Joker to help you along. How far can you get before you miss the goal?
+
+## [Give the game a go here!](https://cse110-sp25-group26.github.io/cse110-sp25-group26/source/)
+
 <br>
 
 ## 🛣️ Sprint Roadmap
