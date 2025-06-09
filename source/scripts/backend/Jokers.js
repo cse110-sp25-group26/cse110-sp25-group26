@@ -499,15 +499,15 @@ class Blueprint extends Joker {
 Joker.registerJoker("blueprint", Blueprint);
 
 /**
- * @classdesc Martingale, increases multiplier for consecutive zero scores.
+ * @classdesc Martingale, increases multiplier for consecutive low scores.
  * @augments Joker
- * @property {number} lastRoundsZero - The count of consecutive rounds with a score of zero.
+ * @property {number} lastRoundsZero - The count of consecutive rounds with a score below 5.
  */
 class Martingale extends Joker {
 	/** @class */
 	constructor() {
 		super("martingale");
-		this.lastRoundsZero = 0;
+		this.lastRoundsLow = 0;
 	}
 
 	/* eslint-disable no-unused-vars */
@@ -519,18 +519,22 @@ class Martingale extends Joker {
 
 	/** @inheritdoc */
 	onScoringStart(params) {
-		if (params.score == 0) {
-			this.lastRoundsZero += 1;
-			params.scoringHandler.addMult(params, 4 / (this.lastRoundsZero));
+		params.scoringHandler.addMult(params, 4 / (this.lastRoundsLow));
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score < 5) {
+			this.lastRoundsLow += 1;
 		} else {
-			this.lastRoundsZero = 0;
+			this.lastRoundsLow = 0;
 		}
 	}
 
 	/** @inheritdoc */
 	getDescription() {
-		const multiplier = this.lastRoundsZero > 0 ? (4 / this.lastRoundsZero).toFixed(1) : "4.0";
-		return `<b>Martingale</b><br>If your score is 0, gain !<t(+${multiplier})!>. Decreases with consecutive zero scores.<br>Current consecutive zeros: ${this.lastRoundsZero}`;
+		const multiplier = this.lastRoundsLow > 0 ? (4 / this.lastRoundsLow).toFixed(1) : "4.0";
+		return `<b>Martingale</b><br>If your score is below 5, gain !<t(+${multiplier})!>. Decreases with consecutive low scores.<br>Current consecutive zeros: ${this.lastRoundsLow}`;
 	}
 }
 Joker.registerJoker("martingale", Martingale);
