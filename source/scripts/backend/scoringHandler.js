@@ -56,6 +56,7 @@ export class scoringHandler {
 			// ->UI: Call back to UI to play joker animation (likely also score animation)
 
 			this.handler.state.handScore += cardValue;
+			this.handler.state.handScore = Math.round(this.handler.state.handScore * 10) / 10;
 			this.handler.uiInterface.updateScorekeeper({
 				handScore: this.handler.state.handScore,
 			});
@@ -113,6 +114,7 @@ export class scoringHandler {
 			this.handler.uiInterface.displayBust();
 		} else {
 			const totalAdded = this.handler.state.handScore * this.handler.state.handMult;
+			this.handler.state.handScore = Math.round(totalAdded * 10) / 10;
 			this.handler.state.roundScore += totalAdded;
 
 			// Show visual feedback for successful scoring
@@ -184,6 +186,7 @@ export class scoringHandler {
 	addChips(params, chips) {
 		// TODO: Check for jokers that may affect this
 		this.handler.state.handScore += chips;
+		this.handler.state.handScore = Math.round(this.handler.state.handScore * 10) / 10;
 		this.handler.uiInterface.updateScorekeeper({
 			handScore: this.handler.state.handScore,
 		});
