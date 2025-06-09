@@ -37,6 +37,7 @@
 				<nav class="actions">
 					<button class="btn-pill" id="info">Info</button>
 					<button class="btn-pill" id="options">Options</button>
+					<button class="btn-pill" id="save-game">Save Game</button>
 				</nav>
 				<div class="bank-balance">$<span id="bank-amount">—</span></div>
 				<ul class="stats-list">
@@ -84,6 +85,10 @@
 			async function initializeGame() {
 				console.log("Initializing BalatJack game...");
 
+				// Check URL parameters for load saved game option
+				const urlParams = new URLSearchParams(window.location.search);
+				const shouldLoadSaved = urlParams.get("load") === "true";
+
 				// Ensure custom elements are defined
 				await customElements.whenDefined("hand-element");
 				await customElements.whenDefined("card-element");
@@ -110,6 +115,15 @@
 
 				// Create the game handler with our WebUI
 				const game = new gameHandler(webUI);
+
+				// If we should load a saved game, attempt to do so
+				if (shouldLoadSaved) {
+					console.log("Attempting to load saved game...");
+					const loadSuccess = game.loadGame();
+					if (!loadSuccess) {
+						console.log("Failed to load saved game, starting new game instead.");
+					}
+				}
 			}
 
 			// Initialize the game when DOM is ready
