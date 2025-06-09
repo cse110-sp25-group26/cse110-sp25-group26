@@ -115,9 +115,117 @@
 			import { WebUI } from "./scripts/frontend/WebUI.js";
 			import { gameHandler } from "./scripts/backend/gameHandler.js";
 
+			/**
+			 * Save volume setting to localStorage
+			 * @param {number} volume - Volume level (0-1)
+			 */
+			function saveVolumeToStorage(volume) {
+				localStorage.setItem('balatjack-volume', volume);
+			}
+
+			/**
+			 * Get volume setting from localStorage
+			 * @returns {number} Volume level (0-1)
+			 */
+			function getVolumeFromStorage() {
+				const storedVolume = localStorage.getItem('balatjack-volume');
+				return storedVolume !== null ? parseFloat(storedVolume) : 1.0; // Default to 1.0
+			}
+
+			// Initialize volume controls
+			function initializeVolumeControls() {
+				// Get volume from localStorage
+				const storedVolume = getVolumeFromStorage();
+				
+				// Set initial volume slider value
+				const volumeSlider = document.getElementById('volume-slider');
+				if (volumeSlider) {
+					volumeSlider.value = storedVolume;
+				}
+				
+				// Update mute button state
+				updateMuteButtonState(storedVolume);
+				
+				// Add event listener for volume change
+				volumeSlider.addEventListener('input', function(e) {
+					const volume = e.target.value;
+					// Send message to parent window
+					window.parent.postMessage({ type: 'setvolume', volume: volume }, '*');
+					// Save to localStorage
+					saveVolumeToStorage(volume);
+					// Update UI
+					updateMuteButtonState(volume);
+				});
+				
+				// Add event listener for mute button
+				const muteBtn = document.getElementById('game-mute-btn');
+				if (muteBtn) {
+					muteBtn.addEventListener('click', function() {
+						window.parent.postMessage({ type: 'togglemute' }, '*');
+					});
+				}
+				
+				// Listen for volume changes from parent window
+				window.addEventListener('message', function(event) {
+					if (event.data && event.data.type === 'volumechange') {
+						if (volumeSlider) {
+							volumeSlider.value = event.data.volume;
+						}
+						updateMuteButtonState(event.data.volume);
+						saveVolumeToStorage(event.data.volume);
+					}
+				});
+			}
+			
+			// Update mute button state based on volume
+			function updateMuteButtonState(volume) {
+				const muteBtn = document.getElementById('game-mute-btn');
+				if (muteBtn) {
+					if (parseFloat(volume) === 0) {
+						muteBtn.classList.add('muted');
+					} else {
+						muteBtn.classList.remove('muted');
+					}
+				}
+			}
+			
+			// Handle options button click
+			document.getElementById('options').addEventListener('click', function() {
+				const optionsModal = document.getElementById('options-modal');
+				if (optionsModal) {
+					// Get volume from localStorage
+					const storedVolume = getVolumeFromStorage();
+					
+					// Set volume slider to stored value
+					const volumeSlider = document.getElementById('volume-slider');
+					if (volumeSlider) {
+						volumeSlider.value = storedVolume;
+					}
+					
+					// Update mute button state
+					updateMuteButtonState(storedVolume);
+					
+					// Display the modal
+					optionsModal.style.display = 'flex';
+				}
+			});
+			
+			// Handle close options button click
+			document.getElementById('close-options').addEventListener('click', function() {
+				document.getElementById('options-modal').style.display = 'none';
+			});
+			
+			// Handle main menu button click
+			document.getElementById('main-menu-btn').addEventListener('click', function() {
+				window.parent.showMainMenu();
+			});
+
 			// Wait for DOM to be fully loaded and start the actual game
 			async function initializeGame() {
 				console.log("Initializing BalatJack game...");
+				
+				// Initialize volume controls
+				initializeVolumeControls();
 
 				// Ensure custom elements are defined
 				await customElements.whenDefined("hand-element");

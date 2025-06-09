@@ -58,6 +58,23 @@
 		let currentMusicIndex = 1;
 		let lastVolumeBeforeMute = 1;
 
+		/**
+		 * Save volume setting to localStorage
+		 * @param {number} volume - Volume level (0-1)
+		 */
+		function saveVolumeToStorage(volume) {
+			localStorage.setItem('balatjack-volume', volume);
+		}
+
+		/**
+		 * Get volume setting from localStorage
+		 * @returns {number} Volume level (0-1)
+		 */
+		function getVolumeFromStorage() {
+			const storedVolume = localStorage.getItem('balatjack-volume');
+			return storedVolume !== null ? parseFloat(storedVolume) : 1.0; // Default to 1.0
+		}
+
 		// Initialize storage when page loads
 		function initializeGameStorage() {
 			// If using modules, you'd import this differently
@@ -272,6 +289,9 @@
 						audio.play().catch(e => console.error("Audio playback failed:", e));
 					}
 				}
+				// Save to localStorage
+				saveVolumeToStorage(newVolume);
+				
 				// Update its own mute button
 				updateMuteButtonState();
 
@@ -331,10 +351,13 @@
 			const modal = document.getElementById("options-menu-modal");
 			if (modal) {
 				const volumeSlider = document.getElementById("menu-volume-slider");
-				const currentVolume = getMusicVolume();
+				// Load volume from localStorage or use current
+				const storedVolume = getVolumeFromStorage();
 				if (volumeSlider) {
-					volumeSlider.value = currentVolume;
+					volumeSlider.value = storedVolume;
 				}
+				// Apply the stored volume
+				setMusicVolume(storedVolume);
 				modal.style.display = "flex";
 				updateMuteButtonState();
 			}
@@ -354,6 +377,10 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			initializeGameStorage();
 			showMainMenu();
+
+			// Load and apply volume from localStorage
+			const storedVolume = getVolumeFromStorage();
+			setMusicVolume(storedVolume);
 
 			// Set up options modal volume slider
 			const volumeSlider = document.getElementById("menu-volume-slider");
@@ -391,10 +418,10 @@
 
 	<!-- Options Modal -->
 	<div id="options-menu-modal" class="modal-overlay" style="display: none;">
-		<div class="modal-content">
-			<h2 class="modal-title">Options</h2>
-			<div class="options-grid">
-				<label for="menu-volume-slider">Music Volume</label>
+		<div class="modal-content" style="background-color: #f0e6d2; border: 2px solid #5a4f41; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); border-radius: 10px;">
+			<h2 class="modal-title" style="font-family: 'Cardo', serif; font-size: 2.5rem; color: #5a4f41;">Options</h2>
+			<div class="options-grid" style="margin-bottom: 1.5rem;">
+				<label for="menu-volume-slider" style="font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #5a4f41;">Music Volume</label>
 				<div class="volume-control-container">
 					<input type="range" id="menu-volume-slider" min="0" max="1" step="0.01" />
 					<div id="menu-mute-btn" class="mute-btn">
@@ -409,7 +436,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="fancy-btn full-width mt-1" onclick="hideOptionsMenu()">⬅ Back</button>
+			<button class="fancy-btn full-width mt-1" onclick="hideOptionsMenu()" style="background: linear-gradient(145deg, #d4af37, #b8860b); text-shadow: 1px 1px 2px #000; box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);">⬅ Back</button>
 		</div>
 	</div>
 </body>
