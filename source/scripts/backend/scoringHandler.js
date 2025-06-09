@@ -2,14 +2,14 @@ import { calculateBlackjackScore, getHandType } from "./utils.js";
 
 /**
  * @classdesc ScoringHandler
- * 
+ *
  * @property {object} handler - The associated gameHandler object.
  */
 export class scoringHandler {
 	/**
 	 * @class scoringHandler
 	 * @description Initializes the scoring handler to interact with the game handler.
-	 * @param {object} handler - The gameHandler object. 
+	 * @param {object} handler - The gameHandler object.
 	 */
 	constructor(handler) {
 		this.handler = handler;
@@ -25,7 +25,7 @@ export class scoringHandler {
 			console.log("No cards played. No score.");
 			return;
 		}
-		
+
 		const jokers = this.handler.state.hands.joker.cards;
 		for (const joker of jokers) {
 			if (joker.onScoringStart) {
@@ -45,7 +45,7 @@ export class scoringHandler {
 		const handType = getHandType(this.handler.state.hands.played.cards);
 		this.handler.uiInterface.updateScorekeeper({ handType: handType });
 
-		for (let i = 0; i < this.handler.state.hands.played.cards.length;) {
+		for (let i = 0; i < this.handler.state.hands.played.cards.length; ) {
 			const card = this.handler.state.hands.played.cards[i];
 
 			let cardValue = card.getValue();
@@ -99,7 +99,9 @@ export class scoringHandler {
 		}
 
 		// Verify that the played hand has a valid blackjack score
-		const score = calculateBlackjackScore(this.handler.state.hands.played.cards);
+		const score = calculateBlackjackScore(
+			this.handler.state.hands.played.cards
+		);
 		if (score > 21) {
 			console.log("Score exceeds 21. Hand is bust.");
 
@@ -112,7 +114,8 @@ export class scoringHandler {
 			});
 			this.handler.uiInterface.displayBust();
 		} else {
-			const totalAdded = this.handler.state.handScore * this.handler.state.handMult;
+			const totalAdded =
+				this.handler.state.handScore * this.handler.state.handMult;
 			this.handler.state.roundScore += totalAdded;
 
 			// Show visual feedback for successful scoring
@@ -145,8 +148,13 @@ export class scoringHandler {
 		}
 
 		this.handler.state.handsPlayed++;
+
+		// Update session tracking for hands played
+		this.handler.gameStorage.updateStat("totalHandsPlayed", 1);
+
 		this.handler.uiInterface.updateScorekeeper({
-			handsRemaining: this.handler.state.totalHands - this.handler.state.handsPlayed,
+			handsRemaining:
+				this.handler.state.totalHands - this.handler.state.handsPlayed,
 		});
 
 		this.handler.state.hands.played.cards = [];
@@ -192,7 +200,9 @@ export class scoringHandler {
 			[`+${chips} Chips`],
 			["#00FFFF"]
 		);
-		console.log(`Added ${chips} chips to score. New score: ${this.handler.state.handScore}`);
+		console.log(
+			`Added ${chips} chips to score. New score: ${this.handler.state.handScore}`
+		);
 	}
 
 	/**
@@ -214,6 +224,10 @@ export class scoringHandler {
 			[`+${(mult * 100).toFixed(0)}% Mult`],
 			["#FFFF00"]
 		);
-		console.log(`Added ${mult * 100}% multiplier to score. New multiplier: ${this.handler.state.handMult}`);
+		console.log(
+			`Added ${mult * 100}% multiplier to score. New multiplier: ${
+				this.handler.state.handMult
+			}`
+		);
 	}
 }

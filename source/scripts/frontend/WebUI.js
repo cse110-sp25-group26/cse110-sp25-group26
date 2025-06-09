@@ -40,6 +40,9 @@ export class WebUI extends UIInterface {
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
 		this.discardButton = document.getElementById("discard-selected-cards");
+		this.saveButton = document.getElementById("save-game");
+		this.infoButton = document.getElementById("info");
+		this.optionsButton = document.getElementById("options");
 
 		// Scorekeeper elements
 		this.goalScoreEl = document.getElementById("goal-score");
@@ -72,6 +75,17 @@ export class WebUI extends UIInterface {
 		if (this.discardButton) {
 			this.discardButton.addEventListener("click", () =>
 				this.onDiscardSelected()
+			);
+		}
+		if (this.saveButton) {
+			this.saveButton.addEventListener("click", () => this.saveGame());
+		}
+		if (this.infoButton) {
+			this.infoButton.addEventListener("click", () => this.showInfo());
+		}
+		if (this.optionsButton) {
+			this.optionsButton.addEventListener("click", () =>
+				this.showOptions()
 			);
 		}
 	}
@@ -244,21 +258,21 @@ export class WebUI extends UIInterface {
 	 */
 	getContainer(containerName) {
 		switch (containerName) {
-		case "handMain":
-			return this.playerHandContainer;
-		case "handPlayed":
-			return this.playedCardsContainer;
-		case "handJoker":
-			return this.jokersContainer;
-		case "deck":
-			return null; // Cards going to deck are removed from UI
-		case "discard_pile":
-			return null; // Cards going to discard are removed from UI
-		case "offscreen":
-			return null; // Cards going offscreen are removed from UI
-		default:
-			console.warn(`Unknown container: ${containerName}`);
-			return null;
+			case "handMain":
+				return this.playerHandContainer;
+			case "handPlayed":
+				return this.playedCardsContainer;
+			case "handJoker":
+				return this.jokersContainer;
+			case "deck":
+				return null; // Cards going to deck are removed from UI
+			case "discard_pile":
+				return null; // Cards going to discard are removed from UI
+			case "offscreen":
+				return null; // Cards going offscreen are removed from UI
+			default:
+				console.warn(`Unknown container: ${containerName}`);
+				return null;
 		}
 	}
 
@@ -522,6 +536,441 @@ export class WebUI extends UIInterface {
 		this.canPlay = false;
 		if (this.playButton) this.playButton.disabled = true;
 		if (this.discardButton) this.discardButton.disabled = true;
+	}
+
+	/**
+	 * @function saveGame
+	 * @description Triggers the save game functionality
+	 */
+	saveGame() {
+		if (this.gameHandler) {
+			this.gameHandler.saveGame();
+		}
+	}
+
+	/**
+	 * @function showInfo
+	 * @description Displays game information and rules
+	 */
+	showInfo() {
+		this.displayModal({
+			title: "Game Information",
+			content: `
+				<div style="text-align: left; line-height: 1.6;">
+					<h3 style="color: #d4af37; margin-bottom: 15px;">🎯 Goal</h3>
+					<p>Score enough points to meet each blind's requirement and advance through all antes to win!</p>
+					
+					<h3 style="color: #d4af37; margin-bottom: 15px;">🃏 How to Play</h3>
+					<ul style="margin-left: 20px;">
+						<li><strong>Select cards</strong> from your hand by clicking them</li>
+						<li><strong>Play cards</strong> to score points (must not exceed 21)</li>
+						<li><strong>Discard cards</strong> to get new ones from the deck</li>
+						<li><strong>Use jokers</strong> to boost your score and multiply points</li>
+					</ul>
+					
+					<h3 style="color: #d4af37; margin-bottom: 15px;">📊 Scoring</h3>
+					<p>Cards have their face value (Ace=1, Jack/Queen/King=10). Jokers provide special bonuses and multipliers.</p>
+					
+					<h3 style="color: #d4af37; margin-bottom: 15px;">💰 Progression</h3>
+					<p>Complete blinds to earn money, advance through antes, and unlock new challenges!</p>
+				</div>
+			`,
+			buttons: [
+				{
+					text: "Close",
+					style: "primary",
+					action: () => this.closeModal(),
+				},
+			],
+		});
+	}
+
+	/**
+	 * @function showOptions
+	 * @description Displays game options and settings
+	 */
+	showOptions() {
+		// Get current music index if available
+		let currentMusicIndex = 0;
+		try {
+			if (window.parent && window.parent.getAvailableMusic) {
+				const musicSources = window.parent.getAvailableMusic();
+				currentMusicIndex = parseInt(
+					localStorage.getItem("preferredMusicIndex") || "0",
+					10
+				);
+			}
+		} catch (e) {
+			// Fallback if parent access fails
+		}
+
+		this.displayModal({
+			title: "Game Options",
+			content: `
+				<div style="text-align: left; line-height: 1.8;">
+					<h3 style="color: #d4af37; margin-bottom: 15px;">🎵 Audio Settings</h3>
+					<div style="margin-bottom: 20px;">
+						<label style="display: block; margin-bottom: 10px;">Background Music:</label>
+						<select id="music-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+							<option value="0" ${
+								currentMusicIndex === 0 ? "selected" : ""
+							}>Track 1 (Default)</option>
+							<option value="1" ${currentMusicIndex === 1 ? "selected" : ""}>Track 2</option>
+						</select>
+					</div>
+					
+					<h3 style="color: #d4af37; margin-bottom: 15px;">💾 Save Management</h3>
+					<div style="margin-bottom: 20px;">
+						<button id="save-current-game" style="
+							background: linear-gradient(45deg, #27ae60, #2ecc71);
+							color: white; border: none; padding: 10px 20px; 
+							border-radius: 6px; cursor: pointer; margin-right: 10px;
+						">💾 Save Current Game</button>
+						<button id="clear-save-data" style="
+							background: linear-gradient(45deg, #e74c3c, #c0392b);
+							color: white; border: none; padding: 10px 20px; 
+							border-radius: 6px; cursor: pointer;
+						">🗑️ Clear Save Data</button>
+					</div>
+					
+					<h3 style="color: #d4af37; margin-bottom: 15px;">🏠 Navigation</h3>
+					<button id="return-to-menu" style="
+						background: linear-gradient(45deg, #34495e, #2c3e50);
+						color: white; border: none; padding: 10px 20px; 
+						border-radius: 6px; cursor: pointer; width: 100%;
+					">🏠 Return to Main Menu</button>
+				</div>
+			`,
+			buttons: [
+				{
+					text: "Apply Changes",
+					style: "primary",
+					action: () => this.applyOptions(),
+				},
+				{
+					text: "Cancel",
+					style: "secondary",
+					action: () => this.closeModal(),
+				},
+			],
+		});
+
+		// Add event listeners for the option buttons
+		setTimeout(() => {
+			const musicSelect = document.getElementById("music-select");
+			const saveCurrentGame =
+				document.getElementById("save-current-game");
+			const clearSaveData = document.getElementById("clear-save-data");
+			const returnToMenu = document.getElementById("return-to-menu");
+
+			if (musicSelect) {
+				musicSelect.addEventListener("change", (e) => {
+					const newIndex = parseInt(e.target.value, 10);
+					try {
+						if (window.parent && window.parent.setMusicSource) {
+							window.parent.setMusicSource(newIndex);
+						}
+					} catch (err) {
+						console.log("Could not change music:", err);
+					}
+				});
+			}
+
+			if (saveCurrentGame) {
+				saveCurrentGame.addEventListener("click", () => {
+					this.saveGame();
+				});
+			}
+
+			if (clearSaveData) {
+				clearSaveData.addEventListener("click", () => {
+					if (
+						confirm(
+							"Are you sure you want to clear all save data? This cannot be undone."
+						)
+					) {
+						if (this.gameHandler && this.gameHandler.gameStorage) {
+							this.gameHandler.gameStorage.clearCurrentGame();
+							this.showMessage("Save data cleared successfully!");
+						}
+					}
+				});
+			}
+
+			if (returnToMenu) {
+				returnToMenu.addEventListener("click", () => {
+					if (
+						confirm(
+							"Return to main menu? Any unsaved progress will be lost."
+						)
+					) {
+						this.exitGame();
+					}
+				});
+			}
+		}, 100);
+	}
+
+	/**
+	 * @function applyOptions
+	 * @description Applies the selected options and closes the modal
+	 */
+	applyOptions() {
+		this.showMessage("Options applied successfully!");
+		this.closeModal();
+	}
+
+	/**
+	 * @function displayModal
+	 * @description Displays a customizable modal dialog
+	 * @param {object} config - Modal configuration
+	 * @param {string} config.title - Modal title
+	 * @param {string} config.content - Modal content HTML
+	 * @param {Array} config.buttons - Array of button configurations
+	 */
+	displayModal(config) {
+		// Remove any existing modal
+		this.closeModal();
+
+		const modal = document.createElement("div");
+		modal.id = "game-modal";
+		modal.style.cssText = `
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 10000;
+			backdrop-filter: blur(5px);
+		`;
+
+		const content = document.createElement("div");
+		content.style.cssText = `
+			background: linear-gradient(135deg, #2c3e50, #3498db);
+			color: white;
+			padding: 30px;
+			border-radius: 15px;
+			max-width: 600px;
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+			border: 2px solid #d4af37;
+		`;
+
+		let buttonsHtml = "";
+		if (config.buttons && config.buttons.length > 0) {
+			buttonsHtml = '<div style="margin-top: 25px; text-align: center;">';
+			config.buttons.forEach((button, index) => {
+				const buttonStyle =
+					button.style === "secondary"
+						? "background: linear-gradient(45deg, #95a5a6, #7f8c8d);"
+						: "background: linear-gradient(45deg, #27ae60, #2ecc71);";
+				buttonsHtml += `
+					<button id="modal-btn-${index}" style="
+						${buttonStyle}
+						color: white;
+						border: none;
+						padding: 12px 25px;
+						margin: 0 10px;
+						border-radius: 6px;
+						cursor: pointer;
+						font-weight: bold;
+					">${button.text}</button>
+				`;
+			});
+			buttonsHtml += "</div>";
+		}
+
+		content.innerHTML = `
+			<h2 style="margin-bottom: 20px; color: #d4af37; text-align: center;">${config.title}</h2>
+			${config.content}
+			${buttonsHtml}
+		`;
+
+		modal.appendChild(content);
+		document.body.appendChild(modal);
+
+		// Add button event listeners
+		if (config.buttons) {
+			config.buttons.forEach((button, index) => {
+				const btnElement = document.getElementById(
+					`modal-btn-${index}`
+				);
+				if (btnElement && button.action) {
+					btnElement.addEventListener("click", button.action);
+				}
+			});
+		}
+
+		// Close on background click
+		modal.addEventListener("click", (e) => {
+			if (e.target === modal) {
+				this.closeModal();
+			}
+		});
+
+		// Close on Escape key
+		const handleKeydown = (e) => {
+			if (e.key === "Escape") {
+				this.closeModal();
+				document.removeEventListener("keydown", handleKeydown);
+			}
+		};
+		document.addEventListener("keydown", handleKeydown);
+	}
+
+	/**
+	 * @function closeModal
+	 * @description Closes the current modal dialog
+	 */
+	closeModal() {
+		const modal = document.getElementById("game-modal");
+		if (modal) {
+			document.body.removeChild(modal);
+		}
+	}
+
+	/**
+	 * @function displayGameOver
+	 * @description Shows the game over screen with statistics
+	 * @param {object} gameOverData - Game over statistics
+	 * @param {boolean} gameOverData.isWin - Whether the player won
+	 * @param {number} gameOverData.totalScore - Final score
+	 * @param {number} gameOverData.levelsCompleted - Number of levels completed
+	 * @param {number} gameOverData.playTime - Play time in milliseconds
+	 */
+	displayGameOver(gameOverData) {
+		const { isWin, totalScore, levelsCompleted, playTime } = gameOverData;
+
+		// Convert play time to readable format
+		const playTimeSeconds = Math.floor(playTime / 1000);
+		const minutes = Math.floor(playTimeSeconds / 60);
+		const seconds = playTimeSeconds % 60;
+		const playTimeFormatted = `${minutes}:${seconds
+			.toString()
+			.padStart(2, "0")}`;
+
+		// Create game over modal
+		const modal = document.createElement("div");
+		modal.style.cssText = `
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 10000;
+			backdrop-filter: blur(5px);
+		`;
+
+		const content = document.createElement("div");
+		content.style.cssText = `
+			background: linear-gradient(135deg, #2c3e50, #3498db);
+			color: white;
+			padding: 40px;
+			border-radius: 20px;
+			text-align: center;
+			box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+			border: 2px solid ${isWin ? "#27ae60" : "#e74c3c"};
+			max-width: 500px;
+			min-width: 400px;
+		`;
+
+		content.innerHTML = `
+			<h1 style="font-size: 3em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); color: ${
+				isWin ? "#27ae60" : "#e74c3c"
+			};">
+				${isWin ? "🎉 VICTORY! 🎉" : "💀 GAME OVER 💀"}
+			</h1>
+			<div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; margin: 20px 0;">
+				<h2 style="color: #ecf0f1; margin-bottom: 25px; font-size: 1.5em;">📊 Final Statistics</h2>
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+					<div>
+						<strong style="color: #f39c12;">Total Score:</strong><br>
+						<span style="font-size: 1.4em; color: #fff;">${totalScore.toLocaleString()}</span>
+					</div>
+					<div>
+						<strong style="color: #f39c12;">Levels Completed:</strong><br>
+						<span style="font-size: 1.4em; color: #fff;">${levelsCompleted}</span>
+					</div>
+					<div style="grid-column: 1 / -1;">
+						<strong style="color: #f39c12;">Play Time:</strong><br>
+						<span style="font-size: 1.4em; color: #fff;">${playTimeFormatted}</span>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: 30px;">
+				<button id="play-again-btn" style="
+					background: linear-gradient(45deg, #27ae60, #2ecc71);
+					color: white;
+					border: none;
+					padding: 12px 30px;
+					margin: 0 10px;
+					border-radius: 25px;
+					cursor: pointer;
+					font-size: 1.1em;
+					font-weight: bold;
+					transition: all 0.3s ease;
+					box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+				">🔄 Play Again</button>
+				<button id="main-menu-btn" style="
+					background: linear-gradient(45deg, #34495e, #2c3e50);
+					color: white;
+					border: none;
+					padding: 12px 30px;
+					margin: 0 10px;
+					border-radius: 25px;
+					cursor: pointer;
+					font-size: 1.1em;
+					font-weight: bold;
+					transition: all 0.3s ease;
+					box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3);
+				">🏠 Main Menu</button>
+			</div>
+		`;
+
+		modal.appendChild(content);
+		document.body.appendChild(modal);
+
+		// Add button event listeners
+		document
+			.getElementById("play-again-btn")
+			.addEventListener("click", () => {
+				document.body.removeChild(modal);
+				this.gameHandler.resetGame();
+			});
+
+		document
+			.getElementById("main-menu-btn")
+			.addEventListener("click", () => {
+				this.exitGame();
+			});
+
+		// Add hover effects
+		const buttons = content.querySelectorAll("button");
+		buttons.forEach((button) => {
+			button.addEventListener("mouseenter", () => {
+				button.style.transform = "translateY(-2px)";
+				button.style.boxShadow = button.style.boxShadow.replace(
+					"0 4px",
+					"0 8px"
+				);
+			});
+			button.addEventListener("mouseleave", () => {
+				button.style.transform = "translateY(0)";
+				button.style.boxShadow = button.style.boxShadow.replace(
+					"0 8px",
+					"0 4px"
+				);
+			});
+		});
 	}
 }
 
