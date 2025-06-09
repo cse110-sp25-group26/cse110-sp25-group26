@@ -40,6 +40,14 @@ export class WebUI extends UIInterface {
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
 		this.discardButton = document.getElementById("discard-selected-cards");
+		this.optionsButton = document.getElementById("options");
+
+		// Modals
+		this.optionsModal = document.getElementById("options-modal");
+		this.closeOptionsButton = document.getElementById("close-options");
+		this.volumeSlider = document.getElementById("volume-slider");
+		this.muteButton = document.getElementById("game-mute-btn");
+		this.mainMenuButton = document.getElementById("main-menu-btn");
 
 		// Scorekeeper elements
 		this.goalScoreEl = document.getElementById("goal-score");
@@ -74,6 +82,44 @@ export class WebUI extends UIInterface {
 				this.onDiscardSelected()
 			);
 		}
+		if (this.optionsButton) {
+			this.optionsButton.addEventListener("click", () =>
+				this.showOptionsModal()
+			);
+		}
+		if (this.closeOptionsButton) {
+			this.closeOptionsButton.addEventListener("click", () =>
+				this.hideOptionsModal()
+			);
+		}
+		if (this.volumeSlider) {
+			this.volumeSlider.addEventListener("input", (e) =>
+				this.onVolumeChange(e)
+			);
+		}
+		if (this.muteButton) {
+			this.muteButton.addEventListener("click", () => this.onToggleMute());
+		}
+		if (this.mainMenuButton) {
+			this.mainMenuButton.addEventListener("click", () => this.exitGame());
+		}
+
+		// Listen for volume changes from the parent window
+		window.addEventListener('message', (event) => {
+			if (event.data && event.data.type === 'volumechange') {
+				const volume = event.data.volume;
+				if (this.volumeSlider) {
+					this.volumeSlider.value = volume;
+				}
+				if (this.muteButton) {
+					if (volume === 0) {
+						this.muteButton.classList.add("muted");
+					} else {
+						this.muteButton.classList.remove("muted");
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -501,7 +547,12 @@ export class WebUI extends UIInterface {
 	 * @description Exit to main menu
 	 */
 	exitGame() {
-		window.location.href = "index.html";
+		if (window.parent && typeof window.parent.showMainMenu === 'function') {
+			window.parent.showMainMenu();
+		} else {
+			// Fallback for when not in an iframe
+			window.location.href = "index.html";
+		}
 	}
 
 	/**
@@ -522,6 +573,53 @@ export class WebUI extends UIInterface {
 		this.canPlay = false;
 		if (this.playButton) this.playButton.disabled = true;
 		if (this.discardButton) this.discardButton.disabled = true;
+	}
+
+	/**
+	 * @function showOptionsModal
+	 * @description Displays the options modal
+	 */
+	showOptionsModal() {
+		if (this.optionsModal) {
+			// Immediately update state when opening
+			if (window.parent && typeof window.parent.getMusicVolume === "function") {
+				const currentVolume = window.parent.getMusicVolume();
+				if (this.volumeSlider) this.volumeSlider.value = currentVolume;
+				if (this.muteButton) {
+					if (currentVolume === 0) this.muteButton.classList.add("muted");
+					else this.muteButton.classList.remove("muted");
+				}
+			}
+			this.optionsModal.style.display = "flex";
+		}
+	}
+
+	/**
+	 * @function hideOptionsModal
+	 * @description Hides the options modal
+	 */
+	hideOptionsModal() {
+		if (this.optionsModal) {
+			this.optionsModal.style.display = "none";
+		}
+	}
+
+	/**
+	 * @function onVolumeChange
+	 * @description Handles volume slider changes
+	 * @param {Event} e - The input event
+	 */
+	onVolumeChange(e) {
+		const volume = parseFloat(e.target.value);
+		window.parent.postMessage({ type: 'setvolume', volume: volume }, '*');
+	}
+
+	/**
+	 * @function onToggleMute
+	 * @description Handles the Mute button click
+	 */
+	onToggleMute() {
+		window.parent.postMessage({ type: 'togglemute' }, '*');
 	}
 }
 

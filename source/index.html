@@ -37,8 +37,9 @@
 	<!-- Main app content container -->
 	<div id="app" class="menu-content"></div>
 
-	<audio id="bg-music" loop autoplay>
-		<source src="./res/snd/track2.wav" type="audio/mpeg" />
+	<audio id="bg-music" loop>
+		<source src="./res/snd/track2.wav" type="audio/wav">
+		<source src="./res/snd/track1.mp3" type="audio/mpeg">
 		Your browser does not support the audio element.
 	</audio>
 
@@ -52,9 +53,10 @@
 		// Available background music tracks
 		const musicSources = [
 			"./res/snd/track1.mp3",
-			"./res/snd/track2.mp3"
+			"./res/snd/track2.wav"
 		];
 		let currentMusicIndex = 1;
+		let lastVolumeBeforeMute = 1;
 
 		// Initialize storage when page loads
 		function initializeGameStorage() {
@@ -92,13 +94,14 @@
 		 */
 		function showMainMenu() {
 			const appDiv = document.getElementById("app");
-			// Restore menu-specific class and reset inline styles from game mode
-			appDiv.className = "menu-content";
-			appDiv.style.width = "";
-			appDiv.style.height = "";
-			appDiv.style.padding = "";
-			appDiv.style.margin = "";
 
+			// Clear all content and styles from the app container
+			appDiv.innerHTML = "";
+			appDiv.removeAttribute("style");
+			
+			// Restore menu-specific class
+			appDiv.className = "menu-content";
+			
 			// Restore visibility of decorative cards
 			document.querySelectorAll('.card-decor').forEach(card => card.style.display = '');
 
@@ -113,6 +116,7 @@
             <button class="fancy-btn" onclick="showStartMenu()">Start Game</button>
             <button class="fancy-btn" onclick="showSavedGames()">Saved Games</button>
             <button class="fancy-btn" onclick="showStats()"> Stats</button>
+            <button class="fancy-btn" onclick="showOptionsMenu()">Options</button>
           </div>
         </div>
       `);
@@ -192,7 +196,7 @@
         <div class="modal-overlay modal-overlay-light">
           <div class="modal-content text-center">
             <h2 class="modal-title">Start Game</h2>
-            <button class="fancy-btn full-width mb-075" onclick="startGame()">🆕 New Game</button>
+            <button class="fancy-btn full-width mb-075" onclick="startGame()">New Game</button>
             <button class="fancy-btn full-width mb-075">▶ Resume</button>
             <button class="fancy-btn full-width" onclick="showMainMenu()">⬅ Back</button>
           </div>
@@ -248,37 +252,166 @@
 				audio.src = musicSources[index];
 				audio.load();
 				audio.play().catch((error) => console.error("Audio playback failed for new source:", error));
-				localStorage.setItem('preferredMusicIndex', index); 
-			} else {
-				console.error("Invalid music index:", index);
 			}
 		}
 
 		/**
-		 * Enables audio playback when the user interacts with the page.
+		 * Sets the volume of the background music.
+		 * Callable from iframe: window.parent.setMusicVolume(volume)
+		 * @param {number} volume - The volume level (0.0 to 1.0).
 		 */
-		function enableAudioPlayback() {
+		function setMusicVolume(volume) {
 			const audio = document.getElementById("bg-music");
-			audio.play().catch((error) => console.error("Audio playback failed:", error));
-			document.removeEventListener("click", enableAudioPlayback);
+			if (audio) {
+				const newVolume = Math.max(0, Math.min(1, parseFloat(volume)));
+				audio.volume = newVolume;
+				if (newVolume > 0) {
+					lastVolumeBeforeMute = newVolume;
+					// If audio is not playing and we set a volume, try to play.
+					if (audio.paused) {
+						audio.play().catch(e => console.error("Audio playback failed:", e));
+					}
+				}
+				// Update its own mute button
+				updateMuteButtonState();
+
+				// Post a message to the iframe
+				const iframe = document.querySelector("#app iframe");
+				if (iframe && iframe.contentWindow) {
+					iframe.contentWindow.postMessage({ type: 'volumechange', volume: newVolume }, '*');
+				}
+			}
 		}
 
-		// Initialize the page and set up event listeners
-		window.onload = () => {
-			initializeGameStorage();
-			const preferredIndex = localStorage.getItem('preferredMusicIndex');
-			if (preferredIndex !== null) {
-			  currentMusicIndex = parseInt(preferredIndex, 10);
-			  const audio = document.getElementById("bg-music");
-			  if (musicSources[currentMusicIndex]) {
-			    audio.src = musicSources[currentMusicIndex];
-			    audio.load();
-			  }
+		/**
+		 * Returns the current volume of the background music.
+		 * Callable from iframe: window.parent.getMusicVolume()
+		 * @returns {number} The current volume level.
+		 */
+		function getMusicVolume() {
+			const audio = document.getElementById("bg-music");
+			if (audio) {
+				return audio.volume;
 			}
-			document.addEventListener("click", enableAudioPlayback);
+			return 1; // Default volume
+		}
+
+		/**
+		 * Toggles the mute state of the music.
+		 */
+		function toggleMute() {
+			const audio = document.getElementById("bg-music");
+			const volumeSlider = document.getElementById("menu-volume-slider");
+			const newVolume = audio.volume > 0 ? 0 : (lastVolumeBeforeMute > 0 ? lastVolumeBeforeMute : 1);
+			setMusicVolume(newVolume);
+			if (volumeSlider) {
+				volumeSlider.value = newVolume;
+			}
+		}
+
+		/**
+		 * Updates the text of the mute button based on the current volume.
+		 */
+		function updateMuteButtonState() {
+			const audio = document.getElementById("bg-music");
+			const muteButton = document.getElementById("menu-mute-btn");
+			if (audio && muteButton) {
+				if (audio.volume === 0) {
+					muteButton.classList.add("muted");
+				} else {
+					muteButton.classList.remove("muted");
+				}
+			}
+		}
+
+		/**
+		 * Displays the options modal on the main menu.
+		 */
+		function showOptionsMenu() {
+			const modal = document.getElementById("options-menu-modal");
+			if (modal) {
+				const volumeSlider = document.getElementById("menu-volume-slider");
+				const currentVolume = getMusicVolume();
+				if (volumeSlider) {
+					volumeSlider.value = currentVolume;
+				}
+				modal.style.display = "flex";
+				updateMuteButtonState();
+			}
+		}
+
+		/**
+		 * Hides the options modal on the main menu.
+		 */
+		function hideOptionsMenu() {
+			const modal = document.getElementById("options-menu-modal");
+			if (modal) {
+				modal.style.display = "none";
+			}
+		}
+
+		// When the page loads, set up main menu
+		document.addEventListener("DOMContentLoaded", () => {
+			initializeGameStorage();
 			showMainMenu();
-		};
+
+			// Set up options modal volume slider
+			const volumeSlider = document.getElementById("menu-volume-slider");
+			if (volumeSlider) {
+				volumeSlider.addEventListener("input", (e) => {
+					setMusicVolume(e.target.value);
+				});
+			}
+
+			const muteButton = document.getElementById("menu-mute-btn");
+			if (muteButton) {
+				muteButton.addEventListener("click", toggleMute);
+			}
+
+			// Listen for messages from the iframe
+			window.addEventListener("message", (event) => {
+				if (event.data && event.data.type === 'togglemute') {
+					toggleMute();
+				} else if (event.data && event.data.type === 'setvolume') {
+					setMusicVolume(event.data.volume);
+				}
+			});
+
+			// Try to play music on first user interaction to deal with autoplay restrictions
+			function playMusicOnFirstInteraction() {
+				const audio = document.getElementById("bg-music");
+				if (audio && audio.paused) {
+					audio.play().catch(e => console.error("Could not play audio:", e));
+				}
+			}
+
+			document.body.addEventListener('pointerdown', playMusicOnFirstInteraction, { once: true });
+		});
 	</script>
+
+	<!-- Options Modal -->
+	<div id="options-menu-modal" class="modal-overlay" style="display: none;">
+		<div class="modal-content">
+			<h2 class="modal-title">Options</h2>
+			<div class="options-grid">
+				<label for="menu-volume-slider">Music Volume</label>
+				<div class="volume-control-container">
+					<input type="range" id="menu-volume-slider" min="0" max="1" step="0.01" />
+					<div id="menu-mute-btn" class="mute-btn">
+						<svg class="speaker-icon" viewBox="0 0 100 100">
+							<path d="M49.23,27.37,39.14,37.46H22.41a4,4,0,0,0-4,4V58.54a4,4,0,0,0,4,4H39.14l10.09,10.09a4,4,0,0,0,6.82-2.83V30.2A4,4,0,0,0,49.23,27.37Z"/>
+							<path d="M64,36.14a4,4,0,0,0-5.66,5.66,8,8,0,0,1,0,11.31A4,4,0,1,0,64,58.86,16,16,0,0,0,64,36.14Z"/>
+							<path d="M72.13,28a4,4,0,1,0-5.66,5.66,19.9,19.9,0,0,1,0,27.42,4,4,0,1,0,5.66,5.66A27.9,27.9,0,0,0,72.13,28Z"/>
+						</svg>
+						<svg class="speaker-muted-icon" viewBox="0 0 32 32">
+							<path d="M16 2 A14 14 0 1 0 16 30 A14 14 0 1 0 16 2 Z M23.707 22.293 L22.293 23.707 L16 17.414 L9.707 23.707 L8.293 22.293 L14.586 16 L8.293 9.707 L9.707 8.293 L16 14.586 L22.293 8.293 L23.707 9.707 L17.414 16 Z"/>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<button class="fancy-btn full-width mt-1" onclick="hideOptionsMenu()">⬅ Back</button>
+		</div>
+	</div>
 </body>
 
 </html>

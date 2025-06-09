@@ -235,3 +235,59 @@ body {
 .stats-back-btn {
     cursor: pointer;
 }
+
+/* Styles for the options modal grid and slider */
+.options-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	align-items: center;
+	margin-bottom: 1.5rem;
+    color: #000;
+    text-align: center;
+}
+
+.options-grid label {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.5rem;
+}
+
+#menu-volume-slider {
+	width: 100%;
+	cursor: pointer;
+}
+
+.volume-control-container {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.mute-btn {
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
+	position: relative;
+}
+
+.mute-btn .speaker-icon,
+.mute-btn .speaker-muted-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	fill: #000;
+}
+
+.mute-btn .speaker-muted-icon {
+	display: none;
+}
+
+.mute-btn.muted .speaker-icon {
+	display: none;
+}
+
+.mute-btn.muted .speaker-muted-icon {
+	display: block;
+}

@@ -336,3 +336,116 @@ body {
 #player-hand-cards {
 	min-height: 120px;
 }
+
+/* General modal styles, similar to menu modals */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	background-color: #f0e6d2; /* Light parchment color */
+	padding: 2rem;
+	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	width: 90%;
+	max-width: 400px;
+	text-align: center;
+	border: 2px solid #5a4f41; /* Darker border */
+}
+
+.modal-title {
+	font-family: "Cardo", serif;
+	font-size: 2.5rem;
+	color: #5a4f41;
+	margin-bottom: 1.5rem;
+}
+
+.options-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	align-items: center;
+	margin-bottom: 1.5rem;
+}
+
+.options-grid label {
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.5rem;
+	color: #5a4f41;
+}
+
+#volume-slider {
+	width: 100%;
+	cursor: pointer;
+}
+
+/* Reusing some button styles from the menu */
+.fancy-btn {
+	background-color: #c8a379;
+	color: #fff;
+	font-family: "Bebas Neue", sans-serif;
+	font-size: 1.5rem;
+	border: 2px solid #5a4f41;
+	border-radius: 5px;
+	padding: 0.75rem 1.5rem;
+	cursor: pointer;
+	transition: background-color 0.2s, transform 0.2s;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fancy-btn:hover {
+	background-color: #a7865f;
+	transform: translateY(-2px);
+}
+
+.full-width {
+	width: 100%;
+}
+
+.mt-1 {
+	margin-top: 1rem;
+}
+
+.volume-control-container {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.mute-btn {
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
+	position: relative;
+}
+
+.mute-btn .speaker-icon,
+.mute-btn .speaker-muted-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	fill: #5a4f41; /* Darker color to match theme */
+}
+
+.mute-btn .speaker-muted-icon {
+	display: none;
+}
+
+.mute-btn.muted .speaker-icon {
+	display: none;
+}
+
+.mute-btn.muted .speaker-muted-icon {
+	display: block;
+}

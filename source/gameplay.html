@@ -35,7 +35,6 @@
 					<p class="chip-label">Chips / Mult</p>
 				</section>
 				<nav class="actions">
-					<button class="btn-pill" id="info">Info</button>
 					<button class="btn-pill" id="options">Options</button>
 				</nav>
 				<div class="bank-balance">$<span id="bank-amount">—</span></div>
@@ -71,6 +70,30 @@
 					</div>
 				</footer>
 			</main>
+		</div>
+
+		<div id="options-modal" class="modal-overlay" style="display: none;">
+			<div class="modal-content">
+				<h2 class="modal-title">Options</h2>
+				<div class="options-grid">
+					<label for="volume-slider">Music Volume</label>
+					<div class="volume-control-container">
+						<input type="range" id="volume-slider" min="0" max="1" step="0.01" />
+						<div id="game-mute-btn" class="mute-btn">
+							<svg class="speaker-icon" viewBox="0 0 100 100">
+								<path d="M49.23,27.37,39.14,37.46H22.41a4,4,0,0,0-4,4V58.54a4,4,0,0,0,4,4H39.14l10.09,10.09a4,4,0,0,0,6.82-2.83V30.2A4,4,0,0,0,49.23,27.37Z"/>
+								<path d="M64,36.14a4,4,0,0,0-5.66,5.66,8,8,0,0,1,0,11.31A4,4,0,1,0,64,58.86,16,16,0,0,0,64,36.14Z"/>
+								<path d="M72.13,28a4,4,0,1,0-5.66,5.66,19.9,19.9,0,0,1,0,27.42,4,4,0,1,0,5.66,5.66A27.9,27.9,0,0,0,72.13,28Z"/>
+							</svg>
+							<svg class="speaker-muted-icon" viewBox="0 0 32 32">
+								<path d="M16 2 A14 14 0 1 0 16 30 A14 14 0 1 0 16 2 Z M23.707 22.293 L22.293 23.707 L16 17.414 L9.707 23.707 L8.293 22.293 L14.586 16 L8.293 9.707 L9.707 8.293 L16 14.586 L22.293 8.293 L23.707 9.707 L17.414 16 Z"/>
+							</svg>
+						</div>
+					</div>
+				</div>
+				<button class="fancy-btn full-width mt-1" id="main-menu-btn">Main Menu</button>
+				<button class="fancy-btn full-width mt-1" id="close-options">⬅ Back</button>
+			</div>
 		</div>
 
 		<script type="module">
