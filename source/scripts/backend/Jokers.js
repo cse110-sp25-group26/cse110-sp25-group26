@@ -534,7 +534,7 @@ class Martingale extends Joker {
 	/** @inheritdoc */
 	getDescription() {
 		const multiplier = this.lastRoundsLow > 0 ? (4 / this.lastRoundsLow).toFixed(1) : "4.0";
-		return `<b>Martingale</b><br>If your score is below 5, gain !<t(+${multiplier})!>. Decreases with consecutive low scores.<br>Current consecutive zeros: ${this.lastRoundsLow}`;
+		return `<b>Martingale</b><br>If your score is below 5, gain !<t(+${multiplier})!>. Decreases with consecutive low scores.<br>Current consecutive low scores: ${this.lastRoundsLow}`;
 	}
 }
 Joker.registerJoker("martingale", Martingale);
