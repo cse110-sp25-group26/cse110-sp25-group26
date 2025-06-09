@@ -1,5 +1,7 @@
 import { CardElement } from "./CardElement.js";
-import { Card } from "../backend/Card.js";
+/**
+ * @typedef {module:scripts/backend/Card} Card
+ */
 
 /**
  * @classdesc UI component representing the Deck.
@@ -29,7 +31,7 @@ export class DeckElement {
 
 		// Set up the deck background image
 		this.deckImage = document.createElement("img");
-		this.deckImage.src = `/source/res/img/${back}.png?v=${Date.now()}`;
+		this.deckImage.src = `res/img/card/${back}.png?v=${Date.now()}`;
 		this.deckImage.alt = "Deck";
 		this.deckImage.style.width = "80px";
 		this.deckImage.style.height = "120px";

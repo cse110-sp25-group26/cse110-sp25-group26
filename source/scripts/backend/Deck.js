@@ -1,4 +1,5 @@
 import { Card } from "./Card.js";
+import { gameHandler } from "./gameHandler.js";
 
 /**
  * @classdesc Represents a deck of cards in the game.
@@ -6,18 +7,23 @@ import { Card } from "./Card.js";
  * @property {Card[]} availableCards - The cards available in the deck.
  * @property {Card[]} usedCards - The cards that have been used from the deck.
  * @property {Card[]} allCards - All cards in the deck, including available and used cards.
+ * 
+ * @property {gameHandler} handler - The game handler object to interact with the game.
  */
 export class Deck {
 	/**
 	 * @class Deck
 	 * @description Creates a new deck of cards.
 	 * @param {Card[]} cards - The cards to be included in the deck.
+	 * @param {gameHandler} gameHandler - The game handler object to interact with the game.
 	 */
-	constructor(cards) {
+	constructor(cards, gameHandler) {
 		this.availableCards = cards;
 		this.usedCards = [];
 		this.allCards = [...cards]; // duplicates the array
 		this.shuffle();
+
+		this.handler = gameHandler;
 	}
 
 	/**
@@ -45,6 +51,9 @@ export class Deck {
 		}
 		const card = this.availableCards.pop();
 		this.usedCards.push(card);
+
+		this.handler.scoringHandler.onDraw(card);
+
 		return card;
 	}
 

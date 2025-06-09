@@ -37,10 +37,6 @@ export class WebUI extends UIInterface {
 		this.jokersContainer = document.getElementById("jokers-area");
 		this.consumablesContainer = document.getElementById("consumables-area");
 
-		console.log("UI Elements found:");
-		console.log("playerHandContainer:", this.playerHandContainer);
-		console.log("playedCardsContainer:", this.playedCardsContainer);
-
 		// Buttons
 		this.playButton = document.getElementById("play-selected-cards");
 		this.discardButton = document.getElementById("discard-selected-cards");
@@ -181,13 +177,9 @@ export class WebUI extends UIInterface {
 	 * @param {Card} card - The backend card object
 	 */
 	createUIel(card) {
-		console.log(
-			`Creating UI element for card: ${card.type} of ${card.suit}`
-		);
 		const cardElement = new CardElement(card, true);
 		card.UIel = cardElement;
 		this.cardElements.set(card, cardElement);
-		console.log(`Card element created:`, cardElement);
 	}
 
 	/**
@@ -217,18 +209,11 @@ export class WebUI extends UIInterface {
 	 * @param {string} dest - Destination container name
 	 */
 	moveMultiple(cards, origin, dest) {
-		console.log(`Moving ${cards.length} cards from ${origin} to ${dest}`);
 		const originContainer = this.getContainer(origin);
 		const destContainer = this.getContainer(dest);
-		console.log(`Origin container:`, originContainer);
-		console.log(`Destination container:`, destContainer);
 
 		cards.forEach((card) => {
 			const cardElement = this.cardElements.get(card);
-			console.log(
-				`Moving card ${card.type} of ${card.suit}, element:`,
-				cardElement
-			);
 			if (!cardElement) return;
 
 			// Remove from origin
@@ -238,10 +223,7 @@ export class WebUI extends UIInterface {
 
 			// Add to destination
 			if (destContainer && destContainer.addCard) {
-				console.log(`Adding card to destination container`);
 				destContainer.addCard(cardElement);
-			} else {
-				console.log(`No destination container or addCard method`);
 			}
 
 			// Clear selection state
@@ -266,6 +248,8 @@ export class WebUI extends UIInterface {
 			return this.playerHandContainer;
 		case "handPlayed":
 			return this.playedCardsContainer;
+		case "handJoker":
+			return this.jokersContainer;
 		case "deck":
 			return null; // Cards going to deck are removed from UI
 		case "discard_pile":
@@ -289,11 +273,9 @@ export class WebUI extends UIInterface {
 		}
 		if (data.roundScore !== undefined && this.roundScoreEl) {
 			this.animateScoreUpdate(data.roundScore);
-			console.log(`Round Score updated to: ${data.roundScore}`);
 		}
 		if (data.handScore !== undefined && this.chipValEl) {
 			this.chipValEl.textContent = data.handScore;
-			console.log(`Hand Score updated to: ${data.handScore}`);
 		}
 		if (data.handMult !== undefined && this.multValEl) {
 			this.multValEl.textContent = data.handMult;

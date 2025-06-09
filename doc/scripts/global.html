@@ -205,7 +205,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line106">line 106</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line151">line 151</a>
     </li></ul></dd>
     
 
@@ -293,7 +293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line83">line 83</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -379,7 +379,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -430,7 +430,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line71">line 71</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -542,7 +542,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -644,7 +644,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line145">line 145</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -781,7 +781,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line37">line 37</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -1004,7 +1004,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
 
 
             
@@ -1056,6 +1056,326 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="frontend_DeckElement.js.html">frontend/DeckElement.js</a>, <a href="frontend_DeckElement.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addChips"><span class="type-signature"></span>addChips<span class="signature">(params, chips)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds chips to the current score, applying any other Joker             effects that may change the value or affect other             scoring parameters.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for adding chips.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The number of chips to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_scoringHandler.js.html">backend/scoringHandler.js</a>, <a href="backend_scoringHandler.js.html#line176">line 176</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addMult"><span class="type-signature"></span>addMult<span class="signature">(params, mult)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds a multiplier to the current score, applying any other Joker             effects that may change the value or affect other             scoring parameters.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters for adding a multiplier.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mult</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The multiplier to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_scoringHandler.js.html">backend/scoringHandler.js</a>, <a href="backend_scoringHandler.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -1250,6 +1570,143 @@
     
 
     
+    <h4 class="name" id="addSave"><span class="type-signature"></span>addSave<span class="signature">(saveData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds a new game save to the saves list.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>saveData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GameState">GameState</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The game save to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="allowPlay"><span class="type-signature"></span>allowPlay<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1303,6 +1760,94 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="backend_UIInterface.js.html">backend/UIInterface.js</a>, <a href="backend_UIInterface.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="allowPlay"><span class="type-signature"></span>allowPlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Enable game controls
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line493">line 493</a>
     </li></ul></dd>
     
 
@@ -1426,6 +1971,143 @@
     
 
     
+    <h4 class="name" id="animateScoreUpdate"><span class="type-signature"></span>animateScoreUpdate<span class="signature">(newScore)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Animates the round score when it updates
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newScore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new score value</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line362">line 362</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="calculateBlackjackScore"><span class="type-signature"></span>calculateBlackjackScore<span class="signature">(cards)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
@@ -1476,7 +2158,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
 
 
             
@@ -1642,7 +2324,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line152">line 152</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1689,6 +2371,94 @@
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="clearCards"><span class="type-signature"></span>clearCards<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Removes all cards from the hand.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2114,7 +2884,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -2209,6 +2979,143 @@
 
 
 <div class="description">
+    Creates a CardElement for a backend Card
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Card">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The backend card object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line160">line 160</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createUIel"><span class="type-signature"></span>createUIel<span class="signature">(card)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Creates UIel object representing a given backend card.
 </div>
 
@@ -2251,7 +3158,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -2390,7 +3297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line133">line 133</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -2415,6 +3322,165 @@
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteSave"><span class="type-signature"></span>deleteSave<span class="signature">(index)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deletes a save from the specified index.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Index of the save to remove.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True if deletion succeeded.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -2479,6 +3545,94 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="backend_UIInterface.js.html">backend/UIInterface.js</a>, <a href="backend_UIInterface.js.html#line172">line 172</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="disallowPlay"><span class="type-signature"></span>disallowPlay<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Disable game controls
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line503">line 503</a>
     </li></ul></dd>
     
 
@@ -2742,7 +3896,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line176">line 176</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -2874,6 +4028,94 @@
 
 
 <div class="description">
+    Shows bust message
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line380">line 380</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayBust"><span class="type-signature"></span>displayBust<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Notifies the player that the hand was bust.
 </div>
 
@@ -2919,6 +4161,189 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="frontend_consoleUI.js.html">frontend/consoleUI.js</a>, <a href="frontend_consoleUI.js.html#line442">line 442</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayHandScored"><span class="type-signature"></span>displayHandScored<span class="signature">(handScore, multiplier, totalAdded)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Shows when a hand successfully scores
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handScore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The hand score</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>multiplier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The multiplier applied</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAdded</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Total points added to round score</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line398">line 398</a>
     </li></ul></dd>
     
 
@@ -3056,6 +4481,143 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="backend_UIInterface.js.html">backend/UIInterface.js</a>, <a href="backend_UIInterface.js.html#line67">line 67</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayLoss"><span class="type-signature"></span>displayLoss<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Shows game over message
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The loss message</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line418">line 418</a>
     </li></ul></dd>
     
 
@@ -3396,6 +4958,166 @@
 
 
 <div class="description">
+    Shows money earned
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>base</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Base money earned</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extras</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Extra money bonuses</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line436">line 436</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayMoney"><span class="type-signature"></span>displayMoney<span class="signature">(base, extras)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Displays the money won by the player, both base value and some				bonuses if any won.
 </div>
 
@@ -3644,6 +5366,94 @@
 
 
 <div class="description">
+    Shows win message
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line428">line 428</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayWin"><span class="type-signature"></span>displayWin<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Display a win message when the player wins the game.
 </div>
 
@@ -3724,7 +5534,7 @@
     
 
     
-    <h4 class="name" id="drawCard"><span class="type-signature"></span>drawCard<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Card.html">Card</a>|null}</span></h4>
+    <h4 class="name" id="drawCard"><span class="type-signature"></span>drawCard<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#Card">Card</a>|null}</span></h4>
     
 
     
@@ -3776,7 +5586,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line34">line 34</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -3816,7 +5626,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 |
 
 <span class="param-type">null</span>
@@ -4070,6 +5880,94 @@
 
 
 <div class="description">
+    Exit to main menu
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line485">line 485</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="exitGame"><span class="type-signature"></span>exitGame<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Exit the game to the main menu.
 </div>
 
@@ -4238,6 +6136,593 @@
     
 
     
+    <h4 class="name" id="formatJokerDescription"><span class="type-signature"></span>formatJokerDescription<span class="signature">(text)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Formats special sequences in joker descriptions:!<c(+X)!> for chips - displays in bold blue!<t(+X)!> for multiplier - displays in bold red
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The text with special sequences</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Formatted HTML text
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getAllSaves"><span class="type-signature"></span>getAllSaves<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;<a href="global.html#GameSave">GameSave</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets all saved games.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Array of saved games.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="global.html#GameSave">GameSave</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getContainer"><span class="type-signature"></span>getContainer<span class="signature">(containerName)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets a UI container by name
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>containerName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the container</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The container element
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTMLElement</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getHandType"><span class="type-signature"></span>getHandType<span class="signature">(cards)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Determines the poker hand type for a given set of cards.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cards</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of Card objects.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_utils.js.html">backend/utils.js</a>, <a href="backend_utils.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The name of the hand type.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="getInsertIndex"><span class="type-signature"></span>getInsertIndex<span class="signature">(card)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
@@ -4288,7 +6773,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -4339,7 +6824,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line96">line 96</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -4380,6 +6865,168 @@
     <dd>
         
 <span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getSave"><span class="type-signature"></span>getSave<span class="signature">(index)</span><span class="type-signature"> &rarr; {<a href="global.html#GameSave">GameSave</a>|null}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets a specific save by index.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The index of the save to fetch.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The saved game for this index, or null if none.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#GameSave">GameSave</a></span>
+|
+
+<span class="param-type">null</span>
 
 
     </dd>
@@ -4449,7 +7096,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line74">line 74</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -4490,6 +7137,226 @@
     <dd>
         
 <span class="param-type">Array.&lt;<a href="CardElement.html">CardElement</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getSelectedCards"><span class="type-signature"></span>getSelectedCards<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;<a href="CardElement.html">CardElement</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets all currently selected card elements
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line123">line 123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Array of selected card elements
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="CardElement.html">CardElement</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getStats"><span class="type-signature"></span>getStats<span class="signature">()</span><span class="type-signature"> &rarr; {Map.&lt;string, any>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets lifetime statistics.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line187">line 187</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The stats object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Map.&lt;string, any></span>
 
 
     </dd>
@@ -4864,6 +7731,182 @@
     
 
     
+    <h4 class="name" id="initialize"><span class="type-signature"></span>initialize<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initializes the WebUI after DOM is ready
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="initializeStorage"><span class="type-signature"></span>initializeStorage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initializes the default game storage if no existing save is found.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="moveCard"><span class="type-signature"></span>moveCard<span class="signature">(fromIndex, toIndex)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
@@ -4988,7 +8031,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line168">line 168</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -5096,7 +8139,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
 
 
             
@@ -5478,7 +8521,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line376">line 376</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line460">line 460</a>
     </li></ul></dd>
     
 
@@ -5544,6 +8587,189 @@
 
 
 <div class="description">
+    Moves cards between UI containers
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cards</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Cards to move</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>origin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Origin container name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dest</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Destination container name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="moveMultiple"><span class="type-signature"></span>moveMultiple<span class="signature">(cards, origin, dest)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Moves cards from one location on-screen to another.
 </div>
 
@@ -5586,7 +8812,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="Card.html">Card</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
 
 
             
@@ -5945,7 +9171,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line333">line 333</a>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -6056,6 +9282,94 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="backend_UIInterface.js.html">backend/UIInterface.js</a>, <a href="backend_UIInterface.js.html#line87">line 87</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="newGame"><span class="type-signature"></span>newGame<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initialize UI for new game
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line462">line 462</a>
     </li></ul></dd>
     
 
@@ -6300,7 +9614,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line353">line 353</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line361">line 361</a>
     </li></ul></dd>
     
 
@@ -6330,6 +9644,501 @@
         
 <div class="param-desc">
     - True if the next blind was reached, false if the game is over.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onDiscardSelected"><span class="type-signature"></span>onDiscardSelected<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Handles the Discard Selected button click
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onDraw"><span class="type-signature"></span>onDraw<span class="signature">(card)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Called when a card is drawn from the deck.             This can be used to trigger any scoring-related effects.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The card that was drawn.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_scoringHandler.js.html">backend/scoringHandler.js</a>, <a href="backend_scoringHandler.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onPlaySelected"><span class="type-signature"></span>onPlaySelected<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Handles the Play Selected button click
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="overwriteSave"><span class="type-signature"></span>overwriteSave<span class="signature">(index, saveData)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Replaces an existing save at the specified index.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Index to replace.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>saveData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GameState">GameState</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The new save data.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line126">line 126</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True if successful.
 </div>
 
 
@@ -6498,7 +10307,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line223">line 223</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line263">line 263</a>
     </li></ul></dd>
     
 
@@ -6740,6 +10549,116 @@
 
 
 <div class="description">
+    Prompts for endless mode
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line453">line 453</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Whether player wants endless mode
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="promptEndlessMode"><span class="type-signature"></span>promptEndlessMode<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Prompts the player if they want to enter endless mode after winning.
 </div>
 
@@ -6842,6 +10761,119 @@
     
 
     
+    <h4 class="name" id="readFromStorage"><span class="type-signature"></span>readFromStorage<span class="signature">()</span><span class="type-signature"> &rarr; {object|null}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Reads and parses the game data from localStorage.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Parsed data object, or null on error.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="removeCard"><span class="type-signature"></span>removeCard<span class="signature">(card)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
@@ -6892,7 +10924,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -6943,7 +10975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line88">line 88</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -7001,7 +11033,7 @@
     
 
     
-    <h4 class="name" id="removeCard"><span class="type-signature"></span>removeCard<span class="signature">(target)</span><span class="type-signature"> &rarr; {<a href="Card.html">Card</a>|null}</span></h4>
+    <h4 class="name" id="removeCard"><span class="type-signature"></span>removeCard<span class="signature">(target)</span><span class="type-signature"> &rarr; {<a href="global.html#Card">Card</a>|null}</span></h4>
     
 
     
@@ -7054,7 +11086,7 @@
 <span class="param-type">number</span>
 |
 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -7105,7 +11137,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line193">line 193</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -7145,7 +11177,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 |
 
 <span class="param-type">null</span>
@@ -7267,7 +11299,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line49">line 49</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -7651,7 +11683,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line65">line 65</a>
+        <a href="frontend_HandElement.js.html">frontend/HandElement.js</a>, <a href="frontend_HandElement.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -7737,7 +11769,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -7832,6 +11864,143 @@
 
 
 <div class="description">
+    Removes a CardElement for a backend Card
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Card">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The backend card object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeUIel"><span class="type-signature"></span>removeUIel<span class="signature">(card)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Removes UIel object for a given backend card, deconstructing             it and freeing its resources.
 </div>
 
@@ -7874,7 +12043,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -8101,7 +12270,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line61">line 61</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -8189,7 +12358,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line58">line 58</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -8275,7 +12444,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -8326,7 +12495,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line48">line 48</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -8412,7 +12581,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -8553,6 +12722,189 @@
 
 
 <div class="description">
+    Shows scoring animation for a card
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Card">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The card to animate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>messages</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Score messages to show</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Colors for the messages</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line303">line 303</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="scoreCard"><span class="type-signature"></span>scoreCard<span class="signature">(card, messages, colors)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Plays the scoring animation and displays text messages for a card.             If no messages given, should just play the animation.
 </div>
 
@@ -8595,7 +12947,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Card.html">Card</a></span>
+<span class="param-type"><a href="global.html#Card">Card</a></span>
 
 
             
@@ -8736,7 +13088,7 @@
 
 
 <div class="description">
-    Scores the played hand, updates the round score, and sets up for the next round.
+    Scores the played hand for the gameHandler.
 </div>
 
 
@@ -8780,7 +13132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line276">line 276</a>
+        <a href="backend_scoringHandler.js.html">backend/scoringHandler.js</a>, <a href="backend_scoringHandler.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -8940,7 +13292,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line157">line 157</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line181">line 181</a>
     </li></ul></dd>
     
 
@@ -9832,6 +14184,182 @@
     
 
     
+    <h4 class="name" id="setupEventListeners"><span class="type-signature"></span>setupEventListeners<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets up event listeners for the game buttons
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupUIElements"><span class="type-signature"></span>setupUIElements<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets references to all the UI elements we need
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="showHand"><span class="type-signature"></span>showHand<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -9920,6 +14448,143 @@
     
 
     
+    <h4 class="name" id="showMessage"><span class="type-signature"></span>showMessage<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Shows a temporary message to the player
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message to show</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="shuffle"><span class="type-signature"></span>shuffle<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -9972,7 +14637,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line23">line 23</a>
+        <a href="backend_Deck.js.html">backend/Deck.js</a>, <a href="backend_Deck.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -10060,7 +14725,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line60">line 60</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -10148,7 +14813,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line78">line 78</a>
+        <a href="backend_Hand.js.html">backend/Hand.js</a>, <a href="backend_Hand.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -10375,7 +15040,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_utils.js.html">backend/utils.js</a>, <a href="backend_utils.js.html#line49">line 49</a>
+        <a href="backend_utils.js.html">backend/utils.js</a>, <a href="backend_utils.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -10416,6 +15081,116 @@
     <dd>
         
 <span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="storageExists"><span class="type-signature"></span>storageExists<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks if localStorage already contains game data.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True if storage exists, false otherwise.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -10843,6 +15618,94 @@
     
 
     
+    <h4 class="name" id="updateDeckCount"><span class="type-signature"></span>updateDeckCount<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates the deck count display
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line291">line 291</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="updateMultiplier"><span class="type-signature"></span>updateMultiplier<span class="signature">(multiplier)</span><span class="type-signature"></span></h4>
     
 
@@ -11128,6 +15991,143 @@
 
 
 <div class="description">
+    Updates the scorekeeper display
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object with scorekeeper data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateScorekeeper"><span class="type-signature"></span>updateScorekeeper<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
     Tells the UI that the scorekeeper changed and it should update.
 </div>
 
@@ -11252,12 +16252,854 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="updateStat"><span class="type-signature"></span>updateStat<span class="signature">(statKey, delta<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Increments a stat by a given amount (default 1).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>statKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Name of the stat to update.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>delta</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">Amount to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line197">line 197</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="writeToStorage"><span class="type-signature"></span>writeToStorage<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Saves the game data to localStorage.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The full data object to write.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line95">line 95</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
         <h3 class="subsection-title">Type Definitions</h3>
 
         
+                
+<h4 class="name" id="Card">Card</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">module:scripts/backend/Card</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_CardElement.js.html">frontend/CardElement.js</a>, <a href="frontend_CardElement.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Card">Card</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">module:scripts/backend/Card</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_DeckElement.js.html">frontend/DeckElement.js</a>, <a href="frontend_DeckElement.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="Card">Card</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of the card (e.g., "Ace", "King").</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>suit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The suit of the card (e.g., "Hearts", "Spades").</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isSelected</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the card is selected.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="frontend_WebUI.js.html">frontend/WebUI.js</a>, <a href="frontend_WebUI.js.html#line514">line 514</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="GameSave">GameSave</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>lastSaved</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The time this save data was last written to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gameState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GameState">GameState</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The game state necessary to reload the game.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="GameState">GameState</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">module:scripts/backend/Card.Card</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
                 
 <h4 class="name" id="GameState">GameState</h4>
 
@@ -11322,7 +17164,7 @@
 
             
 
-            <td class="description last">– the deck of cards</td>
+            <td class="description last">the deck of cards</td>
         </tr>
 
     
@@ -11345,7 +17187,7 @@
 
             
 
-            <td class="description last">– the player's hands</td>
+            <td class="description last">the player's hands</td>
         </tr>
 
     
@@ -11368,7 +17210,7 @@
 
             
 
-            <td class="description last">– current ante value</td>
+            <td class="description last">current ante value</td>
         </tr>
 
     
@@ -11391,7 +17233,7 @@
 
             
 
-            <td class="description last">– current blind value</td>
+            <td class="description last">current blind value</td>
         </tr>
 
     
@@ -11414,7 +17256,7 @@
 
             
 
-            <td class="description last">– how many hands may be played this blind</td>
+            <td class="description last">how many hands may be played this blind</td>
         </tr>
 
     
@@ -11437,7 +17279,7 @@
 
             
 
-            <td class="description last">– (config) hands per blind</td>
+            <td class="description last">(config) hands per blind</td>
         </tr>
 
     
@@ -11460,7 +17302,7 @@
 
             
 
-            <td class="description last">– (fixed) blinds per ante</td>
+            <td class="description last">(fixed) blinds per ante</td>
         </tr>
 
     
@@ -11483,7 +17325,7 @@
 
             
 
-            <td class="description last">– (fixed) total antes in the game</td>
+            <td class="description last">(fixed) total antes in the game</td>
         </tr>
 
     
@@ -11506,7 +17348,7 @@
 
             
 
-            <td class="description last">– player's available money</td>
+            <td class="description last">player's available money</td>
         </tr>
 
     
@@ -11529,7 +17371,7 @@
 
             
 
-            <td class="description last">– how many cards can be discarded</td>
+            <td class="description last">how many cards can be discarded</td>
         </tr>
 
     
@@ -11552,7 +17394,7 @@
 
             
 
-            <td class="description last">– thresholds for each blind</td>
+            <td class="description last">thresholds for each blind</td>
         </tr>
 
     
@@ -11575,7 +17417,7 @@
 
             
 
-            <td class="description last">– score for the current round</td>
+            <td class="description last">score for the current round</td>
         </tr>
 
     
@@ -11598,7 +17440,7 @@
 
             
 
-            <td class="description last">– total hands played so far</td>
+            <td class="description last">total hands played so far</td>
         </tr>
 
     
@@ -11621,7 +17463,7 @@
 
             
 
-            <td class="description last">– how many discards have been used</td>
+            <td class="description last">how many discards have been used</td>
         </tr>
 
     
@@ -11644,7 +17486,7 @@
 
             
 
-            <td class="description last">– score for the current hand</td>
+            <td class="description last">score for the current hand</td>
         </tr>
 
     
@@ -11667,7 +17509,7 @@
 
             
 
-            <td class="description last">– multiplier for the current hand</td>
+            <td class="description last">multiplier for the current hand</td>
         </tr>
 
     
@@ -11690,7 +17532,7 @@
 
             
 
-            <td class="description last">– whether the game is in endless mode</td>
+            <td class="description last">whether the game is in endless mode</td>
         </tr>
 
     
@@ -11736,7 +17578,147 @@
 
             
 
-            <td class="description last">– name of the current blind level</td>
+            <td class="description last">name of the current blind level</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interestCap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Maximum amount that may be reached by interest	
+
+/**</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#GameState">GameState</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current state of the game.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>suits</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The suits of the cards.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>types</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The types of the cards.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>defaultCards</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#Card">Card</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The default set of cards in the game.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scoringHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scoring handler for this gameHandler.</td>
         </tr>
 
     
@@ -11775,7 +17757,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line15">line 15</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -11964,7 +17946,242 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line7">line 7</a>
+        <a href="backend_gameHandler.js.html">backend/gameHandler.js</a>, <a href="backend_gameHandler.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="JokerParams">JokerParams</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>card</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Card">Card</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The card associated with the joker.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cardIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The index of the card in the hand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>jokerIdx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The index of the joker in the hand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>score</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current score of the hand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scoringHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#scoringHandler">scoringHandler</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scoring handler for the game.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gameHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="gameHandler.html">gameHandler</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The game handler for the game.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -12268,6 +18485,195 @@
 
             
                 
+<h4 class="name" id="SavesData">SavesData</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>saves</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#GameSave">GameSave</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of game saves.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lifetimeStats</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Map.&lt;string, any></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Statistics about the player's lifetime performance.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unlockedJokers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of jokers that have been unlocked.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Version of the game data format.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_GameStorage.js.html">backend/GameStorage.js</a>, <a href="backend_GameStorage.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="ScorekeeperData">ScorekeeperData</h4>
 
 
@@ -12553,6 +18959,74 @@
 
 
             
+                
+<h4 class="name" id="scoringHandler">scoringHandler</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">module:scripts/backend/gameHandler.gameHandler</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="backend_Jokers.js.html">backend/Jokers.js</a>, <a href="backend_Jokers.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
     
 
     
@@ -12566,7 +19040,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Card.html">Card</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#addSave">addSave</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#deleteSave">deleteSave</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getAllSaves">getAllSaves</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSave">getSave</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#overwriteSave">overwriteSave</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
 </nav>
 
 <br class="clear">
