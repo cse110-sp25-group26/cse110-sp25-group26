@@ -264,6 +264,8 @@ export class WebUI extends UIInterface {
 			return this.playedCardsContainer;
 		case "handJoker":
 			return this.jokersContainer;
+		case "handConsumable":
+			return this.consumablesContainer;
 		case "deck":
 			return null; // Cards going to deck are removed from UI
 		case "discard_pile":

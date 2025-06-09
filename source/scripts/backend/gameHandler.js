@@ -586,12 +586,11 @@ export class gameHandler {
 		}
 
 		// Reconstruct deck
-		this.state.deck = new Deck(this.defaultCards, this);
-		if (savedState.deck) {
-			// Clear the deck and reconstruct from saved data
-			this.state.deck.availableCards = [];
-			this.state.deck.usedCards = [];
+		this.state.deck = new Deck([], this); // Start with empty deck
 
+		if (savedState.deck) {
+			// Reconstruct available cards
+			this.state.deck.availableCards = [];
 			if (savedState.deck.availableCards) {
 				savedState.deck.availableCards.forEach((cardData) => {
 					const card = new Card(cardData.suit, cardData.type);
@@ -599,21 +598,43 @@ export class gameHandler {
 				});
 			}
 
+			// Reconstruct used cards
+			this.state.deck.usedCards = [];
 			if (savedState.deck.usedCards) {
 				savedState.deck.usedCards.forEach((cardData) => {
 					const card = new Card(cardData.suit, cardData.type);
 					this.state.deck.usedCards.push(card);
 				});
 			}
+
+			// Reconstruct allCards from available and used cards
+			this.state.deck.allCards = [
+				...this.state.deck.availableCards,
+				...this.state.deck.usedCards,
+			];
+		} else {
+			// Fallback to default deck if no saved deck data
+			this.state.deck = new Deck(this.defaultCards, this);
 		}
 
 		// Reconstruct jokers if any
-		if (savedState.hands.joker.cards) {
-			this.state.hands.joker.cards = [];
+		if (
+			savedState.hands &&
+			savedState.hands.joker &&
+			savedState.hands.joker.cards
+		) {
 			savedState.hands.joker.cards.forEach((jokerData) => {
 				if (jokerData.jokerType) {
-					const joker = Joker.newJoker(jokerData.jokerType);
-					this.state.hands.joker.addCard(joker);
+					try {
+						const joker = Joker.newJoker(jokerData.jokerType);
+						this.state.hands.joker.addCard(joker);
+					} catch (err) {
+						console.warn(
+							"Failed to reconstruct joker:",
+							jokerData.jokerType,
+							err
+						);
+					}
 				}
 			});
 		}
@@ -658,13 +679,11 @@ export class gameHandler {
 		// Update scorekeeper with current state
 		this.uiInterface.updateScorekeeper({
 			ante: this.state.currAnte,
-			round: this.state.currBlind,
+			blindName: this.state.currentBlindName,
 			handsRemaining: this.state.totalHands - this.state.handsPlayed,
 			discardsRemaining:
 				this.state.discardCount - this.state.discardsUsed,
 			minScore: this.state.blindRequirements[this.state.currBlind - 1],
-			baseReward: this.state.blindRewards[this.state.currBlind - 1],
-			blindName: this.state.currentBlindName,
 			roundScore: this.state.roundScore,
 			handScore: 0,
 			handMult: 1,
