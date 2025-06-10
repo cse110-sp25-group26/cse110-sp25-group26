@@ -1,4 +1,4 @@
-import { CardElement } from './CardElement.js';
+import { CardElement } from "./CardElement.js";
 
 /**
  * @class HandElement
@@ -11,17 +11,26 @@ export class HandElement extends HTMLElement {
 	 */
 	constructor() {
 		super();
-		this.attachShadow({ mode: 'open' });
+		this.attachShadow({ mode: "open" });
 
 		// Hand container
-		this._container = document.createElement('div');
-		this._container.classList.add('hand');
+		this._container = document.createElement("div");
+		this._container.classList.add("hand");
 		this.shadowRoot.appendChild(this._container);
 
+		// card animation movement test
+		const animationLink = document.createElement('link');
+		animationLink.setAttribute('rel', 'stylesheet');
+		animationLink.setAttribute('href', 'scripts/frontend/card-animations.css');
+		this.shadowRoot.appendChild(animationLink);
+		
 		// Attach external CSS
-		const styleLink = document.createElement('link');
-		styleLink.setAttribute('rel', 'stylesheet');
-		styleLink.setAttribute('href', '/source/scripts/frontend/hand.css');
+		const styleLink = document.createElement("link");
+		styleLink.setAttribute("rel", "stylesheet");
+		styleLink.setAttribute(
+			"href",
+			`styles/hand.css?v=${Date.now()}`
+		);
 		this.shadowRoot.appendChild(styleLink);
 
 		// Internal state
@@ -29,7 +38,7 @@ export class HandElement extends HTMLElement {
 
 		// Listen for card-dropped events to re-run layout
 		// This ensures cards re-home correctly after being dragged and dropped.
-		this._container.addEventListener('card-dropped', () => {
+		this._container.addEventListener("card-dropped", () => {
 			this._updateLayout();
 		});
 	}
@@ -40,7 +49,9 @@ export class HandElement extends HTMLElement {
 	 * @param {CardElement} cardElement - The card element to add.
 	 */
 	addCard(cardElement) {
-		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+		cardElement.addEventListener("click", () =>
+			this._onCardSelect(cardElement)
+		);
 		this.cards.push(cardElement);
 		this._container.appendChild(cardElement);
 		this._updateLayout();
@@ -68,7 +79,7 @@ export class HandElement extends HTMLElement {
 	 */
 	removeSelectedCards() {
 		const selectedCards = this.getSelectedCards();
-		selectedCards.forEach(card => this.removeCard(card));
+		selectedCards.forEach((card) => this.removeCard(card));
 	}
 
 	/**
@@ -77,7 +88,21 @@ export class HandElement extends HTMLElement {
 	 * @returns {CardElement[]} An array of selected card elements.
 	 */
 	getSelectedCards() {
-		return this.cards.filter(card => card.classList.contains('selected'));
+		return this.cards.filter((card) => card.classList.contains("selected"));
+	}
+
+	/**
+	 * @function clearCards
+	 * @description Removes all cards from the hand.
+	 */
+	clearCards() {
+		this.cards.forEach((card) => {
+			if (card.isConnected) {
+				this._container.removeChild(card);
+			}
+		});
+		this.cards = [];
+		this._updateLayout();
 	}
 
 	/**
@@ -85,22 +110,48 @@ export class HandElement extends HTMLElement {
 	 * @description Updates the layout of cards in the hand, scaling them to fit.
 	 */
 	_updateLayout() {
-		const handWidth = this._container.offsetWidth || 1; // Avoid division by zero
-		const cardWidth = 80; // Default card width
-		const totalWidth = this.cards.length * cardWidth;
+		if (this.cards.length === 0) return;
 
-		let overlap = 0;
-		if (totalWidth > handWidth && this.cards.length > 1) {
-			overlap = (totalWidth - handWidth) / (this.cards.length - 1);
-		}
+		// Ensure container has proper styling
+		this._container.style.position = "relative";
+		this._container.style.display = "block"; // Override flex to work with absolute positioning
+		this._container.style.width = "100%";
+		this._container.style.height = "120px";
 
-		this.cards.forEach((card, index) => {
-			card.style.position = 'absolute';
-			card.style.left = `${index * (cardWidth - overlap)}px`;
-			card.style.transform = card.classList.contains('selected') ? 'translateY(-20px)' : 'translateY(0)';
-			card.style.zIndex = index.toString(); // Set zIndex for stacking
-			card.style.width = `${cardWidth}px`; // Ensure consistent width
-		});
+		// Wait for container to have dimensions
+		setTimeout(() => {
+			const handWidth = this._container.offsetWidth || 400;
+			const cardWidth = 80;
+			let cardSpacing = cardWidth;
+
+			// Calculate spacing to fit all cards
+			if (this.cards.length > 1) {
+				const totalNeededWidth = this.cards.length * cardWidth;
+				if (totalNeededWidth > handWidth) {
+					// Cards need to overlap
+					cardSpacing = Math.max(
+						20,
+						(handWidth - cardWidth) / (this.cards.length - 1)
+					);
+				}
+			}
+
+			console.log(
+				`Layout: handWidth=${handWidth}, cardWidth=${cardWidth}, cardSpacing=${cardSpacing}, cards=${this.cards.length}`
+			);
+
+			this.cards.forEach((card, index) => {
+				card.style.position = "absolute";
+				card.style.left = `${index * cardSpacing}px`;
+				card.style.top = "0px";
+				card.style.transform = card.classList.contains("selected")
+					? "translateY(-20px)"
+					: "translateY(0)";
+				card.style.zIndex = index.toString();
+				card.style.width = `${cardWidth}px`;
+				card.style.height = "120px";
+			});
+		}, 10);
 	}
 
 	/**
@@ -113,14 +164,68 @@ export class HandElement extends HTMLElement {
 		if (cardElement._wasDragged) {
 			return;
 		}
-		const isSelected = cardElement.classList.toggle('selected');
-		this.dispatchEvent(new CustomEvent('card-selected', {
-			detail: { card: cardElement, selected: isSelected },
-			bubbles: true,
-			composed: true
-		}));
+		const isSelected = cardElement.classList.toggle("selected");
+		this.dispatchEvent(
+			new CustomEvent("card-selected", {
+				detail: { card: cardElement, selected: isSelected },
+				bubbles: true,
+				composed: true,
+			})
+		);
 		this._updateLayout();
+	}
+	
+	/**
+	 * @function addCardwithAnimation
+	 * @description adding the card to player hand
+	 * @param {CardElement} cardElement - The selected card element.
+	 */
+	addCardwithAnimation(cardElement) {
+		cardElement.addEventListener('click', () => this._onCardSelect(cardElement));
+		this.cards.push(cardElement);
+		this._container.appendChild(cardElement);
+
+		// For movement animation
+		const deckBox = document.getElementById('card-deck')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+		if (deckBox && handBox) {
+			const offsetX = deckBox.left - handBox.left;
+			const offsetY = deckBox.top - handBox.top;
+			cardElement.style.setProperty('--from-x', `${offsetX}px`);
+			cardElement.style.setProperty('--from-y', `${offsetY}px`);
+			cardElement._container?.classList.add('card-fly-in');
+		}
+
+		this._updateLayout();
+	}
+
+	/**
+	 * @function removeSelectedCardswithAnimation
+	 * @description removing card from player hand to trash 
+	 */
+	removeSelectedCardswithAnimation() {
+		const selectedCards = this.getSelectedCards();
+		const trashBox = document.getElementById('discard-pile')?.getBoundingClientRect();
+		const handBox = this.getBoundingClientRect();
+
+		selectedCards.forEach(card => {
+			if (trashBox && handBox) {
+				const offsetX = trashBox.left - handBox.left;
+				const offsetY = trashBox.top - handBox.top;
+				card.style.setProperty('--to-x', `${offsetX}px`);
+				card.style.setProperty('--to-y', `${offsetY}px`);
+				card._container?.classList.add('card-fly-out');
+
+				// 
+				setTimeout(() => {
+					this.removeCard(card);
+				}, 500);
+			} else {
+				this.removeCard(card); // fallback
+			}
+		});
 	}
 }
 
-customElements.define('hand-element', HandElement);
+customElements.define("hand-element", HandElement);
+

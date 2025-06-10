@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/Jokers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/Jokers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Card } from "./Card.js";
+import { calculateBlackjackScore } from "./utils.js";
+
+/**
+ * @typedef {module:scripts/backend/gameHandler.gameHandler} gameHandler
+ * @typedef {module:scripts/backend/scoringHandler.scoringHandler} scoringHandler
+ */
+
+/**
+ * @typedef {object} JokerParams
+ * @property {Card} card - The card associated with the joker.
+ * @property {number} cardIdx - The index of the card in the hand.
+ * @property {number} jokerIdx - The index of the joker in the hand.
+ * @property {number} score - The current score of the hand.
+ * @property {scoringHandler} scoringHandler - The scoring handler for the game.
+ * @property {gameHandler} gameHandler - The game handler for the game.
+ */
+
+/**
+ * Formats special sequences in joker descriptions:
+ * !&lt;c(+X)!> for chips - displays in bold blue
+ * !&lt;t(+X)!> for multiplier - displays in bold red
+ * @param {string} text - The text with special sequences
+ * @returns {string} Formatted HTML text
+ */
+export function formatJokerDescription(text) {
+	return text
+		.replace(/!&lt;c\(([^)]+)\)!>/g, '&lt;span style="color:blue;font-weight:bold">$1 chips&lt;/span>')
+		.replace(/!&lt;t\(([^)]+)\)!>/g, '&lt;span style="color:red;font-weight:bold">$1x mult&lt;/span>');
+}
+
+/**
+ * @classdesc Represents a Joker in the game.
+ * 
+ * @property {Map&lt;string, Joker>} jokerTypes - A map of registered joker types.
+ */
+export class Joker extends Card {
+	static jokerTypes = new Map();
+
+	/**
+	 * Creates a new Joker instance based on the provided name.
+	 * @param {string} name - The name of the joker type.
+	 * @returns {Joker} An instance of the specified joker type.
+	 * @throws {Error} If the joker type is not registered.
+	 */
+	static newJoker(name) {
+		const JokerClass = Joker.jokerTypes.get(name);
+		if (!JokerClass) {
+			throw new Error(`Unknown joker type: ${name}`);
+		}
+		return new JokerClass();
+	}
+
+	/**
+	 * Registers a new joker type.
+	 * @param {string} name - The name of the joker type.
+	 * @param {Joker} jokerClass - The class of the joker type.
+	 * @throws {Error} If the joker type is already registered.
+	 */
+	static registerJoker(name, jokerClass) {
+		Joker.jokerTypes.set(name, jokerClass);
+	}
+
+	/**
+	 * Retrieves all registered joker names.
+	 * @returns {Array&lt;string>} An array of all registered joker names.
+	 */
+	static getJokerTypes() {
+		return Array.from(Joker.jokerTypes.keys());
+	}
+
+	/**
+	 * Returns a joker at a specific index relative to the current joker.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 * @param {number} delta - The index offset from the current joker.
+	 * @returns {Joker|null} The joker at the specified index, or null if out of bounds.
+	 */
+	static getJokerAt(params, delta) {
+		const jokerIdx = params.jokerIdx + delta;
+		if (jokerIdx &lt; 0 || jokerIdx >= params.gameHandler.state.hands.joker.cards.length) {
+			return null;
+		}
+		return params.gameHandler.state.hands.joker.cards[jokerIdx];
+
+	}
+
+	/**
+	 * @class Joker
+	 * @description Represents a Joker in the game.
+	 * @param {string} name - The name of the joker.
+	 */
+	constructor(name) {
+		super("joker", name);
+		this.state = {};
+	}
+
+	/**
+	 * Returns a formatted description of this joker
+	 * @returns {string} HTML-formatted description
+	 */
+	getDescription() {
+		// Default description, individual jokers should override this
+		try {
+			return `&lt;b>${this.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}&lt;/b>&lt;br>${this.description || "No description available."}`;
+		} catch {
+			if (this.constructor.name) {
+				return `&lt;b>${this.constructor.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}&lt;/b>&lt;br>${this.description || "No description available."}`;
+			}
+			return `&lt;b>Joker&lt;/b>&lt;br>Loading description...`;
+		}
+	}
+
+	/* eslint-disable no-unused-vars */
+	/**
+	 * Called when a round starts.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onRoundStart(params) { }
+
+
+	/**
+	 * Called when the blind phase starts.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onBlindStart(params) { }
+
+	/**
+	 * Called when a card is drawn.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onDraw(params) { }
+
+	/**
+	 * Called when a joker is added to play.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onJokerEnter(params) { }
+	/**
+	 * Called when a joker is removed from play.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onJokerLeave(params) { }
+
+	/**
+	 * Called when the scoring phase starts.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onScoringStart(params) { }
+	/**
+	 * Called when the scoring phase ends.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onScoringEnd(params) { }
+
+	/**
+	 * Called when a card is scored.
+	 * @param {JokerParams} params - The parameters for the joker event.
+	 */
+	onCardScore(params) { }
+	/* eslint-enable no-unused-vars */
+
+	static jokerMethods = [
+		"onRoundStart",
+		"onBlindStart",
+		"onDraw",
+		"onJokerEnter",
+		"onJokerLeave",
+		"onScoringEnd",
+		"onCardScore",
+		"onScoringStart"
+	];
+}
+
+/**
+ * @classdesc Lucky Rabbit, adds 2 chips per card drawn.
+ * @augments Joker
+ */
+class LuckyRabbit extends Joker {
+	/** @class */
+	constructor() {
+		super("lucky_rabbit");
+	}
+
+	/** @inheritdoc */
+	onDraw(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+		params.scoringHandler.addChips(params, 2);
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Lucky Rabbit&lt;/b>&lt;br>When you draw a card, gain !&lt;c(+2)!>.`;
+	}
+}
+Joker.registerJoker("lucky_rabbit", LuckyRabbit);
+
+/**
+ * @classdesc Stick Shift, adds 1 discard per round.
+ * @augments Joker
+ */
+class StickShift extends Joker {
+	/** @class */
+	constructor() {
+		super("stick_shift");
+	}
+
+	/** @inheritdoc */
+	onJokerEnter(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+		params.gameHandler.state.discardCount += 1;
+	}
+
+	/** @inheritdoc */
+	onJokerLeave(params) {
+		params.gameHandler.state.discardCount -= 1;
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Stick Shift&lt;/b>&lt;br>Gain +1 discards per round.`;
+	}
+}
+Joker.registerJoker("stick_shift", StickShift);
+
+/**
+ * @classdesc Piggy Bank, increases interest cap by 1.
+ * @augments Joker
+ */
+class PiggyBank extends Joker {
+	/** @class */
+	constructor() {
+		super("piggy_bank");
+	}
+
+	/** @inheritdoc */
+	onJokerEnter(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+		params.gameHandler.state.interestCap += 1;
+	}
+
+	/** @inheritdoc */
+	onJokerLeave(params) {
+		params.gameHandler.state.interestCap -= 1;
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Piggy Bank&lt;/b>&lt;br>Increase interest cap by 1.`;
+	}
+}
+Joker.registerJoker("piggy_bank", PiggyBank);
+
+/**
+ * @classdesc Even Steven, adds a multiplier if score is even.
+ * @augments Joker
+ */
+class EvenSteven extends Joker {
+	/** @class */
+	constructor() {
+		super("even_steven");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score % 2 == 0) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, 0.2);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Even Steven&lt;/b>&lt;br>If your score is even, gain !&lt;t(+0.2)!>.`;
+	}
+}
+Joker.registerJoker("even_steven", EvenSteven);
+
+/**
+ * @classdesc Odd Rod, adds a multiplier if score is odd.
+ * @augments Joker
+ */
+class OddRod extends Joker {
+	/** @class */
+	constructor() {
+		super("odd_rod");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score % 2 == 1) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, 0.2);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Odd Rod&lt;/b>&lt;br>If your score is odd, gain !&lt;t(+0.2)!>.`;
+	}
+}
+Joker.registerJoker("odd_rod", OddRod);
+
+/**
+ * @classdesc Mirror Mask, copies the effect of the Joker to its left.
+ * @augments Joker
+ */
+class MirrorMask extends Joker {
+	/** @class */
+	constructor() {
+		super("mirror_mask");
+		// Create a proxy to intercept all method calls
+		return new Proxy(this, {
+			get(target, prop, receiver) {
+				// Get the original property/method
+				const value = Reflect.get(target, prop, receiver);
+
+				// Make sure the property is a function and valid joker method
+				if (typeof value === 'function' &amp;&amp; Joker.jokerMethods.includes(prop)) {
+
+					// Return a new function that forwards the call
+					return function (...args) {
+						const params = args[0]; // First argument should be the params object
+						const leftJoker = Joker.getJokerAt(params, -1);
+
+						if (leftJoker &amp;&amp; typeof leftJoker[prop] === 'function') {
+							// Forward the call to the joker
+							return leftJoker[prop](...args);
+						}
+
+						// Fallback to the original if not found
+						return value.apply(target, args);
+					};
+				}
+
+				// Not a function or not a joker method, return the original value
+				return value;
+			}
+		});
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Mirror Mask&lt;/b>&lt;br>Copies the effect of the Joker to its left.`;
+	}
+}
+Joker.registerJoker("mirror_mask", MirrorMask);
+
+/**
+ * @classdesc Stacked Deck, draws a card at the start of each round.
+ * @augments Joker
+ */
+class StackedDeck extends Joker {
+	/** @class */
+	constructor() {
+		super("stacked_deck");
+	}
+
+	/** @inheritdoc */
+	onRoundStart(params) {
+		const card = params.gameHandler.state.deck.drawCard();
+		if (card) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.gameHandler.state.hands.main.addCard(card);
+			params.gameHandler.uiInterface.createUIel(card);
+			params.gameHandler.moveMultiple([card], "deck", "handMain", 0);
+		}
+	}
+}
+Joker.registerJoker("stacked_deck", StackedDeck);
+
+/**
+ * @classdesc Card Counter, counts unique cards scored this round.
+ * @augments Joker
+ * @property {Set&lt;string>} seen - A set to track unique cards scored.
+ */
+class CardCounter extends Joker {
+	/** @class */
+	constructor() {
+		super("card_counter");
+		this.seen = new Set();
+	}
+
+	/* eslint-disable no-unused-vars */
+	/** @inheritdoc */
+	onBlindStart(params) {
+		this.seen.clear();
+	}
+	/* eslint-enable no-unused-vars */
+
+	/** @inheritdoc */
+	onCardScore(params) {
+		const card = params.card;
+		if (!this.seen.has(card.type + ' of ' + card.suit)) {
+			this.seen.add(card.type + ' of ' + card.suit);
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, 0.1);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Card Counter&lt;/b>&lt;br>Gain !&lt;t(+0.1)!> for each unique card scored this round.&lt;br>Current unique cards: ${this.seen.size}`;
+	}
+}
+Joker.registerJoker("card_counter", CardCounter);
+
+/**
+ * @classdesc Face Value, adds chips for scoring face cards.
+ * @augments Joker
+ */
+class FaceValue extends Joker {
+	/** @class */
+	constructor() {
+		super("face_value");
+	}
+
+	/** @inheritdoc */
+	onCardScore(params) {
+		const type = params.card.type;
+		if (type == "A" || type == "J" || type == "Q" || type == "K") {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addChips(params, 1);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Face Value&lt;/b>&lt;br>When you score a face card (A, J, Q, K), gain !&lt;c(+1)!>.`;
+	}
+}
+Joker.registerJoker("face_value", FaceValue);
+
+/**
+ * @classdesc Twenty-Oneder, adds a multiplier for scoring exactly 21.
+ * @augments Joker
+ */
+class TwentyOneder extends Joker {
+	/** @class */
+	constructor() {
+		super("twenty_oneder");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score == 21 &amp;&amp; calculateBlackjackScore(params.gameHandler.state.hands.main.cards) == 21) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, 0.5);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Twenty-Oneder&lt;/b>&lt;br>If your score is exactly 21, gain !&lt;t(+0.5)!>.`;
+	}
+}
+Joker.registerJoker("twenty_oneder", TwentyOneder);
+
+/**
+ * @classdesc Blueprint, copies the effects of all Jokers to the left.
+ * @augments Joker
+ */
+class Blueprint extends Joker {
+	/** @class */
+	constructor() {
+		super("blueprint");
+
+		// Create a proxy to intercept all method calls
+		return new Proxy(this, {
+			get(target, prop, receiver) {
+				// Get the original property/method
+				const value = Reflect.get(target, prop, receiver);
+
+				// Make sure the property is a function and valid joker method
+				if (typeof value === 'function' &amp;&amp; Joker.jokerMethods.includes(prop)) {
+
+					// Return a new function that forwards the call
+					return function (...args) {
+						const params = args[0]; // First argument should be the params object
+						let offset = -1;
+						let leftJoker = Joker.getJokerAt(params, offset);
+
+						while (leftJoker &amp;&amp; typeof leftJoker[prop] === 'function') {
+							leftJoker[prop](...args);
+							offset--;
+							leftJoker = Joker.getJokerAt(params, offset);
+						}
+
+						// Fallback to the original if not found
+						return value.apply(target, args);
+					};
+				}
+
+				// Not a function or not a joker method, return the original value
+				return value;
+			}
+		});
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Blueprint&lt;/b>&lt;br>Copy and apply the effects of all Jokers to the left.`;
+	}
+}
+Joker.registerJoker("blueprint", Blueprint);
+
+/**
+ * @classdesc Martingale, increases multiplier for consecutive low scores.
+ * @augments Joker
+ * @property {number} lastRoundsZero - The count of consecutive rounds with a score below 5.
+ */
+class Martingale extends Joker {
+	/** @class */
+	constructor() {
+		super("martingale");
+		this.lastRoundsLow = 0;
+	}
+
+	/* eslint-disable no-unused-vars */
+	/** @inheritdoc */
+	onBlindStart(params) {
+		this.lastRoundZero = 0;
+	}
+	/* eslint-enable no-unused-vars */
+
+	/** @inheritdoc */
+	onScoringStart(params) {
+		params.scoringHandler.addMult(params, 4 / (this.lastRoundsLow));
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score &lt; 5) {
+			this.lastRoundsLow += 1;
+		} else {
+			this.lastRoundsLow = 0;
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		const multiplier = this.lastRoundsLow > 0 ? (4 / this.lastRoundsLow).toFixed(1) : "4.0";
+		return `&lt;b>Martingale&lt;/b>&lt;br>If your score is below 5, gain !&lt;t(+${multiplier})!>. Decreases with consecutive low scores.&lt;br>Current consecutive low scores: ${this.lastRoundsLow}`;
+	}
+}
+Joker.registerJoker("martingale", Martingale);
+
+/**
+ * @classdesc Wildcard Joker, adds a random value if score is less than 21.
+ * @augments Joker
+ */
+class WildcardJoker extends Joker {
+	/** @class */
+	constructor() {
+		super("wildcard_joker");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score &lt; 21) {
+			const remaining = 21 - params.score;
+			const addValue = Math.floor(Math.random() * (remaining + 1));
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addChips(params, addValue);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Wildcard Joker&lt;/b>&lt;br>If your score is less than 21, add a random value to your score.`;
+	}
+}
+Joker.registerJoker("wildcard_joker", WildcardJoker);
+
+/**
+ * @classdesc Overclock, adds a multiplier for playing more than 5 cards.
+ * @augments Joker
+ */
+class Overclock extends Joker {
+	/** @class */
+	constructor() {
+		super("overclock");
+	}
+
+	/** @inheritdoc */
+	onScoringStart(params) {
+		if (params.gameHandler.state.hands.played.cards.length > 5) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, (params.gameHandler.state.hands.played.cards.length - 5) * 0.5);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Overclock&lt;/b>&lt;br>If you play more than 5 cards, gain !&lt;t(+0.5)!> for each additional card.`;
+	}
+}
+Joker.registerJoker("overclock", Overclock);
+
+/**
+ * @classdesc Event Horizon, multiplies the current multiplier by itself.
+ * @augments Joker
+ */
+class EventHorizon extends Joker {
+	/** @class */
+	constructor() {
+		super("event_horizon");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+		params.scoringHandler.mulMult(params, params.gameHandler.state.handMult);
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Event Horizon&lt;/b>&lt;br>Each round scores chips × multiplier².`;
+	}
+}
+Joker.registerJoker("event_horizon", EventHorizon);
+
+/**
+ * @classdesc Glitch King, applies a random multiplier if score exceeds 2,147,483,647.
+ * @augments Joker
+ */
+class GlitchKing extends Joker {
+	/** @class */
+	constructor() {
+		super("glitch_king");
+	}
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (params.score > 2147483647) {
+			const multiplier = 0.5 + Math.random() * 2.5;
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.mulMult(params, multiplier);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Glitch King&lt;/b>&lt;br>If your score exceeds 2,147,483,647, apply a random multiplier between 0.5x and 3.0x.`;
+	}
+}
+Joker.registerJoker("glitch_king", GlitchKing);
+
+/**
+ * @classdesc Snowballer, accumulates a bonus for each card drawn.
+ * @augments Joker
+ * @property {number} snowball - The accumulated bonus from drawn cards.
+ */
+class Snowballer extends Joker {
+	/** @class */
+	constructor() {
+		super("snowballer");
+		this.snowball = 0;
+	}
+
+	/* eslint-disable no-unused-vars */
+	/** @inheritdoc */
+	onDraw(params) {
+		this.snowball += 0.1;
+	}
+	/* eslint-enable no-unused-vars */
+
+	/** @inheritdoc */
+	onScoringEnd(params) {
+		if (this.snowball > 0) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addMult(params, this.snowball);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Snowballer&lt;/b>&lt;br>When you draw a card, add !&lt;t(+0.1)!> to this Joker.&lt;br>Current bonus: !&lt;t(+${this.snowball.toFixed(1)})!>`;
+	}
+}
+Joker.registerJoker("snowballer", Snowballer);
+
+/**
+ * @classdesc Hiccup, adds a chip if more than 7 cards are played.
+ * @augments Joker
+ */
+class Hiccup extends Joker {
+	/** @class */
+	constructor() {
+		super("hiccup");
+	}
+
+	/** @inheritdoc */
+	onScoringStart(params) {
+		if (params.gameHandler.state.hands.played.cards.length > 7) {
+			params.gameHandler.gameStorage.updateStat("totalJokersUsed", 1);
+			params.scoringHandler.addChips(params, 1);
+		}
+	}
+
+	/** @inheritdoc */
+	getDescription() {
+		return `&lt;b>Hiccup&lt;/b>&lt;br>If you played more than 7 cards, gain !&lt;c(+1)!>.`;
+	}
+}
+Joker.registerJoker("hiccup", Hiccup);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addCardwithAnimation">addCardwithAnimation</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#hideOptionsModal">hideOptionsModal</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#mulMult">mulMult</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#onToggleMute">onToggleMute</a></li><li><a href="global.html#onVolumeChange">onVolumeChange</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeSelectedCardswithAnimation">removeSelectedCardswithAnimation</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setStat">setStat</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#showOptionsModal">showOptionsModal</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

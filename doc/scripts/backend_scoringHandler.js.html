@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/scoringHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/scoringHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { calculateBlackjackScore, getHandType } from "./utils.js";
+
+/**
+ * @classdesc ScoringHandler
+ *
+ * @property {object} handler - The associated gameHandler object.
+ */
+export class scoringHandler {
+	/**
+	 * @class scoringHandler
+	 * @description Initializes the scoring handler to interact with the game handler.
+	 * @param {object} handler - The gameHandler object.
+	 */
+	constructor(handler) {
+		this.handler = handler;
+	}
+
+	/**
+	 * @function scoreHand
+	 * @description Scores the played hand for the gameHandler.
+	 */
+	scoreHand() {
+		// If the hand is empty, log and return
+		if (this.handler.state.hands.played.cards.length === 0) {
+			console.log("No cards played. No score.");
+			return;
+		}
+
+		const jokers = this.handler.state.hands.joker.cards;
+		for (const joker of jokers) {
+			if (joker.onScoringStart) {
+				joker.onScoringStart({
+					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
+		}
+
+		this.handler.state.handScore = 0;
+		this.handler.state.handMult = 1;
+
+		// Determine hand type for display
+		const handType = getHandType(this.handler.state.hands.played.cards);
+		this.handler.uiInterface.updateScorekeeper({ handType: handType });
+
+		for (let i = 0; i &lt; this.handler.state.hands.played.cards.length; ) {
+			const card = this.handler.state.hands.played.cards[i];
+
+			let cardValue = card.getValue();
+
+			// TODO: Check for attributes on the card, update base chip value accordingly
+
+			// TODO: Check for applicable jokers to this card
+			// ->UI: Call back to UI to play joker animation (likely also score animation)
+
+			this.handler.state.handScore += cardValue;
+			this.handler.state.handScore =
+				Math.round(this.handler.state.handScore * 10) / 10;
+			this.handler.uiInterface.updateScorekeeper({
+				handScore: this.handler.state.handScore,
+			});
+
+			console.log(
+				`Card ${card.type} of ${card.suit} scored: ${cardValue}`
+			);
+			this.handler.uiInterface.scoreCard(
+				card,
+				[`+${cardValue} Chips`],
+				["#00FFFF"]
+			);
+
+			for (const joker of jokers) {
+				if (joker.onCardScore) {
+					joker.onCardScore({
+						card: card,
+						cardIdx: i,
+						jokerIdx: jokers.indexOf(joker),
+						jokerCard: joker,
+						scoringHandler: this,
+						gameHandler: this.handler,
+					});
+				}
+			}
+
+			// TODO: Conditions for other increments
+			i += 1;
+		}
+
+		for (const joker of jokers) {
+			if (joker.onScoringEnd) {
+				joker.onScoringEnd({
+					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
+					score: this.handler.state.handScore,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
+		}
+
+		// Verify that the played hand has a valid blackjack score
+		const score = calculateBlackjackScore(
+			this.handler.state.hands.played.cards
+		);
+		if (score > 21) {
+			console.log("Score exceeds 21. Hand is bust.");
+
+			this.handler.state.handScore = 0;
+			this.handler.state.handMult = 1;
+
+			this.handler.uiInterface.updateScorekeeper({
+				handScore: 0,
+				handMult: 1,
+			});
+			this.handler.uiInterface.displayBust();
+		} else {
+			const totalAdded =
+				this.handler.state.handScore * this.handler.state.handMult;
+			this.handler.state.handScore = Math.round(totalAdded * 10) / 10;
+			this.handler.state.roundScore += totalAdded;
+
+			// Track highest round score stat
+			this.handler.gameStorage.setStat(
+				"highestRoundScore",
+				this.handler.state.roundScore
+			);
+
+			// Show visual feedback for successful scoring
+			if (this.handler.uiInterface.displayHandScored) {
+				this.handler.uiInterface.displayHandScored(
+					this.handler.state.handScore,
+					this.handler.state.handMult,
+					totalAdded
+				);
+			}
+
+			this.handler.state.handScore = 0;
+			this.handler.state.handMult = 1;
+
+			this.handler.uiInterface.updateScorekeeper({
+				roundScore: this.handler.state.roundScore,
+				handScore: 0,
+				handMult: 1,
+			});
+		}
+
+		this.handler.uiInterface.moveMultiple(
+			this.handler.state.hands.played.cards,
+			"handPlayed",
+			"offscreen",
+			0
+		);
+		for (const card of this.handler.state.hands.played.cards) {
+			this.handler.uiInterface.removeUIel(card);
+		}
+
+		this.handler.state.handsPlayed++;
+		this.handler.uiInterface.updateScorekeeper({
+			handsRemaining:
+				this.handler.state.totalHands - this.handler.state.handsPlayed,
+		});
+
+		this.handler.state.hands.played.cards = [];
+	}
+
+	/**
+	 * @function onDraw
+	 * @description Called when a card is drawn from the deck.
+	 *              This can be used to trigger any scoring-related effects.
+	 * @param {object} card - The card that was drawn.
+	 */
+	onDraw(card) {
+		const jokers = this.handler.state.hands.joker.cards;
+		for (const joker of jokers) {
+			if (joker.onDraw) {
+				joker.onDraw({
+					jokerIdx: jokers.indexOf(joker),
+					jokerCard: joker,
+					card: card,
+					scoringHandler: this,
+					gameHandler: this.handler,
+				});
+			}
+		}
+	}
+
+	/**
+	 * @function addChips
+	 * @description Adds chips to the current score, applying any other Joker
+	 *              effects that may change the value or affect other
+	 *              scoring parameters.
+	 * @param {object} params - The parameters for adding chips.
+	 * @param {number} chips - The number of chips to add.
+	 */
+	addChips(params, chips) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handScore += chips;
+		this.handler.state.handScore =
+			Math.round(this.handler.state.handScore * 10) / 10;
+		this.handler.uiInterface.updateScorekeeper({
+			handScore: this.handler.state.handScore,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`+${chips} Chips`],
+			["#00FFFF"]
+		);
+		console.log(
+			`Added ${chips} chips to score. New score: ${this.handler.state.handScore}`
+		);
+	}
+
+	/**
+	 * @function addMult
+	 * @description Adds a multiplier to the current score, applying any other Joker
+	 *              effects that may change the value or affect other
+	 *              scoring parameters.
+	 * @param {object} params - The parameters for adding a multiplier.
+	 * @param {number} mult - The multiplier to add.
+	 */
+	addMult(params, mult) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handMult += mult;
+		this.handler.uiInterface.updateScorekeeper({
+			handMult: this.handler.state.handMult,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`+${(mult * 100).toFixed(0)}% Mult`],
+			["#FFFF00"]
+		);
+		console.log(
+			`Added ${mult * 100}% multiplier to score. New multiplier: ${
+				this.handler.state.handMult
+			}`
+		);
+	}
+
+	/**
+	 * @function mulMult
+	 * @description Multiplies the current score by a multiplier, applying any other Joker
+	 *              effects that may change the value or affect other
+	 * 				scoring parameters.
+	 * @param {object} params - The parameters for multiplying the score.
+	 * @param {number} mult - The multiplier to apply.
+	 */
+	mulMult(params, mult) {
+		// TODO: Check for jokers that may affect this
+		this.handler.state.handMult *= mult;
+		this.handler.uiInterface.updateScorekeeper({
+			handMult: this.handler.state.handMult,
+		});
+		this.handler.uiInterface.scoreCard(
+			params.jokerCard,
+			[`x${mult} Mult`],
+			["#FFFF00"]
+		);
+		console.log(
+			`Multiplied score by ${mult}. New multiplier: ${this.handler.state.handMult}`
+		);
+	}
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Blueprint.html">Blueprint</a></li><li><a href="global.html#Card">Card</a></li><li><a href="CardCounter.html">CardCounter</a></li><li><a href="CardElement.html">CardElement</a></li><li><a href="ConsoleCardContainerElement.html">ConsoleCardContainerElement</a></li><li><a href="ConsoleCardElement.html">ConsoleCardElement</a></li><li><a href="ConsoleDeckElement.html">ConsoleDeckElement</a></li><li><a href="ConsoleHandElement.html">ConsoleHandElement</a></li><li><a href="ConsoleScorekeeperElement.html">ConsoleScorekeeperElement</a></li><li><a href="ConsoleUI.html">ConsoleUI</a></li><li><a href="Deck.html">Deck</a></li><li><a href="DeckElement.html">DeckElement</a></li><li><a href="EvenSteven.html">EvenSteven</a></li><li><a href="EventHorizon.html">EventHorizon</a></li><li><a href="FaceValue.html">FaceValue</a></li><li><a href="GameStorage.html">GameStorage</a></li><li><a href="GlitchKing.html">GlitchKing</a></li><li><a href="Hand.html">Hand</a></li><li><a href="HandElement.html">HandElement</a></li><li><a href="HandElement_HandElement.html">HandElement</a></li><li><a href="Hiccup.html">Hiccup</a></li><li><a href="Joker.html">Joker</a></li><li><a href="LuckyRabbit.html">LuckyRabbit</a></li><li><a href="Martingale.html">Martingale</a></li><li><a href="MirrorMask.html">MirrorMask</a></li><li><a href="OddRod.html">OddRod</a></li><li><a href="Overclock.html">Overclock</a></li><li><a href="PiggyBank.html">PiggyBank</a></li><li><a href="Snowballer.html">Snowballer</a></li><li><a href="StackedDeck.html">StackedDeck</a></li><li><a href="StickShift.html">StickShift</a></li><li><a href="TwentyOneder.html">TwentyOneder</a></li><li><a href="UIInterface.html">UIInterface</a></li><li><a href="WebUI.html">WebUI</a></li><li><a href="WildcardJoker.html">WildcardJoker</a></li><li><a href="gameHandler.html">gameHandler</a></li><li><a href="module.exports.html">exports</a></li><li><a href="global.html#scoringHandler">scoringHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_onCardSelect">_onCardSelect</a></li><li><a href="global.html#_updateLayout">_updateLayout</a></li><li><a href="global.html#addCard">addCard</a></li><li><a href="global.html#addCards">addCards</a></li><li><a href="global.html#addCardwithAnimation">addCardwithAnimation</a></li><li><a href="global.html#addChips">addChips</a></li><li><a href="global.html#addMult">addMult</a></li><li><a href="global.html#addProperty">addProperty</a></li><li><a href="global.html#allowPlay">allowPlay</a></li><li><a href="global.html#animateScoreUpdate">animateScoreUpdate</a></li><li><a href="global.html#calculateBlackjackScore">calculateBlackjackScore</a></li><li><a href="global.html#calculateTooltipText">calculateTooltipText</a></li><li><a href="global.html#clearCards">clearCards</a></li><li><a href="global.html#compareSuits">compareSuits</a></li><li><a href="global.html#compareValues">compareValues</a></li><li><a href="global.html#createUIel">createUIel</a></li><li><a href="global.html#dealCards">dealCards</a></li><li><a href="global.html#disallowPlay">disallowPlay</a></li><li><a href="global.html#discard">discard</a></li><li><a href="global.html#discardCards">discardCards</a></li><li><a href="global.html#displayBust">displayBust</a></li><li><a href="global.html#displayHandScored">displayHandScored</a></li><li><a href="global.html#displayLoss">displayLoss</a></li><li><a href="global.html#displayMoney">displayMoney</a></li><li><a href="global.html#displayWin">displayWin</a></li><li><a href="global.html#drawCard">drawCard</a></li><li><a href="global.html#enableReordering">enableReordering</a></li><li><a href="global.html#exitGame">exitGame</a></li><li><a href="global.html#flip">flip</a></li><li><a href="global.html#formatJokerDescription">formatJokerDescription</a></li><li><a href="global.html#getContainer">getContainer</a></li><li><a href="global.html#getHandType">getHandType</a></li><li><a href="global.html#getInsertIndex">getInsertIndex</a></li><li><a href="global.html#getSelectedCards">getSelectedCards</a></li><li><a href="global.html#getStats">getStats</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#hasProperty">hasProperty</a></li><li><a href="global.html#help">help</a></li><li><a href="global.html#hideOptionsModal">hideOptionsModal</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#initializeStorage">initializeStorage</a></li><li><a href="global.html#moveCard">moveCard</a></li><li><a href="global.html#moveMultiple">moveMultiple</a></li><li><a href="global.html#moveTo">moveTo</a></li><li><a href="global.html#mulMult">mulMult</a></li><li><a href="global.html#newGame">newGame</a></li><li><a href="global.html#nextBlind">nextBlind</a></li><li><a href="global.html#onDiscardSelected">onDiscardSelected</a></li><li><a href="global.html#onDraw">onDraw</a></li><li><a href="global.html#onPlaySelected">onPlaySelected</a></li><li><a href="global.html#onToggleMute">onToggleMute</a></li><li><a href="global.html#onVolumeChange">onVolumeChange</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playCards">playCards</a></li><li><a href="global.html#printScorekeeper">printScorekeeper</a></li><li><a href="global.html#promptEndlessMode">promptEndlessMode</a></li><li><a href="global.html#readFromStorage">readFromStorage</a></li><li><a href="global.html#removeCard">removeCard</a></li><li><a href="global.html#removeProperty">removeProperty</a></li><li><a href="global.html#removeSelectedCards">removeSelectedCards</a></li><li><a href="global.html#removeSelectedCardswithAnimation">removeSelectedCardswithAnimation</a></li><li><a href="global.html#removeUIel">removeUIel</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#resetDeck">resetDeck</a></li><li><a href="global.html#resetGame">resetGame</a></li><li><a href="global.html#returnCard">returnCard</a></li><li><a href="global.html#scoreCard">scoreCard</a></li><li><a href="global.html#scoreHand">scoreHand</a></li><li><a href="global.html#selectCard">selectCard</a></li><li><a href="global.html#selectCards">selectCards</a></li><li><a href="global.html#setBank">setBank</a></li><li><a href="global.html#setDiscards">setDiscards</a></li><li><a href="global.html#setGoalScore">setGoalScore</a></li><li><a href="global.html#setRoundScore">setRoundScore</a></li><li><a href="global.html#setStat">setStat</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupUIElements">setupUIElements</a></li><li><a href="global.html#showHand">showHand</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#showOptionsModal">showOptionsModal</a></li><li><a href="global.html#shuffle">shuffle</a></li><li><a href="global.html#sortBySuit">sortBySuit</a></li><li><a href="global.html#sortByValue">sortByValue</a></li><li><a href="global.html#staggered">staggered</a></li><li><a href="global.html#storageExists">storageExists</a></li><li><a href="global.html#toggleSelect">toggleSelect</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateChips">updateChips</a></li><li><a href="global.html#updateDeckCount">updateDeckCount</a></li><li><a href="global.html#updateMultiplier">updateMultiplier</a></li><li><a href="global.html#updateScorekeeper">updateScorekeeper</a></li><li><a href="global.html#updateStat">updateStat</a></li><li><a href="global.html#writeToStorage">writeToStorage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
