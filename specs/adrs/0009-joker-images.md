@@ -1,0 +1,70 @@
+---
+# Configuration for the Jekyll "Just the Docs" theme (optional)
+parent: Decisions
+nav_order: 108
+title: Add Joker Images
+status: proposed
+date: 2025-06-06
+---
+
+# Joker Images and Descriptions
+
+## Context and Problem Statement
+
+We need a way for users to quickly and properly know which Joker card is in the Joker deck. How should we implement a way to quickly tell which joker is which at a glance?
+
+## Decision Drivers
+
+- User accessibility (all users can distinguish)
+- Clarity (users can distinguish without research)
+- Ease of implementation and maintenance
+
+## Considered Options
+
+- Announce each joker on entry
+- Update the tooltips for the user to view the card
+- Put the Joker name on the card
+- Give each Joker a custom image
+
+## Decision Outcome
+
+Chosen option: **Multiple: Give each Joker a custom image and add new tooltips**. This provides a quickly accessible way to distinguish the Jokers (by image) while also allowing players who are unaware of what the image means to see what that Joker does on hover.
+
+### Consequences
+
+- **Good:**  
+  - The user can tell easily the difference between Jokers
+  - If desired, the tooltip provides more information on the Joker at any given point in the game
+- **Bad:**
+  - Requires more information to be stored per Joker
+  - Requires custom card images for each Joker
+
+### Confirmation
+
+Verify during user testing that:
+- Users are able to tell what Jokers do without research
+- Images are viably distinctive and users may tell how they work quickly
+
+---
+
+## Pros and Cons of the Options
+
+### Announcing each Joker on entry
+
+- **Good:** Very clear, immediately visible
+- **Bad:** Can clutter the screen, becomes a nuisance if player already knows Joker
+
+### Update the tooltips the user to view on the card
+
+- **Good:** Very descriptive, user may immediately tell the full function of the Joker
+- **Bad:** Long, and requires reading to understand
+
+### Put the Joker name on the card
+
+- **Good:** Allows for quick distinction between cards
+- **Bad:** The name does not always aptly describe what it does. "Chipmunk" has no immediately knowable funciton as a Joker.
+
+### Custom Joker Images
+
+- **Good:** Allows immediate distinction between Jokers
+- **Bad:** The image must correlate with the Joker, meaning many custom new Card images must be created for each Joker implemented.

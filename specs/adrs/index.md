@@ -13,3 +13,5 @@ A chronological list of all ADRs in this repository.
 | 0006 | 05/25/2025 | Engine Separation   | accepted |
 | 0007 | 05/25/2025 | Scorekeeper & UI    | accepted |
 | 0008 | 05/05/2025 | Shuffling Algorithm | accepted |
+| 0009 | 06/06/2025 | Joker Images        | accepted |
+| 0010 | 06/06/2025 | Options Menu        | accepted |
