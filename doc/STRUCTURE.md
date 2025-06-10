@@ -23,7 +23,7 @@ Image resources for the project. May contain subdirectories for sets of images, 
 ### res/snd/
 Sound effects and music for the project. May countain subdirectories for sets of sounds, such as `res/snd/mus` for music or `res/img/card` for card-related SFX.
 
-## css/
+## source/styles/
 CSS files for the project. Grouped into section files, such as `card.css` for styling a card, or `panel.css` for defining a UI panel. Project-wide styling, such as CSS variable provision files, are also contained within this directory.
 
 This presently does not contain subdirectories, but as development continues, this is open for reconsideration.
